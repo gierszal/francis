@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "@fastify/env": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "fastify": "^5.8.5"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "tsc -p tsconfig.json & node dist/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "typescript": "^6.0.3"
+  },
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
