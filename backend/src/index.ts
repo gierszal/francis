@@ -5,11 +5,13 @@ import trackRoutes from "./track/track.routes.js";
 import cors from "@fastify/cors";
 import { ApiError } from "./errors/index.js";
 import { ZodError } from "zod";
+import albumRoutes from "./album/album.routes.js";
 
 const server = fastify({ logger: { level: "info" } });
 
 server.register(fastifyMultipart);
 server.register(trackRoutes, { prefix: "/api/tracks" });
+server.register(albumRoutes, { prefix: "/api/albums" });
 
 server.get("*", function (_req, rep) {
   rep.send({ message: "Not found" });
