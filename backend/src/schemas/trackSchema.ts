@@ -3,12 +3,12 @@ import { z } from "zod";
 export const createTrackSchema = z.object({
   name: z
     .string()
-    .min(1, "The title is not provided!")
-    .max(100, "Too long title"),
+    .min(1, "The track name is not provided!")
+    .max(100, "Too long track name"),
   artist: z
     .string()
-    .min(1, "The title is not provided!")
-    .max(100, "Too long title"),
+    .min(1, "The artist name is not provided!")
+    .max(100, "Too long artist name"),
   picture: z.string().min(1, "Picture is required"),
   audio: z.string().min(1, "Audio is required"),
 });
@@ -21,13 +21,13 @@ export const searchTrackSchema = z.object({
 export const updateTrackSchema = z.object({
   name: z
     .string()
-    .min(1, "The title is not provided!")
-    .max(100, "Too long title")
+    .min(1, "The track name is not provided!")
+    .max(100, "Too long track name")
     .optional(),
   artist: z
     .string()
-    .min(1, "The title is not provided!")
-    .max(100, "Too long title")
+    .min(1, "The track name is not provided!")
+    .max(100, "Too long track name")
     .optional(),
   picture: z.string().min(1, "Picture is required").optional(),
   audio: z.string().min(1, "Audio is required").optional(),
