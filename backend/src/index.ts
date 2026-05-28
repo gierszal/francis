@@ -1,18 +1,45 @@
-import fastify from 'fastify'
-import "dotenv/config"
+import fastify from "fastify";
+import "dotenv/config";
+import fastifyMultipart from "@fastify/multipart";
+import trackRoutes from "./track/track.routes.js";
+import cors from "@fastify/cors";
+import { ApiError } from "./errors/index.js";
+import { ZodError } from "zod";
+import albumRoutes from "./album/album.routes.js";
+import playlistRoutes from "./playlist/playlist.routes.js";
 
-const server = fastify()
+const server = fastify({ logger: { level: "info" } });
 
-server.get('/ping', async (request, reply) => {
-  return 'pong\n'
-})
+server.register(fastifyMultipart);
+server.register(trackRoutes, { prefix: "/api/tracks" });
+server.register(albumRoutes, { prefix: "/api/albums" });
+server.register(playlistRoutes, { prefix: "/api/playlists" });
+
+server.get("*", function (_req, rep) {
+  rep.send({ message: "Not found" });
+});
+
+server.setErrorHandler(function (error, request, reply) {
+  if (error instanceof ApiError) {
+    reply
+      .code(error.statusCode)
+      .send({ error: error.message, details: error.details });
+  } else if (error instanceof ZodError) {
+    reply.code(400).send({ error: error.message });
+  } else {
+    request.log.error(error);
+    reply.code(500).send({ error: "Internal Server Error" });
+  }
+});
+
+server.register(cors, { origin: process.env.CORS_ORIGIN || "*" });
 
 const port = Number(process.env.PORT) || 5000;
 
 server.listen({ port: port }, (err, address) => {
   if (err) {
-    console.error(err)
-    process.exit(1)
+    console.error(err);
+    process.exit(1);
   }
-  console.log(`Server listening at ${address}`)
-})
+  console.log(`Server listening at ${address}`);
+});
