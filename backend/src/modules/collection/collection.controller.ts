@@ -1,17 +1,17 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import type { CollectionServiceType } from "./collection.service.js";
 import type {
-  collectionParamsType,
   collectionQueryType,
   createCollectionType,
-  searchCollectionType,
   updateCollectionType,
 } from "../../types/collection/collection.js";
+import type { paramsType } from "@/types/common/params.js";
+import type { queryType } from "@/types/common/query.js";
 
 class collectionController {
   constructor(private service: CollectionServiceType) {}
   public getCollection = (
-    request: FastifyRequest<{ Params: collectionParamsType }>,
+    request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
@@ -53,7 +53,7 @@ class collectionController {
   };
 
   public searchCollection = (
-    request: FastifyRequest<{ Querystring: searchCollectionType }>,
+    request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
     const { searchQuery, count } = request.query;
@@ -65,7 +65,7 @@ class collectionController {
   };
 
   public deleteCollection = (
-    request: FastifyRequest<{ Params: collectionParamsType }>,
+    request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;

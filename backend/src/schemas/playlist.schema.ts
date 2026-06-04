@@ -12,30 +12,10 @@ export const createPlaylistSchema = z.object({
   description: z.string().min(1, "Description is required"),
 });
 
-export const searchPlaylistSchema = z.object({
-  searchQuery: z.string().max(1000, "Too long description").optional(),
-  count: z.coerce.number().positive().default(10),
-});
-
-export const updatePlaylistSchema = z.object({
-  name: z
-    .string()
-    .min(1, "The name is not provided!")
-    .max(100, "Too long name")
-    .optional(),
-  source: z
-    .string()
-    .min(1, "The source name is not provided!")
-    .max(100, "Too long source name")
-    .optional(),
-  description: z.string().min(1, "Description is required").optional(),
-});
-
-export const playlistParamsSchema = z.object({
-  id: z.string().regex(/^\d+$/, "ID must be a number!"),
-});
+export const updatePlaylistSchema = createPlaylistSchema.partial();
 
 export const playlistQuerySchema = z.object({
+  searchQuery: z.string().max(1000, "Too long description").optional(),
   count: z.coerce.number().positive().default(10),
   offset: z.coerce.number().positive().default(0),
 });

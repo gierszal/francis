@@ -6,9 +6,9 @@ import { UserService } from "./user.service.js";
 import { updateUserSchema } from "../../schemas/user.schema.js";
 import { UserRepository } from "@/repositories/prisma/user.repository.js";
 import { createPlaylistSchema } from "@/schemas/playlist.schema.js";
-import { uuidParamsSchema } from "@/schemas/common/params.schema.js";
 import { querySchema } from "@/schemas/common/query.schema.js";
 import { addToFavouritesSchema } from "@/schemas/track.schema.js";
+import { paramsSchema } from "@/schemas/common/params.schema.js";
 
 type optionsType = {
   prefix: string;
@@ -30,30 +30,6 @@ const userRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   );
 
   fastify.get(
-    "/me/playlists/:id",
-    {
-      preHandler: [validate({ params: uuidParamsSchema })],
-    },
-    controller.getPlaylist,
-  );
-
-  fastify.post(
-    "/me/playlists",
-    {
-      preHandler: [validate({ body: createPlaylistSchema })],
-    },
-    controller.createPlaylist,
-  );
-
-  fastify.delete(
-    "/me/playlists/:id",
-    {
-      preHandler: [validate({ params: uuidParamsSchema })],
-    },
-    controller.deletePlaylist,
-  );
-
-  fastify.get(
     "/me/favourites",
     { preHandler: [validate({ query: querySchema })] },
     controller.getFavourites,
@@ -70,7 +46,7 @@ const userRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   fastify.delete(
     "/me/favourites/:id",
     {
-      preHandler: [validate({ params: uuidParamsSchema })],
+      preHandler: [validate({ params: paramsSchema })],
     },
     controller.removeFromFavourites,
   );

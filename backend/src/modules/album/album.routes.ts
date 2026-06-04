@@ -5,13 +5,13 @@ import { AlbumService } from "./album.service.js";
 
 import {
   addToCollectionSchema,
-  albumParamsSchema,
   albumQuerySchema,
   createAlbumSchema,
-  searchAlbumSchema,
   updateAlbumSchema,
 } from "../../schemas/album.schema.js";
 import { AlbumRepository } from "@/repositories/prisma/album.repository.js";
+import { paramsSchema } from "@/schemas/common/params.schema.js";
+import { querySchema } from "@/schemas/common/query.schema.js";
 
 type optionsType = {
   prefix: string;
@@ -32,7 +32,7 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   fastify.get(
     "/:id",
     {
-      preHandler: [validate({ params: albumParamsSchema })],
+      preHandler: [validate({ params: paramsSchema })],
     },
     controller.getAlbum,
   );
@@ -51,14 +51,14 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
 
   fastify.get(
     "/search",
-    { preHandler: [validate({ query: searchAlbumSchema })] },
+    { preHandler: [validate({ query: querySchema })] },
     controller.searchAlbum,
   );
 
   fastify.delete(
     "/:id",
     {
-      preHandler: [validate({ params: albumParamsSchema })],
+      preHandler: [validate({ params: paramsSchema })],
     },
     controller.deleteAlbum,
   );

@@ -5,12 +5,12 @@ import { PlaylistService } from "./playlist.service.js";
 
 import {
   createPlaylistSchema,
-  playlistParamsSchema,
   playlistQuerySchema,
-  searchPlaylistSchema,
   updatePlaylistSchema,
 } from "../../schemas/playlist.schema.js";
 import { PlaylistRepository } from "@/repositories/prisma/playlist.repository.js";
+import { paramsSchema } from "@/schemas/common/params.schema.js";
+import { querySchema } from "@/schemas/common/query.schema.js";
 
 type optionsType = {
   prefix: string;
@@ -31,7 +31,7 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   fastify.get(
     "/:id",
     {
-      preHandler: [validate({ params: playlistParamsSchema })],
+      preHandler: [validate({ params: paramsSchema })],
     },
     controller.getPlaylist,
   );
@@ -50,14 +50,14 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
 
   fastify.get(
     "/search",
-    { preHandler: [validate({ query: searchPlaylistSchema })] },
+    { preHandler: [validate({ query: querySchema })] },
     controller.searchPlaylist,
   );
 
   fastify.delete(
     "/:id",
     {
-      preHandler: [validate({ params: playlistParamsSchema })],
+      preHandler: [validate({ params: paramsSchema })],
     },
     controller.deletePlaylist,
   );

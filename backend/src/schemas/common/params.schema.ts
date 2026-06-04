@@ -1,4 +1,4 @@
 import { uuid, z } from "zod";
-export const uuidParamsSchema = z.object({
+export const paramsSchema = z.object({
   id: uuid("ID is not valid!"),
 });

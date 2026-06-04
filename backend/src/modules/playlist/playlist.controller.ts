@@ -1,17 +1,17 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import type { PlaylistServiceType } from "./playlist.service.js";
 import type {
-  playlistParamsType,
   playlistQueryType,
   createPlaylistType,
-  searchPlaylistType,
   updatePlaylistType,
 } from "../../types/playlist/playlist.js";
+import type { paramsType } from "@/types/common/params.js";
+import type { queryType } from "@/types/common/query.js";
 
 class playlistController {
   constructor(private service: PlaylistServiceType) {}
   public getPlaylist = (
-    request: FastifyRequest<{ Params: playlistParamsType }>,
+    request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
@@ -53,7 +53,7 @@ class playlistController {
   };
 
   public searchPlaylist = (
-    request: FastifyRequest<{ Querystring: searchPlaylistType }>,
+    request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
     const { searchQuery, count } = request.query;
@@ -65,7 +65,7 @@ class playlistController {
   };
 
   public deletePlaylist = (
-    request: FastifyRequest<{ Params: playlistParamsType }>,
+    request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;

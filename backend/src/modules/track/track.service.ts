@@ -7,13 +7,12 @@ import type {
 
 export class TrackService implements trackServiceType {
   constructor(trackRepository: TrackRepository) {}
-
   async getTrack(id: string) {
     console.log(`Getting track: ${id}`);
     return { id, name: "Mock Track", artist: "Mock Artist" };
   }
 
-  async getTracks(count: number = 10, offset: number = 0) {
+  async getTracks(searchQuery = "", count: number = 10, offset: number = 0) {
     console.log(`Getting tracks: count=${count}, offset=${offset}`);
     return { tracks: [], total: 0, count, offset };
   }
@@ -48,12 +47,21 @@ export class TrackService implements trackServiceType {
     return { success: true, trackID, albumID };
   }
 
+  async addToFavorite(trackID: string) {
+    console.log(`Adding track ${trackID} to album ${trackID}`);
+    return { success: true, trackID };
+  }
+
   async addToPlaylist(trackID: string, playlistID: string) {
     console.log(`Adding track ${trackID} to playlist ${playlistID}`);
     return { success: true, trackID, playlistID };
   }
 
-  async getRecommendations(count: number = 10, offset: number = 0) {
+  async getRecommendations(
+    searchQuery = "",
+    count: number = 10,
+    offset: number = 0,
+  ) {
     console.log(`Getting recommendations: count=${count}, offset=${offset}`);
     return { recommendations: [], count, offset };
   }

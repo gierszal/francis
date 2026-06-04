@@ -8,11 +8,10 @@ import {
   addToAlbumSchema,
   addToPlaylistSchema,
   createTrackSchema,
-  searchTrackSchema,
-  trackParamsSchema,
-  trackQuerySchema,
   updateTrackSchema,
 } from "../../schemas/track.schema.js";
+import { paramsSchema } from "@/schemas/common/params.schema.js";
+import { querySchema } from "@/schemas/common/query.schema.js";
 
 type optionsType = {
   prefix: string;
@@ -25,7 +24,7 @@ const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   fastify.get(
     "/",
     {
-      preHandler: [validate({ query: trackQuerySchema })],
+      preHandler: [validate({ query: querySchema })],
     },
     controller.getTracks,
   );
@@ -33,7 +32,7 @@ const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   fastify.get(
     "/:id",
     {
-      preHandler: [validate({ params: trackParamsSchema })],
+      preHandler: [validate({ params: paramsSchema })],
     },
     controller.getTrack,
   );
@@ -52,26 +51,22 @@ const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
 
   fastify.post(
     "/:id/listens",
-    { preHandler: [validate({ params: trackParamsSchema })] },
+    { preHandler: [validate({ params: paramsSchema })] },
     controller.listenIncrement,
   );
 
   fastify.get(
     "/search",
-    { preHandler: [validate({ query: searchTrackSchema })] },
+    { preHandler: [validate({ query: querySchema })] },
     controller.searchTrack,
   );
 
-  fastify.get(
-    "/recommendations",
-    { preHandler: [validate({ params: trackParamsSchema })] },
-    controller.getRecommendations,
-  );
+  fastify.get("/recommendations", controller.getRecommendations);
 
   fastify.delete(
     "/:id",
     {
-      preHandler: [validate({ params: trackParamsSchema })],
+      preHandler: [validate({ params: paramsSchema })],
     },
     controller.deleteTrack,
   );

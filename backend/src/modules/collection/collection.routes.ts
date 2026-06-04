@@ -4,13 +4,13 @@ import { collectionController } from "./collection.controller.js";
 import { CollectionService } from "./collection.service.js";
 
 import {
-  collectionParamsSchema,
   collectionQuerySchema,
   createCollectionSchema,
-  searchCollectionSchema,
   updateCollectionSchema,
 } from "../../schemas/collection.schema.js";
 import { CollectionRepository } from "@/repositories/prisma/collection.repository.js";
+import { paramsSchema } from "@/schemas/common/params.schema.js";
+import { querySchema } from "@/schemas/common/query.schema.js";
 
 type optionsType = {
   prefix: string;
@@ -31,7 +31,7 @@ const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   fastify.get(
     "/:id",
     {
-      preHandler: [validate({ params: collectionParamsSchema })],
+      preHandler: [validate({ params: paramsSchema })],
     },
     controller.getCollection,
   );
@@ -50,14 +50,14 @@ const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
 
   fastify.get(
     "/search",
-    { preHandler: [validate({ query: searchCollectionSchema })] },
+    { preHandler: [validate({ query: querySchema })] },
     controller.searchCollection,
   );
 
   fastify.delete(
     "/:id",
     {
-      preHandler: [validate({ params: collectionParamsSchema })],
+      preHandler: [validate({ params: paramsSchema })],
     },
     controller.deleteCollection,
   );

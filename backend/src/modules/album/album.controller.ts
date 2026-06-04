@@ -2,21 +2,21 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 import type { albumServiceType } from "./album.service.js";
 import type {
   addToCollectionType,
-  albumParamsType,
   albumQueryType,
   createAlbumType,
-  searchAlbumType,
   updateAlbumType,
 } from "../../types/album/album.js";
+import type { paramsType } from "@/types/common/params.js";
+import type { queryType } from "@/types/common/query.js";
 
 class albumController {
   constructor(private service: albumServiceType) {}
   public getAlbum = (
-    request: FastifyRequest<{ Params: albumParamsType }>,
+    request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
-    reply.send({ message: `Get album with id: ${id}` });
+    return this.service.getAlbum(id);
   };
 
   public getAlbums = (
@@ -25,9 +25,7 @@ class albumController {
   ) => {
     const { count, offset } = request.query;
     reply.send({
-      message: "Get all albums",
-      count,
-      offset,
+      message: "OK",
     });
   };
 
@@ -54,7 +52,7 @@ class albumController {
   };
 
   public searchAlbum = (
-    request: FastifyRequest<{ Querystring: searchAlbumType }>,
+    request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
     const { searchQuery, count } = request.query;
@@ -66,7 +64,7 @@ class albumController {
   };
 
   public deleteAlbum = (
-    request: FastifyRequest<{ Params: albumParamsType }>,
+    request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;

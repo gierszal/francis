@@ -4,16 +4,16 @@ import type {
   addToAlbumType,
   addToPlaylistType,
   createTrackType,
-  searchTrackType,
-  trackParamsType,
   trackQueryType,
   updateTrackType,
 } from "../../types/track/track.js";
+import type { paramsType } from "@/types/common/params.js";
+import type { queryType } from "@/types/common/query.js";
 
 class TrackController {
   constructor(private service: trackServiceType) {}
   public getTrack = (
-    request: FastifyRequest<{ Params: trackParamsType }>,
+    request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
@@ -21,7 +21,7 @@ class TrackController {
   };
 
   public getTracks = (
-    request: FastifyRequest<{ Querystring: trackQueryType }>,
+    request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
     const { count, offset } = request.query;
@@ -55,7 +55,7 @@ class TrackController {
   };
 
   public listenIncrement = (
-    request: FastifyRequest<{ Params: trackParamsType }>,
+    request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
@@ -63,10 +63,10 @@ class TrackController {
   };
 
   public searchTrack = (
-    request: FastifyRequest<{ Querystring: searchTrackType }>,
+    request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
-    const { searchQuery, count } = request.query;
+    const { searchQuery, count, offset } = request.query;
     reply.send({
       message: "Search tracks",
       searchQuery: searchQuery || "",
@@ -75,7 +75,7 @@ class TrackController {
   };
 
   public deleteTrack = (
-    request: FastifyRequest<{ Params: trackParamsType }>,
+    request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
@@ -103,7 +103,7 @@ class TrackController {
   };
 
   public getRecommendations = (
-    request: FastifyRequest<{ Querystring: trackQueryType }>,
+    request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
     const { count, offset } = request.query;

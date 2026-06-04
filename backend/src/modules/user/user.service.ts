@@ -1,51 +1,53 @@
 import type { UserRepository } from "@/repositories/prisma/user.repository.js";
-import type { FastifyRequest } from "fastify";
+import type { queryType } from "@/types/common/query.js";
+import type { updateUserType, UserServiceType } from "@/types/user/user.js";
 
-export class UserService {
+export class UserService implements UserServiceType {
   constructor(private userRepository: UserRepository) {}
-  async getUser(_request: FastifyRequest) {
-    return { message: "getUser" };
+
+  async getUser(userId: string) {
+    return `Hello, World!`;
   }
 
-  async getPlaylists(_request: FastifyRequest) {
-    return { message: "getPlaylists" };
+  async getPlaylists(userId: string, query: queryType) {
+    return {
+      message: "getPlaylists",
+    };
   }
 
-  async getPlaylist(_request: FastifyRequest) {
-    return { message: "getPlaylist" };
+  async getFavourites(userId: string, query: queryType) {
+    return {
+      message: "getFavourites",
+    };
   }
 
-  async createPlaylist(_request: FastifyRequest) {
-    return { message: "createPlaylist" };
+  async addToFavourites(userId: string, trackId: string) {
+    return {
+      message: "addToFavourites",
+    };
   }
 
-  async deletePlaylist(_request: FastifyRequest) {
-    return { message: "deletePlaylist" };
+  async removeFromFavourites(userId: string, trackId: string) {
+    return {
+      message: "removeFromFavourites",
+    };
   }
 
-  async getFavourites(_request: FastifyRequest) {
-    return { message: "getFavourites" };
+  async getHistory(userId: string, query: queryType) {
+    return {
+      message: "getHistory",
+    };
   }
 
-  async addToFavourites(_request: FastifyRequest) {
-    return { message: "addToFavourites" };
+  async updateUser(userId: string, data: updateUserType) {
+    return {
+      message: "updateUser",
+    };
   }
 
-  async removeFromFavourites(_request: FastifyRequest) {
-    return { message: "removeFromFavourites" };
-  }
-
-  async getHistory(_request: FastifyRequest) {
-    return { message: "getHistory" };
-  }
-
-  async updateUser(_request: FastifyRequest) {
-    return { message: "updateUser" };
-  }
-
-  async removeUser(_request: FastifyRequest) {
-    return { message: "removeUser" };
+  async removeUser(userId: string) {
+    return {
+      message: "removeUser",
+    };
   }
 }
-
-export type UserServiceType = InstanceType<typeof UserService>;

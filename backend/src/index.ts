@@ -8,6 +8,7 @@ import { ZodError } from "zod";
 import albumRoutes from "./modules/album/album.routes.js";
 import playlistRoutes from "./modules/playlist/playlist.routes.js";
 import collectionRoutes from "./modules/collection/collection.routes.js";
+import userRoutes from "./modules/user/user.routes.js";
 
 const server = fastify({ logger: { level: "info" } });
 
@@ -16,6 +17,7 @@ server.register(trackRoutes, { prefix: "/api/tracks" });
 server.register(albumRoutes, { prefix: "/api/albums" });
 server.register(playlistRoutes, { prefix: "/api/playlists" });
 server.register(collectionRoutes, { prefix: "/api/collections" });
+server.register(userRoutes, { prefix: "/api/users" });
 
 server.get("*", function (_req, rep) {
   rep.send({ message: "Not found" });
