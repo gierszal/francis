@@ -1,18 +1,15 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import type { collectionServiceType } from "./collection.service.js";
+import type { CollectionServiceType } from "./collection.service.js";
 import type {
   collectionParamsType,
   collectionQueryType,
   createCollectionType,
   searchCollectionType,
   updateCollectionType,
-} from "../types/collection/collection.js";
+} from "../../types/collection/collection.js";
 
 class collectionController {
-  private service: collectionServiceType;
-  constructor(service: collectionServiceType) {
-    this.service = service;
-  }
+  constructor(private service: CollectionServiceType) {}
   public getCollection = (
     request: FastifyRequest<{ Params: collectionParamsType }>,
     reply: FastifyReply,

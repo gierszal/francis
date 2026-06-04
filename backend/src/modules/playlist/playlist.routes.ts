@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
-import validate from "../plugins/zod-validator.js";
+import validate from "../../plugins/zod-validator.js";
 import { playlistController } from "./playlist.controller.js";
-import { playlistService } from "./playlist.service.js";
+import { PlaylistService } from "./playlist.service.js";
 
 import {
   createPlaylistSchema,
@@ -9,13 +9,16 @@ import {
   playlistQuerySchema,
   searchPlaylistSchema,
   updatePlaylistSchema,
-} from "../schemas/playlistSchema.js";
+} from "../../schemas/playlist.schema.js";
+import { PlaylistRepository } from "@/repositories/prisma/playlist.repository.js";
 
 type optionsType = {
   prefix: string;
 };
 
 const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
+  const playlistRepository = new PlaylistRepository();
+  const playlistService = new PlaylistService(playlistRepository);
   const controller = new playlistController(playlistService);
   fastify.get(
     "/",

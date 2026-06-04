@@ -1,5 +1,5 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import type { trackServiceType } from "./track.service.js";
+import type { trackServiceType } from "@/types/track/track.js";
 import type {
   addToAlbumType,
   addToPlaylistType,
@@ -8,13 +8,10 @@ import type {
   trackParamsType,
   trackQueryType,
   updateTrackType,
-} from "../types/track/track.js";
+} from "../../types/track/track.js";
 
-class trackController {
-  private service: trackServiceType;
-  constructor(service: trackServiceType) {
-    this.service = service;
-  }
+class TrackController {
+  constructor(private service: trackServiceType) {}
   public getTrack = (
     request: FastifyRequest<{ Params: trackParamsType }>,
     reply: FastifyReply,
@@ -118,5 +115,5 @@ class trackController {
   };
 }
 
-export type trackControllerType = InstanceType<typeof trackController>;
-export { trackController };
+export type trackControllerType = InstanceType<typeof TrackController>;
+export { TrackController };

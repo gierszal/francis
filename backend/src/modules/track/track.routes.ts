@@ -1,7 +1,8 @@
 import type { FastifyInstance } from "fastify";
-import validate from "../plugins/zod-validator.js";
-import { trackController } from "./track.controller.js";
-import { trackService } from "./track.service.js";
+import validate from "../../plugins/zod-validator.js";
+import { TrackController } from "./track.controller.js";
+import { TrackService } from "./track.service.js";
+import { TrackRepository } from "@/repositories/prisma/track.repository.js";
 
 import {
   addToAlbumSchema,
@@ -11,14 +12,16 @@ import {
   trackParamsSchema,
   trackQuerySchema,
   updateTrackSchema,
-} from "../schemas/trackSchema.js";
+} from "../../schemas/track.schema.js";
 
 type optionsType = {
   prefix: string;
 };
 
 const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
-  const controller = new trackController(trackService);
+  const trackRepository = new TrackRepository();
+  const service = new TrackService(trackRepository);
+  const controller = new TrackController(service);
   fastify.get(
     "/",
     {

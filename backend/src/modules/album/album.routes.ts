@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
-import validate from "../plugins/zod-validator.js";
+import validate from "../../plugins/zod-validator.js";
 import { albumController } from "./album.controller.js";
-import { albumService } from "./album.service.js";
+import { AlbumService } from "./album.service.js";
 
 import {
   addToCollectionSchema,
@@ -10,14 +10,17 @@ import {
   createAlbumSchema,
   searchAlbumSchema,
   updateAlbumSchema,
-} from "../schemas/albumSchema.js";
+} from "../../schemas/album.schema.js";
+import { AlbumRepository } from "@/repositories/prisma/album.repository.js";
 
 type optionsType = {
   prefix: string;
 };
 
 const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
-  const controller = new albumController(albumService);
+  const albumRepository = new AlbumRepository();
+  const service = new AlbumService(albumRepository);
+  const controller = new albumController(service);
   fastify.get(
     "/",
     {

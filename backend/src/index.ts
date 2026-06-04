@@ -1,12 +1,13 @@
 import fastify from "fastify";
 import "dotenv/config";
 import fastifyMultipart from "@fastify/multipart";
-import trackRoutes from "./track/track.routes.js";
+import trackRoutes from "./modules/track/track.routes.js";
 import cors from "@fastify/cors";
 import { ApiError } from "./errors/index.js";
 import { ZodError } from "zod";
-import albumRoutes from "./album/album.routes.js";
-import playlistRoutes from "./playlist/playlist.routes.js";
+import albumRoutes from "./modules/album/album.routes.js";
+import playlistRoutes from "./modules/playlist/playlist.routes.js";
+import collectionRoutes from "./modules/collection/collection.routes.js";
 
 const server = fastify({ logger: { level: "info" } });
 
@@ -14,6 +15,7 @@ server.register(fastifyMultipart);
 server.register(trackRoutes, { prefix: "/api/tracks" });
 server.register(albumRoutes, { prefix: "/api/albums" });
 server.register(playlistRoutes, { prefix: "/api/playlists" });
+server.register(collectionRoutes, { prefix: "/api/collections" });
 
 server.get("*", function (_req, rep) {
   rep.send({ message: "Not found" });

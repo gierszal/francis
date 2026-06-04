@@ -7,13 +7,10 @@ import type {
   createAlbumType,
   searchAlbumType,
   updateAlbumType,
-} from "../types/album/album.js";
+} from "../../types/album/album.js";
 
 class albumController {
-  private service: albumServiceType;
-  constructor(service: albumServiceType) {
-    this.service = service;
-  }
+  constructor(private service: albumServiceType) {}
   public getAlbum = (
     request: FastifyRequest<{ Params: albumParamsType }>,
     reply: FastifyReply,

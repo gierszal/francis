@@ -1,18 +1,15 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import type { playlistServiceType } from "./playlist.service.js";
+import type { PlaylistServiceType } from "./playlist.service.js";
 import type {
   playlistParamsType,
   playlistQueryType,
   createPlaylistType,
   searchPlaylistType,
   updatePlaylistType,
-} from "../types/playlist/playlist.js";
+} from "../../types/playlist/playlist.js";
 
 class playlistController {
-  private service: playlistServiceType;
-  constructor(service: playlistServiceType) {
-    this.service = service;
-  }
+  constructor(private service: PlaylistServiceType) {}
   public getPlaylist = (
     request: FastifyRequest<{ Params: playlistParamsType }>,
     reply: FastifyReply,

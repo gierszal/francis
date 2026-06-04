@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { uuid, z } from "zod";
 
 export const createTrackSchema = z.object({
   name: z
@@ -34,17 +34,21 @@ export const updateTrackSchema = z.object({
 });
 
 export const trackParamsSchema = z.object({
-  id: z.string().regex(/^\d+$/, "ID must be a number!"),
+  id: uuid("ID is not valid!"),
 });
 
 export const addToAlbumSchema = z.object({
-  trackID: z.string().regex(/^\d+$/, "ID must be a number!"),
-  albumID: z.string().regex(/^\d+$/, "ID must be a number!"),
+  trackID: z.uuid("D is not valid!"),
+  albumID: z.uuid("ID is not valid!"),
 });
 
 export const addToPlaylistSchema = z.object({
-  trackID: z.string().regex(/^\d+$/, "ID must be a number!"),
-  playlistID: z.string().regex(/^\d+$/, "ID must be a number!"),
+  trackID: z.uuid("ID is not valid!"),
+  playlistID: z.uuid("ID is not valid!"),
+});
+
+export const addToFavouritesSchema = z.object({
+  trackId: z.uuid(),
 });
 
 export const trackQuerySchema = z.object({
