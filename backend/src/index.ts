@@ -9,6 +9,7 @@ import albumRoutes from "./modules/album/album.routes.js";
 import playlistRoutes from "./modules/playlist/playlist.routes.js";
 import collectionRoutes from "./modules/collection/collection.routes.js";
 import userRoutes from "./modules/user/user.routes.js";
+import authRoutes from "./modules/auth/auth.routes.js";
 
 const server = fastify({ logger: { level: "info" } });
 
@@ -18,6 +19,7 @@ server.register(albumRoutes, { prefix: "/api/albums" });
 server.register(playlistRoutes, { prefix: "/api/playlists" });
 server.register(collectionRoutes, { prefix: "/api/collections" });
 server.register(userRoutes, { prefix: "/api/users" });
+server.register(authRoutes, { prefix: "/api/auth" });
 
 server.get("*", function (_req, rep) {
   rep.send({ message: "Not found" });
@@ -38,7 +40,7 @@ server.setErrorHandler(function (error, request, reply) {
 
 server.register(cors, { origin: process.env.CORS_ORIGIN || "*" });
 
-const port = Number(process.env.PORT) || 5000;
+const port = Number(process.env.PORT) || 10000;
 
 server.listen({ port: port }, (err, address) => {
   if (err) {
