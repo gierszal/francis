@@ -9,58 +9,155 @@ datasource db {
 
 model User {
   id             String   @id @default(uuid())
-  firstName      String   @db.VarChar(100)
-  lastName       String?  @db.VarChar(100)
+  firstName      String   @map("first_name") @db.VarChar(100)
+  lastName       String?  @map("last_name") @db.VarChar(100)
   email          String   @unique @db.VarChar(100)
-  activationLink String   @db.VarChar(100)
-  isActivated    Boolean  @default(false) @db.Boolean()
+  activationLink String   @map("activation_link") @db.VarChar(100)
+  isActivated    Boolean  @default(false) @map("is_activated") @db.Boolean()
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   role   Role   @relation(fields: [roleId], references: [id])
-  roleId String
+  roleId String @map("role_id")
 
-  playlists Playlist[]
-  token     Token?
+  playlists  Playlist[]
+  token      Token?
+  favourites Favourite[]
+
+  @@map("users")
 }
 
 model Role {
-  id   String @id @default(uuid())
-  role String @unique @db.VarChar(100)
+  id        String   @id @default(uuid())
+  role      String   @unique @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   users User[]
+
+  @@map("roles")
 }
 
 model Playlist {
   id        String   @id @default(uuid())
   name      String   @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   author         User            @relation(fields: [authorId], references: [id])
-  authorId       String
+  authorId       String          @map("author_id")
   playlistTracks PlaylistTrack[]
+
+  @@map("playlists")
 }
 
 model Token {
-  id           String @id @default(uuid())
-  refreshToken String @unique
+  id           String   @id @default(uuid())
+  refreshToken String   @unique
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
+  userId String @unique @map("user_id")
+
+  @@map("tokens")
 }
 
 model PlaylistTrack {
   id String @id @default(uuid())
 
   playlist   Playlist @relation(fields: [playlistId], references: [id])
-  playlistId String
+  track      Track    @relation(fields: [trackId], references: [id])
+  trackId    String   @map("track_id")
+  playlistId String   @map("playlist_id")
 
-  // trackId    String
+  @@unique([trackId, playlistId])
+  @@map("playlists_tracks")
+}
+
+model Album {
+  id          String   @id @default(uuid())
+  name        String   @db.VarChar(100)
+  picture     String   @db.Uuid
+  description String   @db.VarChar(255)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  tracks           Track[]
+  gameId           String            @map("game_id")
+  albumCollections AlbumCollection[]
+  game             Game              @relation(fields: [gameId], references: [id])
+
+  @@map("albums")
+}
+
+model Favourite {
+  id String @id @default(uuid())
+
+  user  User  @relation(fields: [userId], references: [id])
+  track Track @relation(fields: [trackId], references: [id])
+
+  userId  String @map("user_id")
+  trackId String @map("track_id")
+
+  @@unique([userId, trackId])
+  @@map("favourites")
 }
 
 model Track {
-  id     String @id @default(uuid())
-  name   String @unique @db.VarChar(100)
-  artist String @db.VarChar(100)
-  audio  String @db.VarChar(100)
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(100)
+  artist    String   @db.VarChar(100)
+  audio     String   @db.VarChar(100)
+  tags      String[]
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  trackListeneds TrackListened[]
+  playlistTracks PlaylistTrack[]
+  favourites     Favourite[]
+  album          Album           @relation(fields: [albumId], references: [id])
+  albumId        String          @map("album_id")
+
+  @@map("tracks")
+}
+
+model Collection {
+  id               String            @id @default(uuid())
+  name             String            @unique @db.VarChar(100)
+  createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  albumCollections AlbumCollection[]
+
+  @@map("collections")
+}
+
+model AlbumCollection {
+  id   String @id @default(uuid())
+  name String @db.VarChar(100)
+
+  album        Album      @relation(fields: [albumId], references: [id])
+  collection   Collection @relation(fields: [collectionId], references: [id])
+  albumId      String     @map("album_id")
+  collectionId String     @map("collection_id")
+
+  @@map("albums_collections")
+}
+
+model Game {
+  id   String @id @default(uuid())
+  name String @unique @db.VarChar(100)
+
+  albums Album[]
+
+  @@map("games")
+}
+
+model TrackListened {
+  id String @id @default(uuid())
+
+  track   Track  @relation(fields: [trackId], references: [id])
+  trackId String @map("track_id")
+
+  @@map("tracks_listened")
 }
