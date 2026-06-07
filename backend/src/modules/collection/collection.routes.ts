@@ -1,10 +1,9 @@
 import type { FastifyInstance } from "fastify";
 import validate from "../../plugins/zod-validator.js";
-import { collectionController } from "./collection.controller.js";
+import { CollectionController } from "./collection.controller.js";
 import { CollectionService } from "./collection.service.js";
 
 import {
-  collectionQuerySchema,
   createCollectionSchema,
   updateCollectionSchema,
 } from "../../schemas/collection.schema.js";
@@ -19,13 +18,13 @@ type optionsType = {
 const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   const collectionRepository = new CollectionRepository();
   const collectionService = new CollectionService(collectionRepository);
-  const controller = new collectionController(collectionService);
+  const collectionController = new CollectionController(collectionService);
   fastify.get(
     "/",
     {
-      preHandler: [validate({ query: collectionQuerySchema })],
+      preHandler: [validate({ query: querySchema })],
     },
-    controller.getCollections,
+    collectionController.getCollections,
   );
 
   fastify.get(
@@ -33,25 +32,29 @@ const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
     {
       preHandler: [validate({ params: paramsSchema })],
     },
-    controller.getCollection,
+    collectionController.getCollection,
   );
 
   fastify.post(
     "/",
     { preHandler: [validate({ body: createCollectionSchema })] },
-    controller.createCollection,
+    collectionController.createCollection,
   );
 
   fastify.put(
-    "/",
-    { preHandler: [validate({ body: updateCollectionSchema })] },
-    controller.updateCollection,
+    "/:id",
+    {
+      preHandler: [
+        validate({ body: updateCollectionSchema, params: paramsSchema }),
+      ],
+    },
+    collectionController.updateCollection,
   );
 
   fastify.get(
     "/search",
     { preHandler: [validate({ query: querySchema })] },
-    controller.searchCollection,
+    collectionController.searchCollection,
   );
 
   fastify.delete(
@@ -59,7 +62,7 @@ const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
     {
       preHandler: [validate({ params: paramsSchema })],
     },
-    controller.deleteCollection,
+    collectionController.deleteCollection,
   );
 };
 

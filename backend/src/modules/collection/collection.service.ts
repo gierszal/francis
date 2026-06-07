@@ -3,6 +3,7 @@ import type {
   createCollectionType,
   updateCollectionType,
 } from "@/types/collection/collection.js";
+import type { CollectionServiceType } from "@/types/collection/collection.js";
 
 export class CollectionService implements CollectionServiceType {
   constructor(collectionRepository: CollectionRepository) {}
@@ -16,7 +17,11 @@ export class CollectionService implements CollectionServiceType {
     };
   }
 
-  async getCollections(count: number = 10, offset: number = 0) {
+  async getCollections(
+    searchQuery?: string,
+    count: number = 10,
+    offset: number = 0,
+  ) {
     console.log(
       `[COLLECTION SERVICE] Getting collections: count=${count}, offset=${offset}`,
     );
@@ -66,5 +71,3 @@ export class CollectionService implements CollectionServiceType {
     return { success: true, id };
   }
 }
-
-export type CollectionServiceType = InstanceType<typeof CollectionService>;

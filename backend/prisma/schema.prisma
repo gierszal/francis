@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String   @id @default(uuid())
+  firstName      String   @db.VarChar(100)
+  lastName       String?  @db.VarChar(100)
+  email          String   @unique @db.VarChar(100)
+  activationLink String   @db.VarChar(100)
+  isActivated    Boolean  @default(false) @db.Boolean()
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  role   Role   @relation(fields: [roleId], references: [id])
+  roleId String
+
+  playlists Playlist[]
+  token     Token?
+}
+
+model Role {
+  id   String @id @default(uuid())
+  role String @unique @db.VarChar(100)
+
+  users User[]
+}
+
+model Playlist {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(100)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  author         User            @relation(fields: [authorId], references: [id])
+  authorId       String
+  playlistTracks PlaylistTrack[]
+}
+
+model Token {
+  id           String @id @default(uuid())
+  refreshToken String @unique
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+}
+
+model PlaylistTrack {
+  id String @id @default(uuid())
+
+  playlist   Playlist @relation(fields: [playlistId], references: [id])
+  playlistId String
+
+  // trackId    String
+}
+
+model Track {
+  id     String @id @default(uuid())
+  name   String @unique @db.VarChar(100)
+  artist String @db.VarChar(100)
+  audio  String @db.VarChar(100)
+}

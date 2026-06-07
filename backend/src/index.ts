@@ -10,16 +10,18 @@ import playlistRoutes from "./modules/playlist/playlist.routes.js";
 import collectionRoutes from "./modules/collection/collection.routes.js";
 import userRoutes from "./modules/user/user.routes.js";
 import authRoutes from "./modules/auth/auth.routes.js";
+import gameRoutes from "./modules/game/game.routes.js";
 
 const server = fastify({ logger: { level: "info" } });
 
 server.register(fastifyMultipart);
-server.register(trackRoutes, { prefix: "/api/tracks" });
-server.register(albumRoutes, { prefix: "/api/albums" });
-server.register(playlistRoutes, { prefix: "/api/playlists" });
-server.register(collectionRoutes, { prefix: "/api/collections" });
-server.register(userRoutes, { prefix: "/api/users" });
-server.register(authRoutes, { prefix: "/api/auth" });
+server.register(trackRoutes, { prefix: "/api/v1/tracks" });
+server.register(albumRoutes, { prefix: "/api/v1/albums" });
+server.register(playlistRoutes, { prefix: "/api/v1/playlists" });
+server.register(collectionRoutes, { prefix: "/api/v1/collections" });
+server.register(userRoutes, { prefix: "/api/v1/users" });
+server.register(gameRoutes, { prefix: "/api/v1/games" });
+server.register(authRoutes, { prefix: "/api/v1/auth" });
 
 server.get("*", function (_req, rep) {
   rep.send({ message: "Not found" });

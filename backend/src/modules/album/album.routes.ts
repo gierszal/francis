@@ -1,11 +1,10 @@
 import type { FastifyInstance } from "fastify";
 import validate from "../../plugins/zod-validator.js";
-import { albumController } from "./album.controller.js";
+import { AlbumController } from "./album.controller.js";
 import { AlbumService } from "./album.service.js";
 
 import {
   addToCollectionSchema,
-  albumQuerySchema,
   createAlbumSchema,
   updateAlbumSchema,
 } from "../../schemas/album.schema.js";
@@ -19,14 +18,14 @@ type optionsType = {
 
 const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   const albumRepository = new AlbumRepository();
-  const service = new AlbumService(albumRepository);
-  const controller = new albumController(service);
+  const albumService = new AlbumService(albumRepository);
+  const albumController = new AlbumController(albumService);
   fastify.get(
     "/",
     {
-      preHandler: [validate({ query: albumQuerySchema })],
+      preHandler: [validate({ query: querySchema })],
     },
-    controller.getAlbums,
+    albumController.getAlbums,
   );
 
   fastify.get(
@@ -34,25 +33,27 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
     {
       preHandler: [validate({ params: paramsSchema })],
     },
-    controller.getAlbum,
+    albumController.getAlbum,
   );
 
   fastify.post(
     "/",
     { preHandler: [validate({ body: createAlbumSchema })] },
-    controller.createAlbum,
+    albumController.createAlbum,
   );
 
   fastify.put(
-    "/",
-    { preHandler: [validate({ body: updateAlbumSchema })] },
-    controller.updateAlbum,
+    "/:id",
+    {
+      preHandler: [validate({ body: updateAlbumSchema, params: paramsSchema })],
+    },
+    albumController.updateAlbum,
   );
 
   fastify.get(
     "/search",
     { preHandler: [validate({ query: querySchema })] },
-    controller.searchAlbum,
+    albumController.searchAlbum,
   );
 
   fastify.delete(
@@ -60,13 +61,13 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
     {
       preHandler: [validate({ params: paramsSchema })],
     },
-    controller.deleteAlbum,
+    albumController.deleteAlbum,
   );
 
   fastify.post(
     "/:albumID/collections/:collectionID",
     { preHandler: [validate({ params: addToCollectionSchema })] },
-    controller.addToCollection,
+    albumController.addToCollection,
   );
 };
 

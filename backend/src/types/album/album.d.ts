@@ -1,6 +1,5 @@
 import {
   addToCollectionSchema,
-  albumQuerySchema,
   createAlbumSchema,
   updateAlbumSchema,
 } from "@/schemas/album.schema.ts";
@@ -10,9 +9,8 @@ import { z } from "zod";
 export type createAlbumType = z.infer<typeof createAlbumSchema>;
 export type updateAlbumType = z.infer<typeof updateAlbumSchema>;
 export type addToCollectionType = z.infer<typeof addToCollectionSchema>;
-export type albumQueryType = z.infer<typeof albumQuerySchema>;
 
-export type albumServiceType = {
+export type AlbumServiceType = {
   getAlbum: (id: string) => Promise<any>;
   getAlbums: (
     searchQuery?: string,

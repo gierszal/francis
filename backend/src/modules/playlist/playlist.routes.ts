@@ -1,11 +1,10 @@
 import type { FastifyInstance } from "fastify";
 import validate from "../../plugins/zod-validator.js";
-import { playlistController } from "./playlist.controller.js";
+import { PlaylistController } from "./playlist.controller.js";
 import { PlaylistService } from "./playlist.service.js";
 
 import {
   createPlaylistSchema,
-  playlistQuerySchema,
   updatePlaylistSchema,
 } from "../../schemas/playlist.schema.js";
 import { PlaylistRepository } from "@/repositories/prisma/playlist.repository.js";
@@ -19,13 +18,13 @@ type optionsType = {
 const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   const playlistRepository = new PlaylistRepository();
   const playlistService = new PlaylistService(playlistRepository);
-  const controller = new playlistController(playlistService);
+  const playlistController = new PlaylistController(playlistService);
   fastify.get(
     "/",
     {
-      preHandler: [validate({ query: playlistQuerySchema })],
+      preHandler: [validate({ query: querySchema })],
     },
-    controller.getPlaylists,
+    playlistController.getPlaylists,
   );
 
   fastify.get(
@@ -33,25 +32,29 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
     {
       preHandler: [validate({ params: paramsSchema })],
     },
-    controller.getPlaylist,
+    playlistController.getPlaylist,
   );
 
   fastify.post(
     "/",
     { preHandler: [validate({ body: createPlaylistSchema })] },
-    controller.createPlaylist,
+    playlistController.createPlaylist,
   );
 
   fastify.put(
-    "/",
-    { preHandler: [validate({ body: updatePlaylistSchema })] },
-    controller.updatePlaylist,
+    "/:id",
+    {
+      preHandler: [
+        validate({ body: updatePlaylistSchema, params: paramsSchema }),
+      ],
+    },
+    playlistController.updatePlaylist,
   );
 
   fastify.get(
     "/search",
     { preHandler: [validate({ query: querySchema })] },
-    controller.searchPlaylist,
+    playlistController.searchPlaylist,
   );
 
   fastify.delete(
@@ -59,7 +62,7 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
     {
       preHandler: [validate({ params: paramsSchema })],
     },
-    controller.deletePlaylist,
+    playlistController.deletePlaylist,
   );
 };
 

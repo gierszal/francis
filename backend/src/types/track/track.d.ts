@@ -3,7 +3,6 @@ import {
   addToFavouritesSchema,
   addToPlaylistSchema,
   createTrackSchema,
-  trackQuerySchema,
   updateTrackSchema,
 } from "@/schemas/track.schema.ts";
 
@@ -14,9 +13,8 @@ export type updateTrackType = z.infer<typeof updateTrackSchema>;
 export type addToAlbumType = z.infer<typeof addToAlbumSchema>;
 export type addToFavouritesType = z.infer<typeof addToFavouritesSchema>;
 export type addToPlaylistType = z.infer<typeof addToPlaylistSchema>;
-export type trackQueryType = z.infer<typeof trackQuerySchema>;
 
-export type trackServiceType = {
+export type TrackServiceType = {
   getTrack: (id: string) => Promise<any>;
   getTracks: (
     searchQuery?: string,

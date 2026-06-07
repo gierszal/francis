@@ -1,17 +1,16 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import type { trackServiceType } from "@/types/track/track.js";
+import type { TrackServiceType } from "@/types/track/track.js";
 import type {
   addToAlbumType,
   addToPlaylistType,
   createTrackType,
-  trackQueryType,
   updateTrackType,
 } from "../../types/track/track.js";
 import type { paramsType } from "@/types/common/params.js";
 import type { queryType } from "@/types/common/query.js";
 
-class TrackController {
-  constructor(private service: trackServiceType) {}
+export class TrackController {
+  constructor(private trackService: TrackServiceType) {}
   public getTrack = (
     request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
@@ -44,7 +43,7 @@ class TrackController {
   };
 
   public updateTrack = (
-    request: FastifyRequest<{ Body: updateTrackType }>,
+    request: FastifyRequest<{ Body: updateTrackType; Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { name, artist, picture, audio } = request.body;
@@ -114,6 +113,3 @@ class TrackController {
     });
   };
 }
-
-export type trackControllerType = InstanceType<typeof TrackController>;
-export { TrackController };

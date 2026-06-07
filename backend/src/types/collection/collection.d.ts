@@ -8,7 +8,6 @@ import { z } from "zod";
 
 export type createCollectionType = z.infer<typeof createCollectionSchema>;
 export type updateCollectionType = z.infer<typeof updateCollectionSchema>;
-export type collectionQueryType = z.infer<typeof collectionQuerySchema>;
 
 export type CollectionServiceType = {
   getCollection: (id: string) => Promise<any>;

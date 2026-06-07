@@ -8,7 +8,6 @@ import { z } from "zod";
 
 export type createPlaylistType = z.infer<typeof createPlaylistSchema>;
 export type updatePlaylistType = z.infer<typeof updatePlaylistSchema>;
-export type playlistQueryType = z.infer<typeof playlistQuerySchema>;
 
 export type PlaylistServiceType = {
   getPlaylist: (id: string) => Promise<any>;

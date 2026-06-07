@@ -44,8 +44,10 @@ const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   );
 
   fastify.put(
-    "/",
-    { preHandler: [validate({ body: updateTrackSchema })] },
+    "/:id",
+    {
+      preHandler: [validate({ body: updateTrackSchema, params: paramsSchema })],
+    },
     controller.updateTrack,
   );
 

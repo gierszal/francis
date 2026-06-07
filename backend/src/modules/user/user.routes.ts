@@ -5,7 +5,6 @@ import { UserService } from "./user.service.js";
 
 import { updateUserSchema } from "../../schemas/user.schema.js";
 import { UserRepository } from "@/repositories/prisma/user.repository.js";
-import { createPlaylistSchema } from "@/schemas/playlist.schema.js";
 import { querySchema } from "@/schemas/common/query.schema.js";
 import { addToFavouritesSchema } from "@/schemas/track.schema.js";
 import { paramsSchema } from "@/schemas/common/params.schema.js";

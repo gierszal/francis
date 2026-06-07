@@ -1,4 +1,5 @@
 import { PlaylistRepository } from "@/repositories/prisma/playlist.repository.js";
+import type { PlaylistServiceType } from "@/types/playlist/playlist.js";
 
 export class PlaylistService implements PlaylistServiceType {
   constructor(private playlistRepository: PlaylistRepository) {}
@@ -13,7 +14,11 @@ export class PlaylistService implements PlaylistServiceType {
     return playlist;
   }
 
-  async getPlaylists(count: number = 10, offset: number = 0) {
+  async getPlaylists(
+    searchQuery?: string,
+    count: number = 10,
+    offset: number = 0,
+  ) {
     console.log(
       `[PLAYLIST SERVICE] Getting playlists: count=${count}, offset=${offset}`,
     );
@@ -90,5 +95,3 @@ export class PlaylistService implements PlaylistServiceType {
     return { success: deleted || true, id };
   }
 }
-
-export type PlaylistServiceType = InstanceType<typeof PlaylistService>;

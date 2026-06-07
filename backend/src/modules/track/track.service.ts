@@ -1,11 +1,11 @@
 import type { TrackRepository } from "@/repositories/prisma/track.repository.js";
 import type {
   createTrackType,
-  trackServiceType,
+  TrackServiceType,
   updateTrackType,
 } from "@/types/track/track.js";
 
-export class TrackService implements trackServiceType {
+export class TrackService implements TrackServiceType {
   constructor(trackRepository: TrackRepository) {}
   async getTrack(id: string) {
     console.log(`Getting track: ${id}`);

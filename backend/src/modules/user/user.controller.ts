@@ -1,6 +1,5 @@
 import type { paramsType } from "@/types/common/params.js";
 import type { queryType } from "@/types/common/query.js";
-import type { createPlaylistType } from "@/types/playlist/playlist.js";
 import type { addToFavouritesType } from "@/types/track/track.js";
 import type { updateUserType, UserServiceType } from "@/types/user/user.js";
 import type { FastifyReply, FastifyRequest } from "fastify";
@@ -60,7 +59,7 @@ export class UserController {
   };
 
   updateUser = async (
-    request: FastifyRequest<{ Body: updateUserType }>,
+    request: FastifyRequest<{ Body: updateUserType; Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const result = await this.userService.updateUser("", request.body);
@@ -74,4 +73,3 @@ export class UserController {
     return reply.send(result);
   };
 }
-export type UserControllerType = InstanceType<typeof UserController>;

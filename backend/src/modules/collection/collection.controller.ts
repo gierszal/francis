@@ -1,14 +1,13 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import type { CollectionServiceType } from "./collection.service.js";
 import type {
-  collectionQueryType,
+  CollectionServiceType,
   createCollectionType,
   updateCollectionType,
 } from "../../types/collection/collection.js";
 import type { paramsType } from "@/types/common/params.js";
 import type { queryType } from "@/types/common/query.js";
 
-class collectionController {
+export class CollectionController {
   constructor(private service: CollectionServiceType) {}
   public getCollection = (
     request: FastifyRequest<{ Params: paramsType }>,
@@ -19,10 +18,10 @@ class collectionController {
   };
 
   public getCollections = (
-    request: FastifyRequest<{ Querystring: collectionQueryType }>,
+    request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
-    const { count, offset } = request.query;
+    const { count, offset, searchQuery } = request.query;
     reply.send({
       message: "Get all collections",
       count,
@@ -42,7 +41,10 @@ class collectionController {
   };
 
   public updateCollection = (
-    request: FastifyRequest<{ Body: updateCollectionType }>,
+    request: FastifyRequest<{
+      Body: updateCollectionType;
+      Params: updateCollectionType;
+    }>,
     reply: FastifyReply,
   ) => {
     const { name } = request.body;
@@ -74,6 +76,5 @@ class collectionController {
 }
 
 export type collectionControllerType = InstanceType<
-  typeof collectionController
+  typeof CollectionController
 >;
-export { collectionController };

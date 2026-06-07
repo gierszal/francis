@@ -1,14 +1,15 @@
 import type { AlbumRepository } from "@/repositories/prisma/album.repository.js";
 import type { createAlbumType, updateAlbumType } from "@/types/album/album.js";
+import type { AlbumServiceType } from "@/types/album/album.js";
 
-export class AlbumService implements albumServiceType {
+export class AlbumService implements AlbumServiceType {
   constructor(private albumRepository: AlbumRepository) {}
   async getAlbum(id: string) {
     console.log(`Getting album: ${id}`);
     return { id, name: "Mock Album" };
   }
 
-  async getAlbums(count = 10, offset = 0) {
+  async getAlbums(searchQuery?: string, count = 10, offset = 0) {
     return { albums: [], total: 0, count, offset };
   }
 
@@ -32,5 +33,3 @@ export class AlbumService implements albumServiceType {
     return { success: true, albumID, collectionID };
   }
 }
-
-export type albumServiceType = InstanceType<typeof AlbumService>;

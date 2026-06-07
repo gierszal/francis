@@ -1,16 +1,15 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import type { albumServiceType } from "./album.service.js";
+import type { AlbumServiceType } from "../../types/album/album.js";
 import type {
   addToCollectionType,
-  albumQueryType,
   createAlbumType,
   updateAlbumType,
 } from "../../types/album/album.js";
 import type { paramsType } from "@/types/common/params.js";
 import type { queryType } from "@/types/common/query.js";
 
-class albumController {
-  constructor(private service: albumServiceType) {}
+export class AlbumController {
+  constructor(private service: AlbumServiceType) {}
   public getAlbum = (
     request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
@@ -20,10 +19,10 @@ class albumController {
   };
 
   public getAlbums = (
-    request: FastifyRequest<{ Querystring: albumQueryType }>,
+    request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
-    const { count, offset } = request.query;
+    const { count, offset, searchQuery } = request.query;
     reply.send({
       message: "OK",
     });
@@ -81,6 +80,3 @@ class albumController {
     });
   };
 }
-
-export type albumControllerType = InstanceType<typeof albumController>;
-export { albumController };
