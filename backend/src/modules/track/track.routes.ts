@@ -57,12 +57,6 @@ const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
     controller.listenIncrement,
   );
 
-  fastify.get(
-    "/search",
-    { preHandler: [validate({ query: querySchema })] },
-    controller.searchTrack,
-  );
-
   fastify.get("/recommendations", controller.getRecommendations);
 
   fastify.delete(
@@ -74,7 +68,7 @@ const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   );
 
   fastify.post(
-    "/:trackID/albums/:albumID",
+    "/:trackId/albums/:albumId",
     { preHandler: [validate({ params: addToAlbumSchema })] },
     controller.addToAlbum,
   );

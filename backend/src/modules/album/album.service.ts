@@ -1,35 +1,36 @@
 import type { AlbumRepository } from "@/repositories/prisma/album.repository.js";
-import type { createAlbumType, updateAlbumType } from "@/types/album/album.js";
+import type {
+  addToCollectionType,
+  createAlbumType,
+  updateAlbumType,
+} from "@/types/album/album.js";
 import type { AlbumServiceType } from "@/types/album/album.js";
+import type { queryType } from "@/types/common/query.js";
 
 export class AlbumService implements AlbumServiceType {
   constructor(private albumRepository: AlbumRepository) {}
+
   async getAlbum(id: string) {
-    console.log(`Getting album: ${id}`);
-    return { id, name: "Mock Album" };
+    return await this.albumRepository.findById(id);
   }
 
-  async getAlbums(searchQuery?: string, count = 10, offset = 0) {
-    return { albums: [], total: 0, count, offset };
+  async getAlbums(data: queryType) {
+    return await this.albumRepository.findAll(data);
   }
 
   async createAlbum(data: createAlbumType) {
-    return { id: "123", ...data };
+    return await this.albumRepository.create(data);
   }
 
   async updateAlbum(id: string, data: updateAlbumType) {
-    return { id, ...data };
-  }
-
-  async searchAlbum(searchQuery = "", count = 10) {
-    return { results: [], searchQuery, count };
+    return await this.albumRepository.update(id, data);
   }
 
   async deleteAlbum(id: string) {
-    return { success: true, id };
+    return await this.albumRepository.remove(id);
   }
 
-  async addToCollection(albumID: string, collectionID: string) {
-    return { success: true, albumID, collectionID };
+  async addToCollection(data: addToCollectionType) {
+    return await this.albumRepository.addToCollection(data);
   }
 }

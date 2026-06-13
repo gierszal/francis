@@ -186,17 +186,14 @@ async function main() {
   await prisma.albumCollection.createMany({
     data: [
       {
-        name: "KCD Collection",
         albumId: kcdAlbum.id,
         collectionId: medievalCollection.id,
       },
       {
-        name: "Witcher Collection",
         albumId: witcherAlbum.id,
         collectionId: fantasyCollection.id,
       },
       {
-        name: "Skyrim Collection",
         albumId: skyrimAlbum.id,
         collectionId: fantasyCollection.id,
       },

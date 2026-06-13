@@ -51,12 +51,6 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
     playlistController.updatePlaylist,
   );
 
-  fastify.get(
-    "/search",
-    { preHandler: [validate({ query: querySchema })] },
-    playlistController.searchPlaylist,
-  );
-
   fastify.delete(
     "/:id",
     {

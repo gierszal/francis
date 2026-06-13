@@ -1,57 +1,26 @@
 import type { GameRepository } from "@/repositories/prisma/game.repository.js";
+import type { queryType } from "@/types/common/query.js";
 import type { updateGameType, createGameType } from "@/types/game/game.js";
 
 export class GameService {
   constructor(private gameRepository: GameRepository) {}
   public getGame = async (id: string) => {
-    return {
-      message: `Get game with id: ${id}`,
-    };
+    return await this.gameRepository.findById(id);
   };
 
-  public getGames = async (
-    searchQuery?: string,
-    count?: number,
-    offset?: number,
-  ) => {
-    return {
-      message: "Get games list",
-      searchQuery: searchQuery || "",
-      count: count || 20,
-      offset: offset || 0,
-    };
-  };
-
-  public searchGames = async (
-    searchQuery: string,
-    count?: number,
-    offset?: number,
-  ) => {
-    return {
-      message: "Search games",
-      searchQuery: searchQuery,
-      count: count || 20,
-      offset: offset || 0,
-    };
+  public getGames = async (data: queryType) => {
+    return await this.gameRepository.findAll(data);
   };
 
   public createGame = async (gameData: createGameType) => {
-    return {
-      message: "Create game",
-      data: gameData,
-    };
+    return await this.gameRepository.create(gameData);
   };
 
-  public updateGame = async (id: string, updateData: updateGameType) => {
-    return {
-      message: `Update game with id: ${id}`,
-      data: updateData,
-    };
+  public updateGame = async (id: string, data: updateGameType) => {
+    return await this.gameRepository.update(id, data);
   };
 
   public deleteGame = async (id: string) => {
-    return {
-      message: `Delete game with id: ${id}`,
-    };
+    return await this.gameRepository.remove(id);
   };
 }

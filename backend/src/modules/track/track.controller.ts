@@ -11,94 +11,136 @@ import type { queryType } from "@/types/common/query.js";
 
 export class TrackController {
   constructor(private trackService: TrackServiceType) {}
-  public getTrack = (
+
+  public getTrack = async (
     request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
-    reply.send({ message: `Get track with id: ${id}` });
+    const track = await this.trackService.getTrack(id);
+    if (!track) {
+      return reply.status(404).send({
+        error: "Not Found",
+        message: `Track with id ${id} not found`,
+      });
+    }
+    reply.send({ data: track });
   };
 
-  public getTracks = (
+  public getTracks = async (
     request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
-    const { count, offset } = request.query;
-    reply.send({
-      message: "Get all tracks",
-      count,
-      offset,
-    });
+    const opts = request.query;
+    const tracks = await this.trackService.getTracks(opts);
+    reply.send(tracks);
   };
 
-  public createTrack = (
+  public createTrack = async (
     request: FastifyRequest<{ Body: createTrackType }>,
     reply: FastifyReply,
   ) => {
-    const { name, artist, picture, audio } = request.body;
-    reply.send({
-      message: "Track created",
-      data: { name, artist, picture, audio },
-    });
+    const data = request.body;
+    const track = await this.trackService.createTrack(data);
+    reply.send({ data: track });
   };
 
-  public updateTrack = (
+  public updateTrack = async (
     request: FastifyRequest<{ Body: updateTrackType; Params: paramsType }>,
     reply: FastifyReply,
   ) => {
-    const { name, artist, picture, audio } = request.body;
-    reply.send({
-      message: "Track created",
-      data: { name, artist, picture, audio },
-    });
+    try {
+      const data = request.body;
+      const { id } = request.params;
+      const track = await this.trackService.updateTrack(id, data);
+      reply.send({ data: track });
+    } catch (err: any) {
+      if (err.message?.includes("not found")) {
+        return reply.status(404).send({
+          error: "Not Found",
+          message: err.message,
+        });
+      }
+      throw err;
+    }
   };
 
-  public listenIncrement = (
+  public listenIncrement = async (
     request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
-    const { id } = request.params;
-    reply.send({ message: `Increment listen count for track: ${id}` });
+    try {
+      const { id } = request.params;
+      await this.trackService.listenIncrement(id);
+      reply.send({ message: "success" });
+    } catch (err: any) {
+      if (err.message?.includes("not found")) {
+        return reply.status(404).send({
+          error: "Not Found",
+          message: err.message,
+        });
+      }
+      throw err;
+    }
   };
 
-  public searchTrack = (
-    request: FastifyRequest<{ Querystring: queryType }>,
-    reply: FastifyReply,
-  ) => {
-    const { searchQuery, count, offset } = request.query;
-    reply.send({
-      message: "Search tracks",
-      searchQuery: searchQuery || "",
-      count: count || 10,
-    });
-  };
-
-  public deleteTrack = (
+  public deleteTrack = async (
     request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
-    const { id } = request.params;
-    reply.send({ message: `Delete track with id: ${id}` });
+    try {
+      const { id } = request.params;
+      const track = await this.trackService.deleteTrack(id);
+      reply.send({ track });
+    } catch (err: any) {
+      if (err.message?.includes("not found")) {
+        return reply.status(404).send({
+          error: "Not Found",
+          message: err.message,
+        });
+      }
+      throw err;
+    }
   };
 
-  public addToAlbum = (
+  public addToAlbum = async (
     request: FastifyRequest<{ Params: addToAlbumType }>,
     reply: FastifyReply,
   ) => {
-    const { trackID, albumID } = request.params;
-    reply.send({
-      message: `Add track ${trackID} to album ${albumID}`,
-    });
+    try {
+      const data = request.params;
+      const track = await this.trackService.addToAlbum(data);
+      reply.send({ track });
+    } catch (err: any) {
+      if (err.message?.includes("not found")) {
+        return reply.status(404).send({
+          error: "Not Found",
+          message: err.message,
+        });
+      }
+      throw err;
+    }
   };
 
-  public addToPlaylist = (
+  public addToPlaylist = async (
     request: FastifyRequest<{ Params: addToPlaylistType }>,
     reply: FastifyReply,
   ) => {
-    const { trackID, playlistID } = request.params;
-    reply.send({
-      message: `Add track ${trackID} to playlist ${playlistID}`,
-    });
+    try {
+      const data = request.params;
+      const result = await this.trackService.addToPlaylist(data);
+      reply.send({
+        message: result,
+      });
+    } catch (err: any) {
+      if (err.message?.includes("not found")) {
+        return reply.status(404).send({
+          error: "Not Found",
+          message: err.message,
+        });
+      }
+      throw err;
+    }
   };
 
   public getRecommendations = (

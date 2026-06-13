@@ -50,12 +50,6 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
     albumController.updateAlbum,
   );
 
-  fastify.get(
-    "/search",
-    { preHandler: [validate({ query: querySchema })] },
-    albumController.searchAlbum,
-  );
-
   fastify.delete(
     "/:id",
     {
@@ -65,7 +59,7 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   );
 
   fastify.post(
-    "/:albumID/collections/:collectionID",
+    "/:albumId/collections/:collectionId",
     { preHandler: [validate({ params: addToCollectionSchema })] },
     albumController.addToCollection,
   );

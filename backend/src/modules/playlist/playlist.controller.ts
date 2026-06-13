@@ -8,66 +8,77 @@ import type { paramsType } from "@/types/common/params.js";
 import type { queryType } from "@/types/common/query.js";
 
 export class PlaylistController {
-  constructor(private service: PlaylistServiceType) {}
-  public getPlaylist = (
+  constructor(private playlistService: PlaylistServiceType) {}
+
+  public getPlaylist = async (
     request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
-    reply.send({ message: `Get playlist with id: ${id}` });
+    const playlist = await this.playlistService.getPlaylist(id);
+    if (!playlist) {
+      return reply.status(404).send({
+        error: "Not Found",
+        message: `Playlist with id ${id} not found`,
+      });
+    }
+    reply.send({ data: playlist });
   };
 
-  public getPlaylists = (
+  public getPlaylists = async (
     request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
-    const { count, offset } = request.query;
-    reply.send({
-      message: "Get all playlists",
-      count,
-      offset,
-    });
+    const opts = request.query;
+    const playlists = await this.playlistService.getPlaylists(opts);
+    reply.send(playlists);
   };
 
-  public createPlaylist = (
+  public createPlaylist = async (
     request: FastifyRequest<{ Body: createPlaylistType }>,
     reply: FastifyReply,
   ) => {
-    const { name, description, source } = request.body;
-    reply.send({
-      message: "Playlist created",
-      data: { name, description, source },
-    });
+    const data = request.body;
+    const playlist = await this.playlistService.createPlaylist(data);
+    reply.send({ data: playlist });
   };
 
-  public updatePlaylist = (
+  public updatePlaylist = async (
     request: FastifyRequest<{ Body: updatePlaylistType; Params: paramsType }>,
     reply: FastifyReply,
   ) => {
-    const { name, description, source } = request.body;
-    reply.send({
-      message: "Playlist created",
-      data: { name, description, source },
-    });
+    try {
+      const data = request.body;
+      const { id } = request.params;
+      const playlist = await this.playlistService.updatePlaylist(id, data);
+      reply.send({ data: playlist });
+    } catch (err: any) {
+      if (err.message?.includes("not found")) {
+        return reply.status(404).send({
+          error: "Not Found",
+          message: err.message,
+        });
+      }
+      throw err;
+    }
   };
 
-  public searchPlaylist = (
-    request: FastifyRequest<{ Querystring: queryType }>,
-    reply: FastifyReply,
-  ) => {
-    const { searchQuery, count } = request.query;
-    reply.send({
-      message: "Search playlists",
-      searchQuery: searchQuery || "",
-      count: count || 10,
-    });
-  };
-
-  public deletePlaylist = (
+  public deletePlaylist = async (
     request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
-    const { id } = request.params;
-    reply.send({ message: `Delete playlist with id: ${id}` });
+    try {
+      const { id } = request.params;
+      const playlist = await this.playlistService.deletePlaylist(id);
+      reply.send({ playlist });
+    } catch (err: any) {
+      if (err.message?.includes("not found")) {
+        return reply.status(404).send({
+          error: "Not Found",
+          message: err.message,
+        });
+      }
+      throw err;
+    }
   };
 }

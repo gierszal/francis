@@ -11,6 +11,8 @@ import collectionRoutes from "./modules/collection/collection.routes.js";
 import userRoutes from "./modules/user/user.routes.js";
 import authRoutes from "./modules/auth/auth.routes.js";
 import gameRoutes from "./modules/game/game.routes.js";
+import { fastifyCookie } from "@fastify/cookie";
+import { errorHandler } from "./errors/errorHandler.js";
 
 const server = fastify({ logger: { level: "info" } });
 
@@ -22,6 +24,11 @@ server.register(collectionRoutes, { prefix: "/api/v1/collections" });
 server.register(userRoutes, { prefix: "/api/v1/users" });
 server.register(gameRoutes, { prefix: "/api/v1/games" });
 server.register(authRoutes, { prefix: "/api/v1/auth" });
+server.register(fastifyCookie, {
+  secret: process.env.COOKIE_KEY!,
+});
+
+server.setErrorHandler(errorHandler);
 
 server.get("*", function (_req, rep) {
   rep.send({ message: "Not found" });

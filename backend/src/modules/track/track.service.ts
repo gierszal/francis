@@ -1,60 +1,50 @@
-import type { TrackRepository } from "@/repositories/prisma/track.repository.js";
+import { TrackRepository } from "@/repositories/prisma/track.repository.js";
+import type { queryType } from "@/types/common/query.js";
 import type {
+  addToAlbumType,
+  addToPlaylistType,
   createTrackType,
   TrackServiceType,
   updateTrackType,
 } from "@/types/track/track.js";
 
 export class TrackService implements TrackServiceType {
-  constructor(trackRepository: TrackRepository) {}
+  constructor(private trackRepository: TrackRepository) {}
+
   async getTrack(id: string) {
-    console.log(`Getting track: ${id}`);
-    return { id, name: "Mock Track", artist: "Mock Artist" };
+    return this.trackRepository.findById(id);
   }
 
-  async getTracks(searchQuery = "", count: number = 10, offset: number = 0) {
-    console.log(`Getting tracks: count=${count}, offset=${offset}`);
-    return { tracks: [], total: 0, count, offset };
+  async getTracks(opts: queryType) {
+    return this.trackRepository.findAll(opts);
   }
 
   async createTrack(data: createTrackType) {
-    console.log(`Creating track: ${data.name}`);
-    return { id: "mock-id-123", ...data, createdAt: new Date() };
+    return this.trackRepository.create(data);
   }
 
   async updateTrack(id: string, data: updateTrackType) {
-    console.log(`Updating track ${id}:`, data);
-    return { id, ...data, updatedAt: new Date() };
+    return this.trackRepository.update(id, data);
   }
 
   async listenIncrement(id: string) {
-    console.log(`Incrementing listen count for track: ${id}`);
-    return { id, listens: 42 };
-  }
-
-  async searchTrack(searchQuery: string = "", count: number = 10) {
-    console.log(`Searching tracks: ${searchQuery}, limit=${count}`);
-    return { results: [], searchQuery, count };
+    return this.trackRepository.listenIncrement(id);
   }
 
   async deleteTrack(id: string) {
-    console.log(`Deleting track: ${id}`);
-    return { success: true, id };
+    return this.trackRepository.remove(id);
   }
 
-  async addToAlbum(trackID: string, albumID: string) {
-    console.log(`Adding track ${trackID} to album ${albumID}`);
-    return { success: true, trackID, albumID };
+  async addToAlbum(data: addToAlbumType) {
+    return this.trackRepository.addToAlbum(data);
   }
 
   async addToFavorite(trackID: string) {
-    console.log(`Adding track ${trackID} to album ${trackID}`);
-    return { success: true, trackID };
+    // return this.trackRepository.addToFavourite(trackID);
   }
 
-  async addToPlaylist(trackID: string, playlistID: string) {
-    console.log(`Adding track ${trackID} to playlist ${playlistID}`);
-    return { success: true, trackID, playlistID };
+  async addToPlaylist(data: addToPlaylistType) {
+    return this.trackRepository.addToPlaylist(data);
   }
 
   async getRecommendations(

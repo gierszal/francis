@@ -49,12 +49,6 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
     gameController.updateGame,
   );
 
-  fastify.get(
-    "/search",
-    { preHandler: [validate({ query: querySchema })] },
-    gameController.searchGame,
-  );
-
   fastify.delete(
     "/:id",
     {

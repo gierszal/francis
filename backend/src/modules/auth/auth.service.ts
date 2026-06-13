@@ -7,35 +7,24 @@ import type {
 
 export class AuthService implements AuthServiceType {
   constructor(private authRepository: AuthRepository) {}
+
   async signUp(data: signUpType) {
-    return {
-      message: "signUp",
-      data,
-    };
+    return await this.authRepository.signUp(data);
   }
 
   async signIn(data: signUpType) {
-    return {
-      message: "signIn",
-      data,
-    };
+    return await this.authRepository.signIn(data);
   }
 
-  async signOut() {
-    return {
-      message: "signOut",
-    };
+  async signOut(refreshToken: string) {
+    return await this.authRepository.signOut(refreshToken);
   }
 
-  async refresh() {
-    return {
-      message: "refresh",
-    };
+  async refresh(refreshToken: string) {
+    return await this.authRepository.signOut(refreshToken);
   }
 
   async activate(link: activationLinkType["link"]) {
-    return {
-      message: "activate",
-    };
+    return await this.authRepository.signOut(link);
   }
 }

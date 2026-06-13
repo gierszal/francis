@@ -10,59 +10,75 @@ import type { queryType } from "@/types/common/query.js";
 export class GameController {
   constructor(private gameService: GameServiceType) {}
 
-  public getGame = (
+  public getGame = async (
     request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
-    return this.gameService.getGame(id);
+    const game = await this.gameService.getGame(id);
+    if (!game) {
+      return reply.status(404).send({
+        error: "Not Found",
+        message: `Game with id ${id} not found`,
+      });
+    }
+    reply.send({ data: game });
   };
 
-  public getGames = (
+  public getGames = async (
     request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
-    const { count, offset, searchQuery } = request.query;
-    return this.gameService.getGames(searchQuery, count, offset);
+    const opts = request.query;
+    const games = await this.gameService.getGames(opts);
+    reply.send(games);
   };
 
-  public searchGame = (
-    request: FastifyRequest<{ Querystring: queryType }>,
-    reply: FastifyReply,
-  ) => {
-    const { searchQuery, count, offset } = request.query;
-    reply.send({
-      message: "Search game",
-      searchQuery: searchQuery || "",
-      count: count || 10,
-    });
-  };
-
-  public createGame = (
+  public createGame = async (
     request: FastifyRequest<{ Body: createGameType }>,
     reply: FastifyReply,
   ) => {
-    const { name } = request.body;
-    return this.gameService.createGame({
-      name,
-    });
+    const data = request.body;
+    const game = await this.gameService.createGame(data);
+    reply.send({ data: game });
   };
 
-  public updateGame = (
+  public updateGame = async (
     request: FastifyRequest<{ Body: updateGameType; Params: paramsType }>,
     reply: FastifyReply,
   ) => {
-    const { name } = request.body;
-    return this.gameService.updateGame("", {
-      name,
-    });
+    try {
+      const data = request.body;
+      const { id } = request.params;
+      const game = await this.gameService.updateGame(id, data);
+      reply.send({ data: game });
+    } catch (err: any) {
+      if (err.message?.includes("not found")) {
+        return reply.status(404).send({
+          error: "Not Found",
+          message: err.message,
+        });
+      }
+      throw err;
+    }
   };
 
-  public deleteGame = (
+  public deleteGame = async (
     request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
-    const { id } = request.params;
-    return this.gameService.deleteGame(id);
+    try {
+      const { id } = request.params;
+      const game = await this.gameService.deleteGame(id);
+      reply.send({ game });
+    } catch (err: any) {
+      if (err.message?.includes("not found")) {
+        return reply.status(404).send({
+          error: "Not Found",
+          message: err.message,
+        });
+      }
+      throw err;
+    }
   };
 }

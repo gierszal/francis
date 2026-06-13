@@ -8,7 +8,7 @@ export type signUpType = z.infer<typeof signUpSchema>;
 export type AuthServiceType = {
   signUp: (data: signUpType) => Promise<any>;
   signIn: (data: signUpType) => Promise<any>;
-  signOut: () => Promise<any>;
-  refresh: () => Promise<any>;
-  activate: (link: string) => Promise<any>;
+  signOut: (refreshToken: string) => Promise<any>;
+  refresh: (refreshToken: string) => Promise<any>;
+  activate: (link: activationLinkType["link"]) => Promise<any>;
 };
