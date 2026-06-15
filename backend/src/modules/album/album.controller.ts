@@ -10,6 +10,7 @@ import type { queryType } from "@/types/common/query.js";
 
 export class AlbumController {
   constructor(private albumService: AlbumServiceType) {}
+
   public getAlbum = async (
     request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
@@ -39,7 +40,9 @@ export class AlbumController {
     reply: FastifyReply,
   ) => {
     const data = request.body;
-    const album = await this.albumService.createAlbum(data);
+    const pic = request.body.picture;
+    if (!pic) reply.code(400).send("The file is not provided!");
+    const album = await this.albumService.createAlbum(data, pic);
     reply.send({ data: album });
   };
 
@@ -50,15 +53,10 @@ export class AlbumController {
     try {
       const data = request.body;
       const { id } = request.params;
-      const album = await this.albumService.updateAlbum(id, data);
+      const pic = request.body.picture;
+      const album = await this.albumService.updateAlbum(id, data, pic);
       reply.send({ data: album });
     } catch (err: any) {
-      if (err.message?.includes("not found")) {
-        return reply.status(404).send({
-          error: "Not Found",
-          message: err.message,
-        });
-      }
       throw err;
     }
   };

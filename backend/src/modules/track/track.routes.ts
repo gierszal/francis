@@ -12,6 +12,10 @@ import {
 } from "../../schemas/track.schema.js";
 import { paramsSchema } from "@/schemas/common/params.schema.js";
 import { querySchema } from "@/schemas/common/query.schema.js";
+import { normalizeTrackMultipartBody } from "@/middlewares/normalize.middleware.js";
+import type { createTrackType, updateTrackType } from "@/types/track/track.js";
+import type { paramsType } from "@/types/common/params.js";
+import { FileService } from "@/services/fileService.js";
 
 type optionsType = {
   prefix: string;
@@ -19,7 +23,8 @@ type optionsType = {
 
 const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   const trackRepository = new TrackRepository();
-  const service = new TrackService(trackRepository);
+  const fileService = new FileService();
+  const service = new TrackService(trackRepository, fileService);
   const controller = new TrackController(service);
   fastify.get(
     "/",
@@ -37,16 +42,24 @@ const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
     controller.getTrack,
   );
 
-  fastify.post(
+  fastify.post<{ Body: createTrackType }>(
     "/",
-    { preHandler: [validate({ body: createTrackSchema })] },
+    {
+      preHandler: [
+        normalizeTrackMultipartBody,
+        validate({ body: createTrackSchema }),
+      ],
+    },
     controller.createTrack,
   );
 
-  fastify.put(
+  fastify.put<{ Body: updateTrackType; Params: paramsType }>(
     "/:id",
     {
-      preHandler: [validate({ body: updateTrackSchema, params: paramsSchema })],
+      preHandler: [
+        normalizeTrackMultipartBody,
+        validate({ body: updateTrackSchema, params: paramsSchema }),
+      ],
     },
     controller.updateTrack,
   );

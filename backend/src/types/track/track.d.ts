@@ -8,6 +8,7 @@ import {
 
 import { z } from "zod";
 import type { queryType } from "../common/query.js";
+import type { Multipart, MultipartFile } from "@fastify/multipart";
 
 export type createTrackType = z.infer<typeof createTrackSchema>;
 export type updateTrackType = z.infer<typeof updateTrackSchema>;
@@ -18,8 +19,12 @@ export type addToPlaylistType = z.infer<typeof addToPlaylistSchema>;
 export type TrackServiceType = {
   getTrack: (id: string) => Promise<any>;
   getTracks: (opts: queryType) => Promise<any>;
-  createTrack: (data: createTrackType) => Promise<any>;
-  updateTrack: (id: string, data: updateTrackType) => Promise<any>;
+  createTrack: (data: createTrackType, audio: MultipartFile) => Promise<any>;
+  updateTrack: (
+    id: string,
+    data: updateTrackType,
+    audio?: MultipartFile,
+  ) => Promise<any>;
   listenIncrement: (id: string) => Promise<any>;
   deleteTrack: (id: string) => Promise<any>;
   addToAlbum: (data: addToAlbumType) => Promise<any>;
@@ -30,4 +35,22 @@ export type TrackServiceType = {
     count?: number,
     offset?: number,
   ) => Promise<any>;
+};
+
+export type TrackRepositoryType = {
+  findAll(options?: queryType): Promise<FindAllResponse>;
+  findById(id: string): Promise<DetailedTrack | null>;
+  create(
+    data: createTrackType,
+    audio: string,
+  ): Promise<FormattedTrack | undefined>;
+  update(
+    id: string,
+    data: updateTrackType,
+    audioPath?: string,
+  ): Promise<FormattedTrack | null>;
+  listenIncrement(id: string): Promise<void | null>;
+  remove(id: string): Promise<FormattedTrack>;
+  addToAlbum(data: addToAlbumType): Promise<FormattedTrack>;
+  addToPlaylist(data: addToPlaylistType): Promise<void>;
 };

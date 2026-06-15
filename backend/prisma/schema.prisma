@@ -12,7 +12,8 @@ model User {
   firstName      String   @map("first_name") @db.VarChar(100)
   lastName       String?  @map("last_name") @db.VarChar(100)
   email          String   @unique @db.VarChar(100)
-  activationLink String   @map("activation_link") @db.VarChar(100)
+  password       String   @db.VarChar(255)
+  activationLink String   @unique @map("activation_link") @db.VarChar(100)
   isActivated    Boolean  @default(false) @map("is_activated") @db.Boolean()
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -20,9 +21,10 @@ model User {
   role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
   roleId String @map("role_id")
 
-  playlists  Playlist[]
-  token      Token?
-  favourites Favourite[]
+  playlists      Playlist[]
+  token          Token?
+  favourites     Favourite[]
+  trackListeneds TrackListened[]
 
   @@map("users")
 }
@@ -79,7 +81,7 @@ model PlaylistTrack {
 model Album {
   id          String   @id @default(uuid())
   name        String   @db.VarChar(100)
-  picture     String   @db.Uuid
+  picture     String   @db.VarChar(255)
   description String   @db.VarChar(255)
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -109,10 +111,11 @@ model Track {
   id        String   @id @default(uuid())
   name      String   @db.VarChar(100)
   artist    String   @db.VarChar(100)
-  audio     String   @db.VarChar(100)
+  audio     String   @db.VarChar(255)
   tags      String[]
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  listens   Int      @default(0)
 
   trackListeneds TrackListened[]
   playlistTracks PlaylistTrack[]
@@ -158,6 +161,8 @@ model TrackListened {
 
   track   Track  @relation(fields: [trackId], references: [id], onDelete: Cascade)
   trackId String @map("track_id")
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String @map("user_id")
 
   @@map("tracks_listened")
 }

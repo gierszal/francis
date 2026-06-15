@@ -11,6 +11,10 @@ import {
 import { AlbumRepository } from "@/repositories/prisma/album.repository.js";
 import { paramsSchema } from "@/schemas/common/params.schema.js";
 import { querySchema } from "@/schemas/common/query.schema.js";
+import { normalizeAlbumMultipartBody } from "@/middlewares/normalize.middleware.js";
+import type { createAlbumType, updateAlbumType } from "@/types/album/album.js";
+import { FileService } from "@/services/fileService.js";
+import type { paramsType } from "@/types/common/params.js";
 
 type optionsType = {
   prefix: string;
@@ -18,7 +22,8 @@ type optionsType = {
 
 const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   const albumRepository = new AlbumRepository();
-  const albumService = new AlbumService(albumRepository);
+  const fileService = new FileService();
+  const albumService = new AlbumService(albumRepository, fileService);
   const albumController = new AlbumController(albumService);
   fastify.get(
     "/",
@@ -36,16 +41,24 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
     albumController.getAlbum,
   );
 
-  fastify.post(
+  fastify.post<{ Body: createAlbumType }>(
     "/",
-    { preHandler: [validate({ body: createAlbumSchema })] },
+    {
+      preHandler: [
+        normalizeAlbumMultipartBody,
+        validate({ body: createAlbumSchema }),
+      ],
+    },
     albumController.createAlbum,
   );
 
-  fastify.put(
+  fastify.put<{ Body: updateAlbumType; Params: paramsType }>(
     "/:id",
     {
-      preHandler: [validate({ body: updateAlbumSchema, params: paramsSchema })],
+      preHandler: [
+        normalizeAlbumMultipartBody,
+        validate({ body: updateAlbumSchema, params: paramsSchema }),
+      ],
     },
     albumController.updateAlbum,
   );

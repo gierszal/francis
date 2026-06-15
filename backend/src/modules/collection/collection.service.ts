@@ -1,12 +1,12 @@
-import type { CollectionRepository } from "@/repositories/prisma/collection.repository.js";
 import type {
+  CollectionRepositoryType,
   createCollectionType,
   updateCollectionType,
 } from "@/types/collection/collection.js";
 import type { CollectionServiceType } from "@/types/collection/collection.js";
 
 export class CollectionService implements CollectionServiceType {
-  constructor(collectionRepository: CollectionRepository) {}
+  constructor(collectionRepository: CollectionRepositoryType) {}
   async getCollection(id: string) {
     console.log(`[COLLECTION SERVICE] Getting collection: ${id}`);
     return {

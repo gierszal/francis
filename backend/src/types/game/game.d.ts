@@ -13,3 +13,11 @@ export type GameServiceType = {
   updateGame: (id: string, data: updateGameType) => Promise<any>;
   deleteGame: (id: string) => Promise<any>;
 };
+
+export type GameRepositoryType = {
+  findAll(options?: queryType): Promise<FindAllGamesResponse>;
+  findById(id: string): Promise<DetailedGame | null>;
+  create(data: createGameType): Promise<FormattedGame>;
+  update(id: string, data: updateGameType): Promise<FormattedGame | null>;
+  remove(id: string): Promise<FormattedGame>;
+};

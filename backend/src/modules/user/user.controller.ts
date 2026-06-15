@@ -8,35 +8,68 @@ export class UserController {
   constructor(private userService: UserServiceType) {}
 
   getUser = async (request: FastifyRequest, reply: FastifyReply) => {
-    const result = await this.userService.getUser("");
+    const id = request?.user?.id;
+    if (!id)
+      return reply
+        .code(404)
+        .send({ message: "User with this id does not exist!" });
 
-    return reply.send(result);
+    const user = await this.userService.getUser(id);
+    return reply.send({ user });
   };
 
   getPlaylists = async (
     request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
-    const result = await this.userService.getPlaylists("", request);
+    const id = request?.user?.id;
+    const query = request.query;
+    if (!id)
+      return reply.code(404).send({ message: "User id was not provided!" });
 
-    return reply.send(result);
+    const playlists = await this.userService.getPlaylists(id, query);
+    return reply.send({ playlists });
   };
 
   getFavourites = async (
     request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
-    const result = await this.userService.getFavourites("", request);
-
+    const id = request?.user?.id;
+    const data = request.params;
+    if (!id)
+      return reply.code(401).send({ message: "User id was not provided!" });
+    const result = await this.userService.getFavourites(id, data);
     return reply.send(result);
   };
 
   addToFavourites = async (
-    request: FastifyRequest<{ Body: addToFavouritesType }>,
+    request: FastifyRequest<{ Params: addToFavouritesType }>,
     reply: FastifyReply,
   ) => {
-    const result = await this.userService.addToFavourites("", "");
+    const id = request?.user?.id;
+    const { trackId } = request.params;
+    if (!id || !trackId)
+      return reply
+        .code(400)
+        .send("Either track id or user id is not provided!");
 
+    const result = await this.userService.addToFavourites(id, trackId);
+    return reply.code(201).send(result);
+  };
+
+  addToHistory = async (
+    request: FastifyRequest<{ Params: paramsType }>,
+    reply: FastifyReply,
+  ) => {
+    const userId = request?.user?.id;
+    const { id } = request.params;
+    if (!id || !userId)
+      return reply
+        .code(400)
+        .send("Either track id or user id is not provided!");
+
+    const result = await this.userService.addToHistory(userId, id);
     return reply.code(201).send(result);
   };
 
@@ -44,7 +77,14 @@ export class UserController {
     request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
-    const result = await this.userService.removeFromFavourites("", "");
+    const userId = request?.user?.id;
+    const { id } = request.params;
+    if (!userId || !id)
+      return reply
+        .code(400)
+        .send("Either track id or user id is not provided!");
+
+    const result = await this.userService.removeFromFavourites(userId, id);
 
     return reply.send(result);
   };
@@ -53,22 +93,37 @@ export class UserController {
     request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
-    const result = await this.userService.getHistory("", request);
+    const id = request?.user?.id;
+    const data = request.params;
+
+    if (!id)
+      return reply.code(401).send({ message: "User id was not provided!" });
+
+    const result = await this.userService.getHistory(id, data);
 
     return reply.send(result);
   };
 
   updateUser = async (
-    request: FastifyRequest<{ Body: updateUserType; Params: paramsType }>,
+    request: FastifyRequest<{ Body: updateUserType }>,
     reply: FastifyReply,
   ) => {
-    const result = await this.userService.updateUser("", request.body);
+    const id = request?.user?.id;
+    const data = request.body;
+    if (!id)
+      return reply.code(401).send({ message: "User id was not provided!" });
+
+    const result = await this.userService.updateUser(id, data);
 
     return reply.send(result);
   };
 
   removeUser = async (request: FastifyRequest, reply: FastifyReply) => {
-    const result = await this.userService.removeUser("");
+    const id = request?.user?.id;
+    if (!id)
+      return reply.code(401).send({ message: "User id was not provided!" });
+
+    const result = await this.userService.removeUser(id);
 
     return reply.send(result);
   };

@@ -1,11 +1,6 @@
 import { string, ZodError } from "zod";
-import { ValidationError } from "../errors/index.js";
+import { ValidationError, type errorType } from "../errors/index.js";
 import { z } from "zod";
-
-type errorType = {
-  errors: string[];
-  properties?: string[];
-};
 
 const validate = (schemas: Record<string, z.ZodObject | undefined>) => {
   return async (request: any) => {
@@ -16,6 +11,7 @@ const validate = (schemas: Record<string, z.ZodObject | undefined>) => {
       } catch (e) {
         if (e instanceof ZodError) {
           const formattedError: errorType = z.treeifyError(e);
+          console.log(formattedError);
           throw new ValidationError("Validation failed", formattedError);
         }
         throw e;

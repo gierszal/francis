@@ -1,19 +1,62 @@
-import type {} from "@/generated/prisma/client.js";
+import { DatabaseError } from "@/errors/index.js";
 import { prisma } from "@/prisma.js";
-import type { signUpType } from "@/types/auth/auth.js";
-import type { queryType } from "@/types/common/query.js";
+import type { signUpType, activationLinkType } from "@/types/auth/auth.js";
+import { ROLES } from "@/types/auth/roles.js";
+import * as bcrypt from "bcrypt";
 
 export class AuthRepository {
-  async signUp(data: signUpType) {
+  async findUserByEmail(email: string) {
+    return await prisma.user.findUnique({
+      where: { email },
+    });
+  }
+
+  async createUser(data: signUpType & activationLinkType) {
+    const { email, firstName, link, password } = data;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return await prisma.user.create({
+      data: {
+        email,
+        firstName,
+        password: hashedPassword,
+        activationLink: link,
+        roleId: ROLES.USER!,
+      },
+    });
+  }
+
+  async activateUser(data: activationLinkType) {
+    const { link } = data;
+    return await prisma.user.update({
+      where: { activationLink: link },
+      data: { isActivated: true },
+    });
+  }
+
+  async saveRefreshToken(userId: string, refreshToken: string) {
     try {
-      const { email, password } = data;
-      const candidate = await prisma.user.findUnique({ where: { email } });
-    } catch (e) {
-      throw e;
+      await prisma.token.upsert({
+        where: { userId },
+        update: { refreshToken },
+        create: { userId, refreshToken },
+      });
+    } catch (err: any) {
+      throw new DatabaseError("Unable to save refresh token!");
     }
   }
-  async signIn(data: signUpType) {}
-  async signOut(resfreshToken: string) {}
-  async refresh(resfreshToken: string) {}
-  async activate(activationLink: string) {}
+
+  async findRefreshToken(refreshToken: string) {
+    return await prisma.token.findUnique({
+      where: { refreshToken },
+    });
+  }
+
+  async removeRefreshToken(refreshToken: string) {
+    return await prisma.token.delete({
+      where: { refreshToken },
+      select: {
+        refreshToken: true,
+      },
+    });
+  }
 }

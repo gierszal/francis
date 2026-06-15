@@ -16,7 +16,13 @@ import { errorHandler } from "./errors/errorHandler.js";
 
 const server = fastify({ logger: { level: "info" } });
 
-server.register(fastifyMultipart);
+server.register(fastifyMultipart, {
+  attachFieldsToBody: true,
+  limits: {
+    fileSize: 100 * 1024 * 1024,
+  },
+});
+
 server.register(trackRoutes, { prefix: "/api/v1/tracks" });
 server.register(albumRoutes, { prefix: "/api/v1/albums" });
 server.register(playlistRoutes, { prefix: "/api/v1/playlists" });
@@ -32,19 +38,6 @@ server.setErrorHandler(errorHandler);
 
 server.get("*", function (_req, rep) {
   rep.send({ message: "Not found" });
-});
-
-server.setErrorHandler(function (error, request, reply) {
-  if (error instanceof ApiError) {
-    reply
-      .code(error.statusCode)
-      .send({ error: error.message, details: error.details });
-  } else if (error instanceof ZodError) {
-    reply.code(400).send({ error: error.message });
-  } else {
-    request.log.error(error);
-    reply.code(500).send({ error: "Internal Server Error" });
-  }
 });
 
 server.register(cors, { origin: process.env.CORS_ORIGIN || "*" });

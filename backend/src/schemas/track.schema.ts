@@ -1,3 +1,4 @@
+import type { MultipartFile } from "@fastify/multipart";
 import { z } from "zod";
 
 export const createTrackSchema = z.object({
@@ -9,8 +10,25 @@ export const createTrackSchema = z.object({
     .string()
     .min(1, "The artist name is not provided!")
     .max(100, "Too long artist name"),
-  audio: z.string().min(1, "Audio is required"),
-  albumId: z.string().min(1, "Album id is required"),
+  audio: z
+    .custom<MultipartFile>(
+      (file) => {
+        return file !== undefined && file !== null;
+      },
+      {
+        message: "Album picture is missing!",
+      },
+    )
+    .refine(
+      (file) => {
+        const allowedMimeTypes = ["audio/mpeg", "audio/wav", "audio/flac"];
+        return allowedMimeTypes.includes(file.mimetype);
+      },
+      {
+        message: "File format is not supported!",
+      },
+    ),
+  albumId: z.uuid("Id is not valid!"),
   tags: z.array(z.string()).min(1, "At least one tag is required"),
 });
 
@@ -27,5 +45,5 @@ export const addToPlaylistSchema = z.object({
 });
 
 export const addToFavouritesSchema = z.object({
-  trackId: z.uuid(),
+  trackId: z.uuid("Id is not valid"),
 });

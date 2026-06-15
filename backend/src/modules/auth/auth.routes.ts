@@ -3,7 +3,13 @@ import validate from "../../plugins/zod-validator.js";
 import { AuthController } from "./auth.controller.js";
 import { AuthService } from "./auth.service.js";
 import { AuthRepository } from "@/repositories/prisma/auth.repository.js";
-import { activationLinkSchema, signUpSchema } from "@/schemas/auth.schema.js";
+import {
+  activationLinkSchema,
+  signInSchema,
+  signUpSchema,
+} from "@/schemas/auth.schema.js";
+import { TokenService } from "@/services/tokenService.js";
+import { MailService } from "@/services/mailService.js";
 
 type optionsType = {
   prefix: string;
@@ -11,7 +17,13 @@ type optionsType = {
 
 const authRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   const authRepository = new AuthRepository();
-  const authService = new AuthService(authRepository);
+  const tokenService = new TokenService();
+  const mailService = new MailService();
+  const authService = new AuthService(
+    authRepository,
+    tokenService,
+    mailService,
+  );
   const authController = new AuthController(authService);
 
   fastify.post(
@@ -22,7 +34,7 @@ const authRoutes = (fastify: FastifyInstance, _options: optionsType) => {
 
   fastify.post(
     "/sign-in",
-    { preHandler: [validate({ body: signUpSchema })] },
+    { preHandler: [validate({ body: signInSchema })] },
     authController.signIn,
   );
 
@@ -33,7 +45,7 @@ const authRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   fastify.get(
     "/activate/:link",
     {
-      preHandler: [validate({ query: activationLinkSchema })],
+      preHandler: [validate({ params: activationLinkSchema })],
     },
     authController.activate,
   );

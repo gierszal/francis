@@ -1,3 +1,4 @@
+import type { MultipartFile } from "@fastify/multipart";
 import { z } from "zod";
 
 export const createAlbumSchema = z.object({
@@ -6,7 +7,24 @@ export const createAlbumSchema = z.object({
     .min(1, "The name is not provided!")
     .max(100, "Too long name"),
   description: z.string().min(1, "Description is required"),
-  picture: z.uuid("Picture is required"),
+  picture: z
+    .custom<MultipartFile>(
+      (file) => {
+        return file !== undefined && file !== null;
+      },
+      {
+        message: "Album picture is missing!",
+      },
+    )
+    .refine(
+      (file) => {
+        const allowedMimeTypes = ["image/jpeg", "image/png"];
+        return allowedMimeTypes.includes(file.mimetype);
+      },
+      {
+        message: "File format is not supported!",
+      },
+    ),
   gameId: z.uuid("Game id is required"),
 });
 

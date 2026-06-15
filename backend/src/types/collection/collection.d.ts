@@ -20,3 +20,14 @@ export type CollectionServiceType = {
   updateCollection: (id: string, data: updateCollectionType) => Promise<any>;
   deleteCollection: (id: string) => Promise<any>;
 };
+
+export type CollectionRepositoryType = {
+  findAll(options?: queryType): Promise<FindAllCollectionsResponse>;
+  findById(id: string): Promise<DetailedCollection | null>;
+  create(data: createCollectionType): Promise<FormattedCollection>;
+  update(
+    id: string,
+    data: updateCollectionType,
+  ): Promise<FormattedCollection | null>;
+  remove(id: string): Promise<FormattedCollection>;
+};

@@ -41,7 +41,9 @@ export class TrackController {
     reply: FastifyReply,
   ) => {
     const data = request.body;
-    const track = await this.trackService.createTrack(data);
+    const audio = request.body.audio;
+    if (!audio) reply.code(400).send("The audio is not provided!");
+    const track = await this.trackService.createTrack(data, audio);
     reply.send({ data: track });
   };
 
@@ -52,15 +54,10 @@ export class TrackController {
     try {
       const data = request.body;
       const { id } = request.params;
-      const track = await this.trackService.updateTrack(id, data);
+      const audio = request.body.audio;
+      const track = await this.trackService.updateTrack(id, data, audio);
       reply.send({ data: track });
     } catch (err: any) {
-      if (err.message?.includes("not found")) {
-        return reply.status(404).send({
-          error: "Not Found",
-          message: err.message,
-        });
-      }
       throw err;
     }
   };

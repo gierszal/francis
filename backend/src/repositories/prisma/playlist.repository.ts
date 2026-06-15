@@ -74,15 +74,15 @@ export class PlaylistRepository {
     return playlist ? formatDetailedPlaylist(playlist) : null;
   }
 
-  async create({ description, name }: createPlaylistType) {
-    // const playlist = await prisma.playlist.create({
-    //   data: {
-    //     name,
-    //     description,
-    //   },
-    // });
-    // console.log("created");
-    // return formatPlaylist(playlist);
+  async create(id: string, { description, name }: createPlaylistType) {
+    const playlist = await prisma.playlist.create({
+      data: {
+        name,
+        description,
+        authorId: id,
+      },
+    });
+    return formatPlaylist(playlist);
   }
 
   async update(id: string, data: updatePlaylistType) {

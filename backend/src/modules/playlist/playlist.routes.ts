@@ -10,6 +10,13 @@ import {
 import { PlaylistRepository } from "@/repositories/prisma/playlist.repository.js";
 import { paramsSchema } from "@/schemas/common/params.schema.js";
 import { querySchema } from "@/schemas/common/query.schema.js";
+import { authMiddleware } from "@/middlewares/auth.middleware.js";
+import type { queryType } from "@/types/common/query.js";
+import type { paramsType } from "@/types/common/params.js";
+import type {
+  createPlaylistType,
+  updatePlaylistType,
+} from "@/types/playlist/playlist.js";
 
 type optionsType = {
   prefix: string;
@@ -19,42 +26,43 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   const playlistRepository = new PlaylistRepository();
   const playlistService = new PlaylistService(playlistRepository);
   const playlistController = new PlaylistController(playlistService);
-  fastify.get(
+  fastify.get<{ Querystring: queryType }>(
     "/",
     {
-      preHandler: [validate({ query: querySchema })],
+      preHandler: [authMiddleware, validate({ query: querySchema })],
     },
     playlistController.getPlaylists,
   );
 
-  fastify.get(
+  fastify.get<{ Params: paramsType }>(
     "/:id",
     {
-      preHandler: [validate({ params: paramsSchema })],
+      preHandler: [authMiddleware, validate({ params: paramsSchema })],
     },
     playlistController.getPlaylist,
   );
 
-  fastify.post(
+  fastify.post<{ Body: createPlaylistType }>(
     "/",
-    { preHandler: [validate({ body: createPlaylistSchema })] },
+    { preHandler: [authMiddleware, validate({ body: createPlaylistSchema })] },
     playlistController.createPlaylist,
   );
 
-  fastify.put(
+  fastify.put<{ Body: updatePlaylistType; Params: paramsType }>(
     "/:id",
     {
       preHandler: [
+        authMiddleware,
         validate({ body: updatePlaylistSchema, params: paramsSchema }),
       ],
     },
     playlistController.updatePlaylist,
   );
 
-  fastify.delete(
+  fastify.delete<{ Params: paramsType }>(
     "/:id",
     {
-      preHandler: [validate({ params: paramsSchema })],
+      preHandler: [authMiddleware, validate({ params: paramsSchema })],
     },
     playlistController.deletePlaylist,
   );

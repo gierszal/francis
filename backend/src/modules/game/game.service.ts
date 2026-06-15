@@ -1,9 +1,13 @@
 import type { GameRepository } from "@/repositories/prisma/game.repository.js";
 import type { queryType } from "@/types/common/query.js";
-import type { updateGameType, createGameType } from "@/types/game/game.js";
+import type {
+  updateGameType,
+  createGameType,
+  GameRepositoryType,
+} from "@/types/game/game.js";
 
 export class GameService {
-  constructor(private gameRepository: GameRepository) {}
+  constructor(private gameRepository: GameRepositoryType) {}
   public getGame = async (id: string) => {
     return await this.gameRepository.findById(id);
   };

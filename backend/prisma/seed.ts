@@ -1,5 +1,6 @@
 import { pool, prisma } from "@/prisma.js";
 import { randomUUID } from "crypto";
+import bcrypt from "bcrypt";
 
 async function main() {
   const adminRole = await prisma.role.create({
@@ -14,11 +15,15 @@ async function main() {
     },
   });
 
+  const adminPassword = await bcrypt.hash("Admin123!", 10);
+  const userPassword = await bcrypt.hash("User123!", 10);
+
   const admin = await prisma.user.create({
     data: {
       firstName: "Admin",
       lastName: "Francis",
       email: "admin@francis.local",
+      password: adminPassword,
       activationLink: randomUUID(),
       isActivated: true,
       roleId: adminRole.id,
@@ -30,6 +35,7 @@ async function main() {
       firstName: "Henry",
       lastName: "Player",
       email: "henry@francis.local",
+      password: userPassword,
       activationLink: randomUUID(),
       isActivated: true,
       roleId: userRole.id,
@@ -243,8 +249,6 @@ async function main() {
       userId: user.id,
     },
   });
-
-  console.log("Seed completed");
 }
 
 main()
@@ -253,7 +257,7 @@ main()
     await pool.end();
   })
   .catch(async (e) => {
-    console.log(e);
+    console.error("❌ Seed failed:", e);
     await prisma.$disconnect();
     await pool.end();
     process.exit(1);

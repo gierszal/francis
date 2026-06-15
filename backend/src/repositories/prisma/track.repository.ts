@@ -25,6 +25,13 @@ export class TrackRepository {
     const [tracks, total] = await Promise.all([
       prisma.track.findMany({
         where,
+        include: {
+          album: {
+            select: {
+              picture: true,
+            },
+          },
+        },
         orderBy: { createdAt: "desc" },
         skip: offset,
         take: count,
@@ -62,28 +69,49 @@ export class TrackRepository {
     return track ? formatDetailedTrack(track) : null;
   }
 
-  async create({ artist, audio, name, albumId, tags }: createTrackType) {
-    const track = await prisma.track.create({
-      data: {
-        artist,
-        audio,
-        name,
-        tags,
-        albumId,
-      },
-    });
-    return formatTrack(track);
+  async create(
+    { artist, name, albumId, tags }: createTrackType,
+    audio: string,
+  ) {
+    try {
+      const track = await prisma.track.create({
+        data: {
+          artist,
+          audio,
+          name,
+          tags,
+          albumId,
+        },
+        include: {
+          album: {
+            select: { picture: true },
+          },
+        },
+      });
+      return formatTrack(track);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  async update(id: string, data: updateTrackType) {
+  async update(id: string, data: updateTrackType, audioPath?: string) {
+    let updateData: any = data;
+
+    if (audioPath) updateData = { ...data, audio: audioPath };
+
     const updates = Object.fromEntries(
-      Object.entries(data).filter(([, v]) => v !== undefined),
+      Object.entries(updateData).filter(([, v]) => v !== undefined),
     );
 
     try {
       const track = await prisma.track.update({
         where: { id },
         data: updates,
+        include: {
+          album: {
+            select: { picture: true },
+          },
+        },
       });
       return formatTrack(track);
     } catch (err: any) {
@@ -94,8 +122,13 @@ export class TrackRepository {
 
   async listenIncrement(id: string) {
     try {
-      await prisma.trackListened.create({
-        data: { trackId: id },
+      await prisma.track.update({
+        where: { id },
+        data: {
+          listens: {
+            increment: 1,
+          },
+        },
       });
       return;
     } catch (err: any) {
@@ -155,12 +188,13 @@ export class TrackRepository {
   }
 }
 
-function formatTrack(track: Track) {
+function formatTrack(track: Track | any) {
   return {
     id: track.id,
     name: track.name,
     artist: track.artist,
     audio: track.audio,
+    picture: track.album.picture,
     tags: track.tags.map((tag: any) => tag),
     created_at: track.createdAt,
     updated_at: track.updatedAt,

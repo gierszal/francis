@@ -38,8 +38,11 @@ export class PlaylistController {
     request: FastifyRequest<{ Body: createPlaylistType }>,
     reply: FastifyReply,
   ) => {
+    const id = request.user?.id;
+    if (!id)
+      return reply.code(401).send({ message: "User id was not provided!" });
     const data = request.body;
-    const playlist = await this.playlistService.createPlaylist(data);
+    const playlist = await this.playlistService.createPlaylist(id, data);
     reply.send({ data: playlist });
   };
 

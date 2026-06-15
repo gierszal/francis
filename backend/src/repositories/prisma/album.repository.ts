@@ -1,3 +1,4 @@
+import { DatabaseError } from "@/errors/index.js";
 import type { Album } from "@/generated/prisma/client.js";
 import { prisma } from "@/prisma.js";
 import type {
@@ -74,23 +75,33 @@ export class AlbumRepository {
     return album ? formatDetailedAlbum(album) : null;
   }
 
-  async create({ description, name, picture, gameId }: createAlbumType) {
-    const album = await prisma.album.create({
-      data: {
-        description,
-        name,
-        picture,
-        gameId,
-      },
-    });
-    return formatAlbum(album);
+  async create(
+    { description, name, gameId }: createAlbumType,
+    picturePath: string,
+  ) {
+    try {
+      const album = await prisma.album.create({
+        data: {
+          description,
+          name,
+          picture: picturePath,
+          gameId,
+        },
+      });
+      return formatAlbum(album);
+    } catch (err: any) {
+      throw new DatabaseError(err.message);
+    }
   }
 
-  async update(id: string, data: updateAlbumType) {
-    const updates = Object.fromEntries(
-      Object.entries(data).filter(([, v]) => v !== undefined),
-    );
+  async update(id: string, data: updateAlbumType, picPath?: string) {
+    let updateData: any = data;
 
+    if (picPath) updateData = { ...data, picture: picPath };
+
+    const updates = Object.fromEntries(
+      Object.entries(updateData).filter(([, v]) => v !== undefined),
+    );
     try {
       const album = await prisma.album.update({
         where: { id },
