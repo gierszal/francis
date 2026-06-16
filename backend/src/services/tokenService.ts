@@ -44,10 +44,6 @@ export class TokenService {
       const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET!);
       if (decoded) {
         const userPayload = new UserPayloadDTO(decoded as any);
-        console.log("!!!!");
-
-        console.log(decoded);
-        console.log(userPayload);
         return userPayload;
       } else throw new InvalidTokenError("Unable to verify tokens!");
     } catch (e) {

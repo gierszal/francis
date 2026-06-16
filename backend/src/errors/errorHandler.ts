@@ -10,6 +10,7 @@ import {
   InvalidTokenError,
   DatabaseError,
   FileServiceError,
+  LLMApplicationError,
 } from "./index.js";
 
 export function errorHandler(
@@ -50,6 +51,11 @@ export function errorHandler(
   if (error instanceof InvalidTokenError) {
     return reply
       .status(401)
+      .send({ error: error.message, details: error.details });
+  }
+  if (error instanceof LLMApplicationError) {
+    return reply
+      .status(500)
       .send({ error: error.message, details: error.details });
   }
   if (error instanceof ConflictError) {

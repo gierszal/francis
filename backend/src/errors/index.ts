@@ -84,6 +84,14 @@ export class FileServiceError extends ApiError {
   }
 }
 
+export class LLMApplicationError extends ApiError {
+  constructor(message: string, details?: errorType) {
+    super(message);
+    this.details = details;
+    this.name = "LLMApplicationError";
+  }
+}
+
 export class DatabaseError extends ApiError {
   constructor(message: string, details?: errorType) {
     super(message);

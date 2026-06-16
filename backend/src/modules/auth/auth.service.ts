@@ -1,5 +1,6 @@
 import {
   ConflictError,
+  DatabaseError,
   InvalidCredentialsError,
   InvalidTokenError,
   UnauthorizedError,
@@ -50,22 +51,30 @@ export class AuthService implements AuthServiceType {
   }
 
   async signIn(data: signInType) {
-    const { email, password } = data;
+    try {
+      const { email, password } = data;
 
-    const user = await this.authRepository.findUserByEmail(email);
+      const user = await this.authRepository.findUserByEmail(email);
 
-    if (!user)
-      throw new InvalidCredentialsError("User with this email does not exist!");
+      if (!user)
+        throw new InvalidCredentialsError(
+          "User with this email does not exist!",
+        );
 
-    const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) throw new InvalidCredentialsError("Passwords do not match!");
+      const isValid = await bcrypt.compare(password, user.password);
+      if (!isValid)
+        throw new InvalidCredentialsError("Passwords do not match!");
 
-    const payload = new UserPayloadDTO(user);
-    const tokens = this.tokenService.generateTokens(payload);
+      const payload = new UserPayloadDTO(user);
+      const tokens = this.tokenService.generateTokens(payload);
 
-    await this.authRepository.saveRefreshToken(user.id, tokens.refreshToken);
+      await this.authRepository.saveRefreshToken(user.id, tokens.refreshToken);
 
-    return { user: payload, tokens };
+      return { user: payload, tokens };
+    } catch (err) {
+      console.log(err);
+      throw new DatabaseError("Unable to sign in!");
+    }
   }
 
   async refresh(refreshToken: string) {

@@ -13,6 +13,7 @@ import authRoutes from "./modules/auth/auth.routes.js";
 import gameRoutes from "./modules/game/game.routes.js";
 import { fastifyCookie } from "@fastify/cookie";
 import { errorHandler } from "./errors/errorHandler.js";
+import aiRoutes from "./modules/ai/ai.routes.js";
 
 const server = fastify({ logger: { level: "info" } });
 
@@ -30,6 +31,7 @@ server.register(collectionRoutes, { prefix: "/api/v1/collections" });
 server.register(userRoutes, { prefix: "/api/v1/users" });
 server.register(gameRoutes, { prefix: "/api/v1/games" });
 server.register(authRoutes, { prefix: "/api/v1/auth" });
+server.register(aiRoutes, { prefix: "/api/v1/ai" });
 server.register(fastifyCookie, {
   secret: process.env.COOKIE_KEY!,
 });
@@ -44,7 +46,7 @@ server.register(cors, { origin: process.env.CORS_ORIGIN || "*" });
 
 const port = Number(process.env.PORT) || 10000;
 
-server.listen({ port: port }, (err, address) => {
+server.listen({ port: port, host: process.env.HOST! }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);

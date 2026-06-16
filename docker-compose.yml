@@ -1,0 +1,66 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama-backend
+    ports:
+      - "${OLLAMA_EXT_PORT}:${OLLAMA_INT_PORT}"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      OLLAMA_HOST: ${OLLAMA_HOST}
+    networks:
+      - francis-network
+    healthcheck:
+      test: ["CMD", "ollama", "--version"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - francis-data:/var/lib/postgresql/data
+    container_name: francis-db
+    networks:
+      - francis-network
+    ports:
+      - "${POSTGRES_EXT_PORT}:${POSTGRES_INT_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: francis-backend
+    ports:
+      - "${BACKEND_EXT_PORT}:${BACKEND_INT_PORT}"
+    volumes:
+      - ./backend/src:/backend/src
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      OLLAMA_API_URL: ${OLLAMA_API_URL}
+    depends_on:
+      ollama:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    networks:
+      - francis-network
+
+networks:
+  francis-network:
+    driver: bridge
+
+volumes:
+  francis-data:
+  ollama_data:

@@ -13,6 +13,15 @@ export class AuthRepository {
 
   async createUser(data: signUpType & activationLinkType) {
     const { email, firstName, link, password } = data;
+
+    const userRole = await prisma.role.findUnique({
+      where: {
+        role: "USER",
+      },
+    });
+
+    if (!userRole?.id) throw new DatabaseError("Unable to find user role id!");
+
     const hashedPassword = await bcrypt.hash(password, 10);
     return await prisma.user.create({
       data: {
@@ -20,7 +29,7 @@ export class AuthRepository {
         firstName,
         password: hashedPassword,
         activationLink: link,
-        roleId: ROLES.USER!,
+        roleId: userRole.id,
       },
     });
   }
