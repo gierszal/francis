@@ -14,6 +14,12 @@ import gameRoutes from "./modules/game/game.routes.js";
 import { fastifyCookie } from "@fastify/cookie";
 import { errorHandler } from "./errors/errorHandler.js";
 import aiRoutes from "./modules/ai/ai.routes.js";
+import fastifyStatic from "@fastify/static";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const server = fastify({ logger: { level: "info" } });
 
@@ -22,6 +28,11 @@ server.register(fastifyMultipart, {
   limits: {
     fileSize: 100 * 1024 * 1024,
   },
+});
+
+server.register(fastifyStatic, {
+  root: join(__dirname, "../static"),
+  prefix: "/static",
 });
 
 server.register(trackRoutes, { prefix: "/api/v1/tracks" });
