@@ -16,9 +16,9 @@ export class PlaylistController {
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
-    const userId = request.user?.id;
-    if (!userId) throw new BadRequestError("User id was not provided!");
-    const playlist = await this.playlistService.getPlaylist(id, userId);
+    const user = request.user;
+    if (!user) throw new BadRequestError("User is not defined!");
+    const playlist = await this.playlistService.getPlaylist(id, user);
     reply.send({ data: playlist });
   };
 
@@ -39,7 +39,7 @@ export class PlaylistController {
     if (!id) throw new BadRequestError("User id was not provided!");
     const data = request.body;
     const playlist = await this.playlistService.createPlaylist(id, data);
-    reply.code(201).send(playlist);
+    reply.code(201).send({ data: playlist });
   };
 
   public updatePlaylist = async (
@@ -47,14 +47,10 @@ export class PlaylistController {
     reply: FastifyReply,
   ) => {
     const data = request.body;
-    const userId = request.user?.id;
-    if (!userId) throw new BadRequestError("User id was not provided!");
+    const user = request.user;
+    if (!user) throw new BadRequestError("User is not defined!");
     const { id } = request.params;
-    const playlist = await this.playlistService.updatePlaylist(
-      id,
-      userId,
-      data,
-    );
+    const playlist = await this.playlistService.updatePlaylist(id, user, data);
     reply.send({ data: playlist });
   };
 
@@ -63,9 +59,9 @@ export class PlaylistController {
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
-    const userId = request.user?.id;
-    if (!userId) throw new BadRequestError("User id was not provided!");
-    await this.playlistService.deletePlaylist(id, userId);
+    const user = request.user;
+    if (!user) throw new BadRequestError("User is not defined!");
+    await this.playlistService.deletePlaylist(id, user);
     reply.code(204).send();
   };
 }

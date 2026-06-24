@@ -31,7 +31,7 @@ export function formatDetailedTrack(
     tags: track.tags.map((tag: any) => tag),
     created_at: track.createdAt,
     updated_at: track.updatedAt,
-    listens: track._count.trackListeneds,
+    listens: track.listens,
     album: {
       id: track.album.id,
       name: track.album.name,

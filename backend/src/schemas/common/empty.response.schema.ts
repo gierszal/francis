@@ -1,1 +1,3 @@
-export const emptyResponseSchema = { type: "null" };
+import z from "zod";
+
+export const emptyResponseSchema = z.void();

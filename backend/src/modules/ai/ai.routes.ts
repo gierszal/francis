@@ -1,5 +1,4 @@
 import type { FastifyInstance } from "fastify";
-import validate from "../../plugins/zod-validator.js";
 import { AIController } from "./ai.controller.js";
 import { AIService } from "./ai.service.js";
 import { TrackRepository } from "@/repositories/prisma/track.repository.js";
@@ -41,7 +40,6 @@ const aiRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       preHandler: [
         authMiddleware,
         requireRole(ROLES.ADMIN.name, ROLES.USER.name),
-        validate({ body: aiGenerateQuerySchema }),
       ],
     },
     aiController.generate,

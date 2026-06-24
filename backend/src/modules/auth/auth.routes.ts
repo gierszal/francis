@@ -1,5 +1,4 @@
 import type { FastifyInstance } from "fastify";
-import validate from "../../plugins/zod-validator.js";
 import { AuthController } from "./auth.controller.js";
 import { AuthService } from "./auth.service.js";
 import { AuthRepository } from "@/repositories/prisma/auth.repository.js";
@@ -10,14 +9,13 @@ import {
 } from "@/schemas/auth/auth.schema.js";
 import { TokenService } from "@/services/tokenService.js";
 import { MailService } from "@/services/mailService.js";
-import z from "zod";
 import {
-  emptyResponseSchema,
   refreshResponseSchema,
   signInResponseSchema,
   signUpResponseSchema,
 } from "@/schemas/auth/index.js";
 import { errorResponseSchema } from "@/schemas/common/error.schema.js";
+import { emptyResponseSchema } from "@/schemas/common/empty.response.schema.js";
 
 type optionsType = {
   prefix: string;
@@ -40,7 +38,7 @@ const authRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "User registration route",
         tags: ["Auth"],
-        body: z.toJSONSchema(signUpSchema),
+        body: signUpSchema,
         response: {
           201: signUpResponseSchema,
           400: errorResponseSchema,
@@ -50,7 +48,6 @@ const authRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [validate({ body: signUpSchema })],
     },
     authController.signUp,
   );
@@ -62,16 +59,15 @@ const authRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         description: "User log-in route",
         tags: ["Auth"],
         body: signInSchema,
-        // response: {
-        //   200: signInResponseSchema,
-        //   400: errorResponseSchema,
-        //   401: errorResponseSchema,
-        //   500: errorResponseSchema,
-        //   default: errorResponseSchema,
-        // },
+        response: {
+          201: signInResponseSchema,
+          400: errorResponseSchema,
+          401: errorResponseSchema,
+          500: errorResponseSchema,
+          default: errorResponseSchema,
+        },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [validate({ body: signInSchema })],
     },
     authController.signIn,
   );
@@ -101,13 +97,13 @@ const authRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         description:
           "Refresh the access token using a valid refresh token (sent in Authorization header)",
         tags: ["Auth"],
-        response: {
-          200: refreshResponseSchema,
-          401: errorResponseSchema,
-          403: errorResponseSchema,
-          500: errorResponseSchema,
-          default: errorResponseSchema,
-        },
+        // response: {
+        //   201: ,
+        //   401: errorResponseSchema,
+        //   403: errorResponseSchema,
+        //   500: errorResponseSchema,
+        //   default: errorResponseSchema,
+        // },
         security: [{ bearerAuth: [] }],
       },
     },
@@ -120,6 +116,7 @@ const authRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "User log-out route",
         tags: ["Auth"],
+        params: activationLinkSchema,
         response: {
           204: emptyResponseSchema,
           401: errorResponseSchema,
@@ -128,7 +125,6 @@ const authRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [validate({ params: activationLinkSchema })],
     },
     authController.activate,
   );

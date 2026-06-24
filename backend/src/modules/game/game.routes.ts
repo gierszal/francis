@@ -1,5 +1,4 @@
 import type { FastifyInstance } from "fastify";
-import validate from "../../plugins/zod-validator.js";
 import { GameController } from "./game.controller.js";
 import { GameService } from "./game.service.js";
 import { GameRepository } from "@/repositories/prisma/game.repository.js";
@@ -12,7 +11,11 @@ import { authMiddleware, requireRole } from "@/middlewares/auth.middleware.js";
 import { ROLES } from "@/types/auth/auth.roles.js";
 import type { CreateGameDTO, UpdateGameDTO } from "@/types/game/game.dto.js";
 import z from "zod";
-import { gameItemSchema, gameListSchema } from "@/schemas/game/index.js";
+import {
+  detailedGameResponseSchema,
+  gameResponseSchema,
+  gamesResponseSchema,
+} from "@/schemas/game/index.js";
 import {
   emptyResponseSchema,
   errorResponseSchema,
@@ -35,9 +38,9 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Retrieve a paginated list of games",
         tags: ["Games"],
-        querystring: z.toJSONSchema(querySchema),
+        querystring: querySchema,
         response: {
-          200: gameListSchema,
+          200: gamesResponseSchema,
           400: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -45,7 +48,6 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
           default: errorResponseSchema,
         },
       },
-      preHandler: [validate({ query: querySchema })],
     },
     gameController.getGames,
   );
@@ -56,9 +58,9 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Retrieve a single game by its UUID",
         tags: ["Games"],
-        params: z.toJSONSchema(paramsSchema),
+        params: paramsSchema,
         response: {
-          200: gameItemSchema,
+          200: detailedGameResponseSchema,
           404: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -66,7 +68,6 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
           default: errorResponseSchema,
         },
       },
-      preHandler: [validate({ params: paramsSchema })],
     },
     gameController.getGame,
   );
@@ -77,9 +78,9 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Create a new game (ADMIN role required)",
         tags: ["Games"],
-        body: z.toJSONSchema(createGameSchema),
+        body: createGameSchema,
         response: {
-          201: gameItemSchema,
+          201: gameResponseSchema,
           400: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -89,11 +90,7 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [
-        authMiddleware,
-        requireRole(ROLES.ADMIN.name),
-        validate({ body: createGameSchema }),
-      ],
+      preHandler: [authMiddleware, requireRole(ROLES.ADMIN.name)],
     },
     gameController.createGame,
   );
@@ -104,10 +101,10 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Update an existing game (ADMIN role required)",
         tags: ["Games"],
-        params: z.toJSONSchema(paramsSchema),
-        body: z.toJSONSchema(updateGameSchema),
+        params: paramsSchema,
+        body: updateGameSchema,
         response: {
-          200: gameItemSchema,
+          200: gameResponseSchema,
           400: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -118,11 +115,7 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [
-        authMiddleware,
-        requireRole(ROLES.ADMIN.name),
-        validate({ body: updateGameSchema, params: paramsSchema }),
-      ],
+      preHandler: [authMiddleware, requireRole(ROLES.ADMIN.name)],
     },
     gameController.updateGame,
   );
@@ -133,7 +126,7 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Delete a game (ADMIN role required)",
         tags: ["Games"],
-        params: z.toJSONSchema(paramsSchema),
+        params: paramsSchema,
         response: {
           204: emptyResponseSchema,
           400: errorResponseSchema,
@@ -145,11 +138,7 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [
-        authMiddleware,
-        requireRole(ROLES.ADMIN.name),
-        validate({ params: paramsSchema }),
-      ],
+      preHandler: [authMiddleware, requireRole(ROLES.ADMIN.name)],
     },
     gameController.deleteGame,
   );

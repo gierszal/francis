@@ -1,5 +1,4 @@
 import type { FastifyInstance } from "fastify";
-import validate from "../../plugins/zod-validator.js";
 import { PlaylistController } from "./playlist.controller.js";
 import { PlaylistService } from "./playlist.service.js";
 
@@ -23,10 +22,10 @@ import {
   emptyResponseSchema,
 } from "@/schemas/common/index.js";
 import {
-  playlistItemSchema,
-  playlistListSchema,
+  detailedPlaylistResponseSchema,
+  playlistResponseSchema,
+  playlistsResponseSchema,
 } from "@/schemas/playlist/index.js";
-import z from "zod";
 
 type optionsType = {
   prefix: string;
@@ -44,9 +43,9 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         description:
           "Retrieve a paginated list of playlists - only admin may access this route",
         tags: ["Playlists"],
-        querystring: z.toJSONSchema(querySchema),
+        querystring: querySchema,
         response: {
-          200: playlistListSchema,
+          200: playlistsResponseSchema,
           400: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -55,11 +54,7 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [
-        authMiddleware,
-        requireRole(ROLES.ADMIN.name),
-        validate({ query: querySchema }),
-      ],
+      preHandler: [authMiddleware, requireRole(ROLES.ADMIN.name)],
     },
     playlistController.getPlaylists,
   );
@@ -70,9 +65,9 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Retrieve a playlist by its UUID",
         tags: ["Playlists"],
-        params: z.toJSONSchema(paramsSchema),
+        params: paramsSchema,
         response: {
-          200: playlistItemSchema,
+          200: detailedPlaylistResponseSchema,
           404: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -81,7 +76,7 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [authMiddleware, validate({ params: paramsSchema })],
+      preHandler: [authMiddleware],
     },
     playlistController.getPlaylist,
   );
@@ -93,9 +88,9 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         description:
           "Create a new playlist - user that created this playlist may access this route (and admin). ",
         tags: ["Playlists"],
-        body: z.toJSONSchema(createPlaylistSchema),
+        body: createPlaylistSchema,
         response: {
-          201: playlistItemSchema,
+          201: playlistResponseSchema,
           400: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -105,7 +100,7 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [authMiddleware, validate({ body: createPlaylistSchema })],
+      preHandler: [authMiddleware],
     },
     playlistController.createPlaylist,
   );
@@ -117,10 +112,10 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         description:
           "Update an existing playlist - user that created this playlist may access this route (and admin)",
         tags: ["Playlists"],
-        params: z.toJSONSchema(paramsSchema),
-        body: z.toJSONSchema(updatePlaylistSchema),
+        params: paramsSchema,
+        body: updatePlaylistSchema,
         response: {
-          200: playlistItemSchema,
+          200: playlistResponseSchema,
           400: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -131,10 +126,7 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [
-        authMiddleware,
-        validate({ body: updatePlaylistSchema, params: paramsSchema }),
-      ],
+      preHandler: [authMiddleware],
     },
     playlistController.updatePlaylist,
   );
@@ -146,7 +138,7 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         description:
           "Delete a playlist - user that created this playlist may access this route (and admin)",
         tags: ["Playlists"],
-        params: z.toJSONSchema(paramsSchema),
+        params: paramsSchema,
         response: {
           204: emptyResponseSchema,
           400: errorResponseSchema,
@@ -158,7 +150,7 @@ const playlistRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [authMiddleware, validate({ params: paramsSchema })],
+      preHandler: [authMiddleware],
     },
     playlistController.deletePlaylist,
   );

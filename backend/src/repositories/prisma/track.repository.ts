@@ -49,11 +49,6 @@ export class TrackRepository implements ITrackRepository {
     const track = await prisma.track.findUnique({
       where: { id },
       include: {
-        _count: {
-          select: {
-            trackListeneds: true,
-          },
-        },
         album: {
           select: {
             id: true,

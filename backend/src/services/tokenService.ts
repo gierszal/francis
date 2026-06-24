@@ -6,18 +6,12 @@ export class TokenService {
   generateTokens(payload: FormattedUserPayload) {
     try {
       const accessToken = jwt.sign(
-        { ...payload },
+        { ...payload, expiresIn: "15m" },
         process.env.JWT_ACCESS_SECRET!,
-        {
-          expiresIn: "15m",
-        },
       );
       const refreshToken = jwt.sign(
-        { ...payload },
+        { ...payload, expiresIn: "7d" },
         process.env.JWT_REFRESH_SECRET!,
-        {
-          expiresIn: "7d",
-        },
       );
       return {
         accessToken,

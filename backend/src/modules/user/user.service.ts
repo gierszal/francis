@@ -3,8 +3,6 @@ import type {
   UpdateUserDTO,
   IUserRepository,
   IUserService,
-  AddToFavouriteResponse,
-  AddToHistoryResponse,
 } from "@/types/user/index.js";
 import type { FormattedUser } from "@/types/user/user.model.js";
 import type { PlaylistsResponse } from "@/types/playlist/playlist.response.js";

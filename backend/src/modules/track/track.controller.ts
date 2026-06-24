@@ -50,8 +50,7 @@ export class TrackController {
     const data = request.body;
     const { id } = request.params;
     const audio = request.body.audio;
-    if (!id || !audio)
-      throw new BadRequestError("Either the audio or id was not found!");
+    if (!id) throw new BadRequestError("Track id was not found!");
     const track = await this.trackService.updateTrack(id, data, audio);
     reply.send({ data: track });
   };
@@ -73,7 +72,7 @@ export class TrackController {
     const { id } = request.params;
     if (!id) throw new BadRequestError("Track id was not provided!");
     const track = await this.trackService.deleteTrack(id);
-    reply.send({ data: track });
+    reply.code(204).send();
   };
 
   public addToPlaylist = async (

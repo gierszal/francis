@@ -3,12 +3,13 @@ import {
   NotFoundError,
   UnauthorizedError,
   ConflictError,
-  ValidationError,
   InvalidCredentialsError,
   InvalidTokenError,
   BadRequestError,
   ForbiddenError,
 } from "./ApiError.js";
+
+import z from "zod";
 
 import {
   DatabaseError,
@@ -16,13 +17,13 @@ import {
   FileServiceError,
   LLMApplicationError,
 } from "./InfrastructureError.js";
+import { ZodError } from "zod";
 
 const errorStatusMap = new Map<Function, number>([
   [NotFoundError, 404],
   [UnauthorizedError, 401],
   [InvalidCredentialsError, 401],
   [InvalidTokenError, 401],
-  [ValidationError, 400],
   [ConflictError, 409],
   [BadRequestError, 400],
   [ForbiddenError, 403],
@@ -61,10 +62,16 @@ export function errorHandler(
     "An error occured!",
   );
 
-  const status = resolveStatus(error);
+  let status = resolveStatus(error);
   const payload: Record<string, unknown> = {
     message: error.message,
   };
+
+  if ("validation" in error && error.validation) {
+    status = 400;
+    payload.details = error instanceof ZodError ? z.flattenError(error) : error;
+  }
+
   if (process.env.NODE_ENV !== "development" && "details" in error)
     payload.details = error.details;
 

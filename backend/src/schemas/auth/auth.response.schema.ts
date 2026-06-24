@@ -1,37 +1,28 @@
-export const signUpResponseSchema = {
-  type: "object",
-  properties: {
-    userId: {
-      type: "string",
-      format: "uuid",
-      description: "ID нового пользователя",
-    },
-    firstName: { type: "string", description: "Имя пользователя" },
-    email: {
-      type: "string",
-      format: "email",
-      description: "Электронная почта",
-    },
-  },
-  required: ["userId", "firstName", "email"],
-  additionalProperties: false,
-};
+import { ROLES } from "@/types/auth/auth.roles.js";
+import z from "zod";
 
-export const signInResponseSchema = {
-  type: "object",
-  properties: {
-    accessToken: {
-      type: "string",
-      description: "JWT‑access‑token",
-    },
-    refreshToken: {
-      type: "string",
-      description: "JWT‑refresh‑token",
-    },
-  },
-  required: ["accessToken", "refreshToken"],
-  additionalProperties: false,
-};
+const userAuthSchema = z.object({
+  id: z.uuid(),
+  email: z.email(),
+  is_activated: z.boolean(),
+  role: z.enum([ROLES.ADMIN.name, ROLES.USER.name]),
+});
+
+const tokensSchema = z.object({
+  accessToken: z.string(),
+  refreshToken: z.string(),
+});
+
+export const signUpSchema = z.object({
+  tokens: tokensSchema,
+  user: userAuthSchema,
+});
+
+export const signUpResponseSchema = z.object({
+  data: signUpSchema,
+});
+
+export const signInResponseSchema = signUpResponseSchema;
 
 export const activateResponseSchema = {
   type: "object",
@@ -46,14 +37,6 @@ export const activateResponseSchema = {
   additionalProperties: false,
 };
 
-export const emptyResponseSchema = { type: "null" };
-
-export const refreshResponseSchema = {
-  type: "object",
-  properties: {
-    accessToken: { type: "string", description: "JWT-access token." },
-    refreshToken: { type: "string", description: "JWT-refresh token." },
-  },
-  required: ["accessToken", "refreshToken"],
-  additionalProperties: false,
-};
+export const refreshResponseSchema = z.object({
+  data: tokensSchema,
+});

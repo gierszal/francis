@@ -1,63 +1,55 @@
-export const playlistItemSchema = {
-  type: "object",
-  properties: {
-    id: {
-      type: "string",
-      format: "uuid",
-      description: "Unique identifier of the playlist",
-    },
-    name: { type: "string", description: "Playlist name" },
-    description: {
-      type: "string",
-      nullable: true,
-      description: "Optional description",
-    },
-    createdAt: {
-      type: "string",
-      format: "date-time",
-      description: "Record creation timestamp",
-    },
-    updatedAt: {
-      type: "string",
-      format: "date-time",
-      description: "Record last‑update timestamp",
-    },
-    authorId: {
-      type: "string",
-      format: "uuid",
-      description: "User who created the playlist",
-    },
-    trackIds: {
-      type: "array",
-      description:
-        "Array of UUIDs of tracks that belong to the playlist (derived from `playlistTracks` relation)",
-      items: { type: "string", format: "uuid" },
-    },
-  },
-  required: ["id", "name", "createdAt", "updatedAt", "authorId", "trackIds"],
-  additionalProperties: false,
-};
+import z from "zod";
+import { metaSchema } from "../common/meta.schema.js";
 
-export const playlistListSchema = {
-  type: "object",
-  properties: {
-    data: {
-      type: "array",
-      items: { $ref: "#/components/schemas/PlaylistItem" },
-    },
-    total: {
-      type: "integer",
-      description: "Total number of playlists (ignoring pagination)",
-    },
-    page: {
-      type: "integer",
-      description: "Current page (1‑based)",
-    },
-    limit: {
-      type: "integer",
-      description: "Number of items per page",
-    },
-  },
-  required: ["data", "total", "page", "limit"],
-  additionalProperties: false,
-};
+const playlistSchema = z.object({
+  id: z.uuid(),
+  name: z.string(),
+  description: z.string().nullable(),
+  created_at: z.coerce.date(),
+  updated_at: z.coerce.date(),
+});
+
+const detailedPlaylistSchema = z.object({
+  id: z.uuid(),
+  name: z.string(),
+  tracks: z.array(
+    z.object({
+      id: z.uuid(),
+      name: z.string(),
+      audio: z.string(),
+      artist: z.string(),
+      album: z.object({
+        id: z.uuid(),
+        name: z.string(),
+        game: z.object({
+          id: z.uuid(),
+          name: z.string(),
+          createdAt: z.coerce.date(),
+          updatedAt: z.coerce.date(),
+        }),
+        picture: z.uuid(),
+      }),
+    }),
+  ),
+  description: z.string().nullable(),
+  author: z.object({
+    id: z.uuid(),
+    firstName: z.string(),
+    lastName: z.string(),
+  }),
+  created_at: z.coerce.date(),
+  updated_at: z.coerce.date(),
+});
+
+export const playlistsResponseSchema = z.object({
+  data: z.array(playlistSchema),
+  meta: metaSchema,
+});
+
+export const playlistResponseSchema = z.object({
+  data: playlistSchema,
+});
+
+export const detailedPlaylistResponseSchema = z.object({
+  data: detailedPlaylistSchema,
+});

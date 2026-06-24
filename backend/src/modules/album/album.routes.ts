@@ -1,13 +1,10 @@
 import type { FastifyInstance } from "fastify";
-import validate from "../../plugins/zod-validator.js";
 import { AlbumController } from "./album.controller.js";
 import { AlbumService } from "./album.service.js";
 
 import {
   addToCollectionSchema,
-  createAlbumDocSchema,
   createAlbumSchema,
-  updateAlbumDocSchema,
   updateAlbumSchema,
 } from "../../schemas/album/album.schema.js";
 import { AlbumRepository } from "@/repositories/prisma/album.repository.js";
@@ -21,17 +18,21 @@ import { FileService } from "@/services/fileService.js";
 import type { paramsType, queryType } from "@/types/common/index.js";
 import { authMiddleware, requireRole } from "@/middlewares/auth.middleware.js";
 import { ROLES } from "@/types/auth/auth.roles.js";
-import { albumItemSchema, albumListSchema } from "@/schemas/album/index.js";
+import {
+  albumResponseSchema,
+  albumsReponseSchema,
+  detailedAlbumResponseSchema,
+} from "@/schemas/album/index.js";
 import { errorResponseSchema } from "@/schemas/common/error.schema.js";
 type optionsType = {
   prefix: string;
 };
-import z from "zod";
 import {
   emptyResponseSchema,
   paramsSchema,
   querySchema,
 } from "@/schemas/common/index.js";
+import { validatePart } from "@/middlewares/validate.middleware.js";
 
 const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   const albumRepository = new AlbumRepository();
@@ -44,9 +45,9 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Get all albums",
         tags: ["Albums"],
-        querystring: z.toJSONSchema(querySchema),
+        querystring: querySchema,
         response: {
-          200: albumListSchema,
+          200: albumsReponseSchema,
           400: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -54,7 +55,6 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
           default: errorResponseSchema,
         },
       },
-      preHandler: [validate({ query: querySchema })],
     },
     albumController.getAlbums,
   );
@@ -65,9 +65,9 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Get album by id",
         tags: ["Albums"],
-        params: z.toJSONSchema(paramsSchema),
+        params: paramsSchema,
         response: {
-          200: albumItemSchema,
+          200: detailedAlbumResponseSchema,
           404: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -75,7 +75,6 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
           default: errorResponseSchema,
         },
       },
-      preHandler: [validate({ params: paramsSchema })],
     },
     albumController.getAlbum,
   );
@@ -87,9 +86,8 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         description: "Создать альбом (только ADMIN)",
         tags: ["Albums"],
         consumes: ["multipart/form-data"],
-        body: z.toJSONSchema(createAlbumDocSchema),
         response: {
-          201: albumItemSchema,
+          201: albumResponseSchema,
           400: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -103,7 +101,7 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         normalizeAlbumMultipartBody,
         authMiddleware,
         requireRole(ROLES.ADMIN.name),
-        validate({ body: createAlbumSchema }),
+        validatePart({ body: createAlbumSchema }),
       ],
     },
     albumController.createAlbum,
@@ -115,10 +113,9 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Обновить данные альбома (только ADMIN)",
         tags: ["Albums"],
-        params: z.toJSONSchema(paramsSchema),
-        body: z.toJSONSchema(updateAlbumDocSchema),
+        params: paramsSchema,
         response: {
-          200: albumItemSchema,
+          200: albumResponseSchema,
           400: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -133,7 +130,7 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         normalizeAlbumMultipartBody,
         authMiddleware,
         requireRole(ROLES.ADMIN.name),
-        validate({ body: updateAlbumSchema, params: paramsSchema }),
+        validatePart({ body: updateAlbumSchema }),
       ],
     },
     albumController.updateAlbum,
@@ -145,7 +142,7 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Удалить альбом (только ADMIN)",
         tags: ["Albums"],
-        params: z.toJSONSchema(paramsSchema),
+        params: paramsSchema,
         response: {
           204: emptyResponseSchema,
           401: errorResponseSchema,
@@ -156,11 +153,7 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [
-        authMiddleware,
-        requireRole(ROLES.ADMIN.name),
-        validate({ params: paramsSchema }),
-      ],
+      preHandler: [authMiddleware, requireRole(ROLES.ADMIN.name)],
     },
     albumController.deleteAlbum,
   );
@@ -172,9 +165,9 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         description:
           "Add album to collection. Only admin may access this route",
         tags: ["Albums"],
-        params: z.toJSONSchema(addToCollectionSchema),
+        params: addToCollectionSchema,
         response: {
-          200: albumItemSchema,
+          200: emptyResponseSchema,
           400: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -184,11 +177,7 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [
-        authMiddleware,
-        requireRole(ROLES.ADMIN.name),
-        validate({ params: addToCollectionSchema }),
-      ],
+      preHandler: [authMiddleware, requireRole(ROLES.ADMIN.name)],
     },
     albumController.addToCollection,
   );

@@ -83,9 +83,12 @@ export class UserController {
   ) => {
     const { count, offset } = request.query;
     reply.send({
-      message: "Get track recommendations",
-      count,
-      offset,
+      data: [],
+      meta: {
+        total: 0,
+        count: 10,
+        offset: 0,
+      },
     });
   };
 

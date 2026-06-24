@@ -1,34 +1,57 @@
 import z from "zod";
+import { metaSchema } from "../common/meta.schema.js";
 
-export const albumItemSchema = z.object({
+export const albumSchema = z.object({
   id: z.uuid(),
 
   name: z.string().max(100),
 
-  picture: z.url().nullable(),
+  picture: z.string(),
 
   description: z.string().max(255).nullable(),
 
-  createdAt: z.iso.datetime(),
-  updatedAt: z.iso.datetime(),
+  created_at: z.coerce.date(),
+  updated_at: z.coerce.date(),
 
-  gameId: z.uuid(),
-
-  trackIds: z.array(z.uuid()),
-
-  collectionIds: z.array(z.uuid()),
+  game_id: z.uuid(),
 });
 
-export const albumListSchema = {
-  type: "object",
-  properties: {
-    data: {
-      type: "array",
-      items: albumItemSchema,
-    },
-    total: { type: "integer", minimum: 0 },
-    page: { type: "integer", minimum: 1 },
-    limit: { type: "integer", minimum: 1 },
-  },
-  required: ["data", "total", "page", "limit"],
-};
+export const albumResponseSchema = z.object({
+  data: albumSchema,
+});
+
+export const albumsReponseSchema = z.object({
+  data: z.array(albumSchema),
+  meta: metaSchema,
+});
+
+export const detailedAlbumSchema = z.object({
+  id: z.uuid(),
+  name: z.string(),
+  picture: z.uuid(),
+  description: z.string(),
+  tracks: z.array(
+    z.object({
+      id: z.uuid(),
+      name: z.string(),
+      artist: z.string(),
+    }),
+  ),
+  tracks_amount: z.number().int().min(0),
+  game: z.object({
+    id: z.uuid(),
+    name: z.string(),
+  }),
+  collections: z.array(
+    z.object({
+      id: z.uuid(),
+      name: z.string(),
+    }),
+  ),
+  created_at: z.coerce.date(),
+  updated_at: z.coerce.date(),
+});
+
+export const detailedAlbumResponseSchema = z.object({
+  data: detailedAlbumSchema,
+});

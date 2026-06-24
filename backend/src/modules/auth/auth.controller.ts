@@ -52,6 +52,7 @@ export class AuthController {
       throw new InvalidCredentialsError("Refresh token is not provided!");
 
     const tokens = await this.authService.refresh(refreshToken);
+    console.log(tokens);
     reply.setCookie("refreshToken", tokens.refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,

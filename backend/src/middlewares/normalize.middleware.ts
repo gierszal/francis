@@ -19,12 +19,21 @@ export const normalizeTrackMultipartBody = async (
 ) => {
   const body = request.body as any;
 
-  if (body.tags.value)
-    request.body = {
-      name: body.name?.value,
-      artist: body.artist?.value,
-      audio: body.audio,
-      albumId: body.albumId?.value,
-      tags: JSON.parse(body.tags.value),
-    };
+  // if (body.tags?.value)
+  const normalizedBody: any = {};
+
+  if (body.name) normalizedBody.name = body.name.value;
+  if (body.artist) normalizedBody.artist = body.artist.value;
+  if (body.albumId) normalizedBody.albumId = body.albumId.value;
+  if (body.audio) normalizedBody.audio = body.audio;
+
+  if (body.tags) {
+    try {
+      normalizedBody.tags = JSON.parse(body.tags.value);
+    } catch {
+      normalizedBody.tags = [];
+    }
+  }
+
+  request.body = normalizedBody;
 };

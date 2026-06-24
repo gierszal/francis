@@ -3,10 +3,13 @@ import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import {
   jsonSchemaTransform,
-  jsonSchemaTransformObject,
-} from "fastify-type-provider-zod";
+  serializerCompiler,
+  validatorCompiler,
+} from "@bram-dc/fastify-type-provider-zod";
 
 export default fp(async (fastify) => {
+  fastify.setValidatorCompiler(validatorCompiler);
+  fastify.setSerializerCompiler(serializerCompiler);
   await fastify.register(swagger, {
     openapi: {
       info: {
@@ -24,7 +27,6 @@ export default fp(async (fastify) => {
       },
     },
     transform: jsonSchemaTransform,
-    transformObject: jsonSchemaTransformObject,
   });
   await fastify.register(swaggerUi, {
     routePrefix: `/api/${process.env.API_VERSION}/docs`,

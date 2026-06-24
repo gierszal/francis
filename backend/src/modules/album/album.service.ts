@@ -1,5 +1,4 @@
 import { NotFoundError } from "@/errors/ApiError.js";
-import type { AlbumRepository } from "@/repositories/prisma/album.repository.js";
 import { FileService, FileType } from "@/services/fileService.js";
 import type {
   AddToCollectionDTO,

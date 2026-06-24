@@ -19,19 +19,9 @@ import swaggerPlugin from "./plugins/swagger.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-import {
-  validatorCompiler,
-  serializerCompiler,
-} from "fastify-type-provider-zod";
-
-import type { ZodTypeProvider } from "fastify-type-provider-zod";
-
 const server = fastify({
   logger: { level: "info" },
-}).withTypeProvider<ZodTypeProvider>();
-
-server.setValidatorCompiler(validatorCompiler);
-server.setSerializerCompiler(serializerCompiler);
+});
 
 server.register(swaggerPlugin, {
   prefix: `/api/${process.env.API_VERSION}`,
@@ -52,23 +42,23 @@ server.register(fastifyStatic, {
 server.register(trackRoutes, {
   prefix: `/api/${process.env.API_VERSION}/tracks`,
 });
-// server.register(albumRoutes, {
-//   prefix: `/api/${process.env.API_VERSION}/albums`,
-// });
-// server.register(playlistRoutes, {
-//   prefix: `/api/${process.env.API_VERSION}/playlists`,
-// });
-// server.register(collectionRoutes, {
-//   prefix: `/api/${process.env.API_VERSION}/collections`,
-// });
-// server.register(userRoutes, {
-//   prefix: `/api/${process.env.API_VERSION}/users`,
-// });
-// server.register(gameRoutes, {
-//   prefix: `/api/${process.env.API_VERSION}/games`,
-// });
-// server.register(authRoutes, { prefix: `/api/${process.env.API_VERSION}/auth` });
-// server.register(aiRoutes, { prefix: `/api/${process.env.API_VERSION}/ai` });
+server.register(albumRoutes, {
+  prefix: `/api/${process.env.API_VERSION}/albums`,
+});
+server.register(playlistRoutes, {
+  prefix: `/api/${process.env.API_VERSION}/playlists`,
+});
+server.register(collectionRoutes, {
+  prefix: `/api/${process.env.API_VERSION}/collections`,
+});
+server.register(userRoutes, {
+  prefix: `/api/${process.env.API_VERSION}/users`,
+});
+server.register(gameRoutes, {
+  prefix: `/api/${process.env.API_VERSION}/games`,
+});
+server.register(authRoutes, { prefix: `/api/${process.env.API_VERSION}/auth` });
+server.register(aiRoutes, { prefix: `/api/${process.env.API_VERSION}/ai` });
 
 server.register(fastifyCookie, {
   secret: process.env.COOKIE_KEY!,

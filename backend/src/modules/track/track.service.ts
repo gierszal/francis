@@ -1,5 +1,4 @@
 import { NotFoundError } from "@/errors/ApiError.js";
-import { TrackRepository } from "@/repositories/prisma/track.repository.js";
 import { FileType, type FileService } from "@/services/fileService.js";
 import type { queryType } from "@/types/common/query.js";
 import type {

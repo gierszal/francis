@@ -13,14 +13,6 @@ export class ApiError extends Error {
   }
 }
 
-export class ValidationError extends ApiError {
-  constructor(message: string, details?: errorType) {
-    super(message);
-    this.details = details;
-    this.name = "ValidationError";
-  }
-}
-
 export class NotFoundError extends ApiError {
   constructor(message: string, details?: errorType) {
     super(message);

@@ -1,5 +1,4 @@
 import type { FastifyInstance } from "fastify";
-import validate from "../../plugins/zod-validator.js";
 import { CollectionController } from "./collection.controller.js";
 import { CollectionService } from "./collection.service.js";
 
@@ -17,8 +16,9 @@ import type {
 import type { paramsType } from "@/types/common/index.js";
 import z from "zod";
 import {
-  collectionItemSchema,
-  collectionListSchema,
+  collectionResponseSchema,
+  collectionsResponseSchema,
+  detailedCollectionResponseSchema,
 } from "@/schemas/collection/collection.response.schema.js";
 import { errorResponseSchema } from "@/schemas/common/error.schema.js";
 import {
@@ -40,9 +40,9 @@ const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Retrieve a paginated list of collections",
         tags: ["Collections"],
-        querystring: z.toJSONSchema(querySchema),
+        querystring: querySchema,
         response: {
-          200: collectionListSchema,
+          200: collectionsResponseSchema,
           400: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -50,7 +50,6 @@ const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
           default: errorResponseSchema,
         },
       },
-      preHandler: [validate({ query: querySchema })],
     },
     collectionController.getCollections,
   );
@@ -61,9 +60,9 @@ const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Retrieve a collection by its UUID",
         tags: ["Collections"],
-        params: z.toJSONSchema(paramsSchema),
+        params: paramsSchema,
         response: {
-          200: collectionItemSchema,
+          200: detailedCollectionResponseSchema,
           404: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -71,7 +70,6 @@ const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
           default: errorResponseSchema,
         },
       },
-      preHandler: [validate({ params: paramsSchema })],
     },
     collectionController.getCollection,
   );
@@ -82,9 +80,9 @@ const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Create a new collection (restricted to ADMIN role)",
         tags: ["Collections"],
-        body: z.toJSONSchema(createCollectionSchema),
+        body: createCollectionSchema,
         response: {
-          201: collectionItemSchema,
+          201: collectionResponseSchema,
           400: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -94,11 +92,7 @@ const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [
-        authMiddleware,
-        requireRole(ROLES.ADMIN.name),
-        validate({ body: createCollectionSchema }),
-      ],
+      preHandler: [authMiddleware, requireRole(ROLES.ADMIN.name)],
     },
     collectionController.createCollection,
   );
@@ -109,10 +103,10 @@ const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Update an existing collection (restricted to ADMIN role)",
         tags: ["Collections"],
-        params: z.toJSONSchema(paramsSchema),
-        body: z.toJSONSchema(updateCollectionSchema),
+        params: paramsSchema,
+        body: updateCollectionSchema,
         response: {
-          200: collectionItemSchema,
+          200: collectionResponseSchema,
           400: errorResponseSchema,
           401: errorResponseSchema,
           403: errorResponseSchema,
@@ -123,11 +117,7 @@ const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [
-        authMiddleware,
-        requireRole(ROLES.ADMIN.name),
-        validate({ body: updateCollectionSchema, params: paramsSchema }),
-      ],
+      preHandler: [authMiddleware, requireRole(ROLES.ADMIN.name)],
     },
     collectionController.updateCollection,
   );
@@ -138,7 +128,7 @@ const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Delete a collection (restricted to ADMIN role)",
         tags: ["Collections"],
-        params: z.toJSONSchema(paramsSchema),
+        params: paramsSchema,
         response: {
           204: emptyResponseSchema,
           400: errorResponseSchema,
@@ -150,11 +140,7 @@ const collectionRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [
-        authMiddleware,
-        requireRole(ROLES.ADMIN.name),
-        validate({ params: paramsSchema }),
-      ],
+      preHandler: [authMiddleware, requireRole(ROLES.ADMIN.name)],
     },
     collectionController.deleteCollection,
   );

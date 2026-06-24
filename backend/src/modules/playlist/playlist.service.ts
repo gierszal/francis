@@ -1,4 +1,5 @@
 import { ForbiddenError } from "@/errors/ApiError.js";
+import { ROLES } from "@/types/auth/auth.roles.js";
 import type { queryType } from "@/types/common/query.js";
 import type {
   CreatePlaylistDTO,
@@ -9,6 +10,7 @@ import type {
   PlaylistsResponse,
   UpdatePlaylistDTO,
 } from "@/types/playlist/index.js";
+import type { FormattedUserPayload } from "@/types/user/user.model.js";
 import {
   formatDetailedPlaylist,
   formatPlaylist,
@@ -19,10 +21,10 @@ export class PlaylistService implements IPlaylistService {
 
   async getPlaylist(
     id: string,
-    userId: string,
+    user: FormattedUserPayload,
   ): Promise<FormattedDetailedPlaylist | null> {
     const playlist = await this.playlistRepository.findById(id);
-    if (playlist?.authorId !== userId)
+    if (playlist?.authorId !== user.id && user.role !== ROLES.ADMIN.name)
       throw new ForbiddenError("Access to playlist denied!");
     return formatDetailedPlaylist(playlist);
   }
@@ -50,19 +52,19 @@ export class PlaylistService implements IPlaylistService {
 
   async updatePlaylist(
     id: string,
-    userId: string,
+    user: FormattedUserPayload,
     data: UpdatePlaylistDTO,
   ): Promise<FormattedPlaylist> {
     const playlist = await this.playlistRepository.findById(id);
-    if (playlist?.authorId !== userId)
+    if (playlist?.authorId !== user.id && user.role !== ROLES.ADMIN.name)
       throw new ForbiddenError("Access to playlist denied!");
     const updatedPlaylist = await this.playlistRepository.update(id, data);
     return formatPlaylist(updatedPlaylist);
   }
 
-  async deletePlaylist(id: string, userId: string): Promise<void> {
+  async deletePlaylist(id: string, user: FormattedUserPayload): Promise<void> {
     const playlist = await this.playlistRepository.findById(id);
-    if (playlist?.authorId !== userId)
+    if (playlist?.authorId !== user.id && user.role !== ROLES.ADMIN.name)
       throw new ForbiddenError("Access to playlist denied!");
     return await this.playlistRepository.remove(id);
   }

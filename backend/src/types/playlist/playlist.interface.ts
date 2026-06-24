@@ -8,11 +8,12 @@ import type {
   PlaylistsResponse,
   UpdatePlaylistDTO,
 } from "./index.js";
+import type { FormattedUserPayload } from "../user/user.model.js";
 
 export interface IPlaylistService {
   getPlaylist(
     id: string,
-    userId: string,
+    user: FormattedUserPayload,
   ): Promise<FormattedDetailedPlaylist | null>;
 
   getPlaylists(data: queryType): Promise<PlaylistsResponse>;
@@ -24,11 +25,11 @@ export interface IPlaylistService {
 
   updatePlaylist(
     id: string,
-    userId: string,
+    user: FormattedUserPayload,
     data: UpdatePlaylistDTO,
   ): Promise<FormattedPlaylist | null>;
 
-  deletePlaylist(id: string, userId: string): Promise<void>;
+  deletePlaylist(id: string, user: FormattedUserPayload): Promise<void>;
 }
 
 export interface IPlaylistRepository {

@@ -35,7 +35,7 @@ export class GameController {
   ) => {
     const data = request.body;
     const game = await this.gameService.createGame(data);
-    reply.code(204).send({ data: game });
+    reply.code(201).send({ data: game });
   };
 
   public updateGame = async (

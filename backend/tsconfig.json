@@ -2,7 +2,7 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-    // "rootDir": "./src",
+    "rootDir": "./src",
     "outDir": "./dist",
     "paths":{
       "@/*":["./src/*"],
@@ -45,5 +45,14 @@
   },
   "watchOptions": {
     "watchFile": "dynamicPriorityPolling"
-  }
+  },
+  
+   "include": [
+    "src/**/*.ts"
+  ],
+
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
 }

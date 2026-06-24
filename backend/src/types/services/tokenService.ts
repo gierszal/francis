@@ -1,10 +1,10 @@
-import type { UserPayloadDTO } from "@/DTO/userDTO.js";
+import type { FormattedUserPayload } from "@/types/user/index.js";
 
 export type TokenServiceType = {
-  generateTokens(payload: UserPayloadDTO): {
+  generateTokens(payload: FormattedUserPayload): {
     accessToken: string;
     refreshToken: string;
   };
-  validateAccessToken(token: string): UserPayloadDTO | null;
-  validateRefreshToken(token: string): UserPayloadDTO | null;
+  validateAccessToken(token: string): FormattedUserPayload | null;
+  validateRefreshToken(token: string): FormattedUserPayload | null;
 };
