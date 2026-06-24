@@ -18,8 +18,8 @@ model User {
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  roleId String @map("role_id")
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  roleId Int  @map("role_id")
 
   playlists      Playlist[]
   token          Token?
@@ -30,7 +30,7 @@ model User {
 }
 
 model Role {
-  id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   role      String   @unique @db.VarChar(100)
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -148,8 +148,10 @@ model AlbumCollection {
 }
 
 model Game {
-  id   String @id @default(uuid())
-  name String @unique @db.VarChar(100)
+  id        String   @id @default(uuid())
+  name      String   @unique @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   albums Album[]
 

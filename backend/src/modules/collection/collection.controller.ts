@@ -1,80 +1,62 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import type {
-  CollectionServiceType,
-  createCollectionType,
-  updateCollectionType,
-} from "../../types/collection/collection.js";
+  ICollectionService,
+  CreateCollectionDTO,
+  UpdateCollectionDTO,
+} from "../../types/collection/index.js";
 import type { paramsType } from "@/types/common/params.js";
 import type { queryType } from "@/types/common/query.js";
+import { BadRequestError } from "@/errors/ApiError.js";
 
 export class CollectionController {
-  constructor(private service: CollectionServiceType) {}
-  public getCollection = (
+  constructor(private collectionService: ICollectionService) {}
+
+  public getCollection = async (
     request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
-    reply.send({ message: `Get collection with id: ${id}` });
+    if (!id) throw new BadRequestError("Collection id was not provided!");
+    const collection = await this.collectionService.getCollection(id);
+    reply.send({ data: collection });
   };
 
-  public getCollections = (
+  public getCollections = async (
     request: FastifyRequest<{ Querystring: queryType }>,
     reply: FastifyReply,
   ) => {
-    const { count, offset, searchQuery } = request.query;
-    reply.send({
-      message: "Get all collections",
-      count,
-      offset,
-    });
+    const opts = request.query;
+    const collections = await this.collectionService.getCollections(opts);
+    reply.send(collections);
   };
 
-  public createCollection = (
-    request: FastifyRequest<{ Body: createCollectionType }>,
+  public createCollection = async (
+    request: FastifyRequest<{ Body: CreateCollectionDTO }>,
     reply: FastifyReply,
   ) => {
-    const { name } = request.body;
-    reply.send({
-      message: "Collection created",
-      data: { name },
-    });
+    const data = request.body;
+    const collection = await this.collectionService.createCollection(data);
+    reply.code(201).send({ data: collection });
   };
 
-  public updateCollection = (
-    request: FastifyRequest<{
-      Body: updateCollectionType;
-      Params: updateCollectionType;
-    }>,
+  public updateCollection = async (
+    request: FastifyRequest<{ Body: UpdateCollectionDTO; Params: paramsType }>,
     reply: FastifyReply,
   ) => {
-    const { name } = request.body;
-    reply.send({
-      message: "Collection updated",
-      data: { name },
-    });
+    const data = request.body;
+    const { id } = request.params;
+    if (!id) throw new BadRequestError("Collection id was not provided!");
+    const collection = await this.collectionService.updateCollection(id, data);
+    reply.send({ data: collection });
   };
 
-  public searchCollection = (
-    request: FastifyRequest<{ Querystring: queryType }>,
-    reply: FastifyReply,
-  ) => {
-    const { searchQuery, count } = request.query;
-    reply.send({
-      message: "Search collections",
-      searchQuery: searchQuery || "",
-      count: count || 10,
-    });
-  };
-
-  public deleteCollection = (
+  public deleteCollection = async (
     request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
-    reply.send({ message: `Delete collection with id: ${id}` });
+    if (!id) throw new BadRequestError("Collection id was not provided!");
+    await this.collectionService.deleteCollection(id);
+    reply.code(204).send();
   };
 }
-
-export type collectionControllerType = InstanceType<
-  typeof CollectionController
->;

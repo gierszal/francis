@@ -1,5 +1,5 @@
 import { string, ZodError } from "zod";
-import { ValidationError, type errorType } from "../errors/index.js";
+import { ValidationError, type errorType } from "../errors/ApiError.js";
 import { z } from "zod";
 
 const validate = (schemas: Record<string, z.ZodObject | undefined>) => {
@@ -11,7 +11,6 @@ const validate = (schemas: Record<string, z.ZodObject | undefined>) => {
       } catch (e) {
         if (e instanceof ZodError) {
           const formattedError: errorType = z.treeifyError(e);
-          console.log(formattedError);
           throw new ValidationError("Validation failed", formattedError);
         }
         throw e;

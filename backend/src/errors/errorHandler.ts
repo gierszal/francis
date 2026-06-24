@@ -1,77 +1,72 @@
-import type { FastifyReply, FastifyRequest } from "fastify";
+import { type FastifyReply, type FastifyRequest } from "fastify";
 import {
   NotFoundError,
   UnauthorizedError,
   ConflictError,
   ValidationError,
-  EmailConfigError,
-  EmailSendingError,
   InvalidCredentialsError,
   InvalidTokenError,
+  BadRequestError,
+  ForbiddenError,
+} from "./ApiError.js";
+
+import {
   DatabaseError,
+  EmailServiceError,
   FileServiceError,
   LLMApplicationError,
-} from "./index.js";
+} from "./InfrastructureError.js";
+
+const errorStatusMap = new Map<Function, number>([
+  [NotFoundError, 404],
+  [UnauthorizedError, 401],
+  [InvalidCredentialsError, 401],
+  [InvalidTokenError, 401],
+  [ValidationError, 400],
+  [ConflictError, 409],
+  [BadRequestError, 400],
+  [ForbiddenError, 403],
+
+  [DatabaseError, 500],
+  [EmailServiceError, 500],
+  [FileServiceError, 500],
+  [LLMApplicationError, 500],
+]);
+
+function resolveStatus(err: unknown) {
+  for (const [error, status] of errorStatusMap) {
+    if (err instanceof error) return status;
+  }
+  if (
+    typeof err === "object" &&
+    err !== null &&
+    "statusCode" in err &&
+    typeof err.statusCode === "number"
+  )
+    return err.statusCode;
+  return 500;
+}
 
 export function errorHandler(
   error: Error,
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  if (error instanceof NotFoundError) {
-    return reply
-      .status(404)
-      .send({ error: error.message, details: error.details });
-  }
-  if (error instanceof UnauthorizedError) {
-    return reply
-      .status(401)
-      .send({ error: error.message, details: error.details });
-  }
-  if (error instanceof InvalidCredentialsError) {
-    return reply
-      .status(401)
-      .send({ error: error.message, details: error.details });
-  }
-  if (error instanceof EmailConfigError) {
-    return reply
-      .status(500)
-      .send({ error: error.message, details: error.details });
-  }
-  if (error instanceof EmailSendingError) {
-    return reply
-      .status(500)
-      .send({ error: error.message, details: error.details });
-  }
-  if (error instanceof ValidationError) {
-    return reply
-      .status(400)
-      .send({ error: error.message, details: error.details });
-  }
-  if (error instanceof InvalidTokenError) {
-    return reply
-      .status(401)
-      .send({ error: error.message, details: error.details });
-  }
-  if (error instanceof LLMApplicationError) {
-    return reply
-      .status(500)
-      .send({ error: error.message, details: error.details });
-  }
-  if (error instanceof ConflictError) {
-    return reply
-      .status(409)
-      .send({ error: error.message, details: error.details });
-  }
-  if (error instanceof DatabaseError) {
-    return reply
-      .status(500)
-      .send({ error: error.message, details: error.details });
-  }
-  if (error instanceof FileServiceError) {
-    return reply
-      .status(500)
-      .send({ error: error.message, details: error.details });
-  }
-  return reply.status(500).send({ error: "Internal Server Error" });
+  request.log.error(
+    {
+      err: error,
+      url: request.raw.url,
+      method: request.raw.method,
+    },
+    "An error occured!",
+  );
+
+  const status = resolveStatus(error);
+  const payload: Record<string, unknown> = {
+    message: error.message,
+  };
+  if (process.env.NODE_ENV !== "development" && "details" in error)
+    payload.details = error.details;
+
+  reply.status(status).send({ error: payload });
 }

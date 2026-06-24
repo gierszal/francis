@@ -7,9 +7,19 @@ import { GameRepository } from "@/repositories/prisma/game.repository.js";
 import {
   createGameSchema,
   updateGameSchema,
-} from "../../schemas/game.schema.js";
-import { paramsSchema } from "@/schemas/common/params.schema.js";
-import { querySchema } from "@/schemas/common/query.schema.js";
+} from "../../schemas/game/game.schema.js";
+import { authMiddleware, requireRole } from "@/middlewares/auth.middleware.js";
+import { ROLES } from "@/types/auth/auth.roles.js";
+import type { CreateGameDTO, UpdateGameDTO } from "@/types/game/game.dto.js";
+import z from "zod";
+import { gameItemSchema, gameListSchema } from "@/schemas/game/index.js";
+import {
+  emptyResponseSchema,
+  errorResponseSchema,
+  paramsSchema,
+  querySchema,
+} from "@/schemas/common/index.js";
+import type { paramsType } from "@/types/common/index.js";
 
 type optionsType = {
   prefix: string;
@@ -22,6 +32,19 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   fastify.get(
     "/",
     {
+      schema: {
+        description: "Retrieve a paginated list of games",
+        tags: ["Games"],
+        querystring: z.toJSONSchema(querySchema),
+        response: {
+          200: gameListSchema,
+          400: errorResponseSchema,
+          401: errorResponseSchema,
+          403: errorResponseSchema,
+          500: errorResponseSchema,
+          default: errorResponseSchema,
+        },
+      },
       preHandler: [validate({ query: querySchema })],
     },
     gameController.getGames,
@@ -30,29 +53,103 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   fastify.get(
     "/:id",
     {
+      schema: {
+        description: "Retrieve a single game by its UUID",
+        tags: ["Games"],
+        params: z.toJSONSchema(paramsSchema),
+        response: {
+          200: gameItemSchema,
+          404: errorResponseSchema,
+          401: errorResponseSchema,
+          403: errorResponseSchema,
+          500: errorResponseSchema,
+          default: errorResponseSchema,
+        },
+      },
       preHandler: [validate({ params: paramsSchema })],
     },
     gameController.getGame,
   );
 
-  fastify.post(
+  fastify.post<{ Body: CreateGameDTO }>(
     "/",
-    { preHandler: [validate({ body: createGameSchema })] },
+    {
+      schema: {
+        description: "Create a new game (ADMIN role required)",
+        tags: ["Games"],
+        body: z.toJSONSchema(createGameSchema),
+        response: {
+          201: gameItemSchema,
+          400: errorResponseSchema,
+          401: errorResponseSchema,
+          403: errorResponseSchema,
+          409: errorResponseSchema,
+          500: errorResponseSchema,
+          default: errorResponseSchema,
+        },
+        security: [{ bearerAuth: [] }],
+      },
+      preHandler: [
+        authMiddleware,
+        requireRole(ROLES.ADMIN.name),
+        validate({ body: createGameSchema }),
+      ],
+    },
     gameController.createGame,
   );
 
-  fastify.put(
+  fastify.put<{ Body: UpdateGameDTO; Params: paramsType }>(
     "/:id",
     {
-      preHandler: [validate({ body: updateGameSchema, params: paramsSchema })],
+      schema: {
+        description: "Update an existing game (ADMIN role required)",
+        tags: ["Games"],
+        params: z.toJSONSchema(paramsSchema),
+        body: z.toJSONSchema(updateGameSchema),
+        response: {
+          200: gameItemSchema,
+          400: errorResponseSchema,
+          401: errorResponseSchema,
+          403: errorResponseSchema,
+          404: errorResponseSchema,
+          409: errorResponseSchema,
+          500: errorResponseSchema,
+          default: errorResponseSchema,
+        },
+        security: [{ bearerAuth: [] }],
+      },
+      preHandler: [
+        authMiddleware,
+        requireRole(ROLES.ADMIN.name),
+        validate({ body: updateGameSchema, params: paramsSchema }),
+      ],
     },
     gameController.updateGame,
   );
 
-  fastify.delete(
+  fastify.delete<{ Params: paramsType }>(
     "/:id",
     {
-      preHandler: [validate({ params: paramsSchema })],
+      schema: {
+        description: "Delete a game (ADMIN role required)",
+        tags: ["Games"],
+        params: z.toJSONSchema(paramsSchema),
+        response: {
+          204: emptyResponseSchema,
+          400: errorResponseSchema,
+          401: errorResponseSchema,
+          403: errorResponseSchema,
+          404: errorResponseSchema,
+          500: errorResponseSchema,
+          default: errorResponseSchema,
+        },
+        security: [{ bearerAuth: [] }],
+      },
+      preHandler: [
+        authMiddleware,
+        requireRole(ROLES.ADMIN.name),
+        validate({ params: paramsSchema }),
+      ],
     },
     gameController.deleteGame,
   );

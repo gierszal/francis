@@ -3,8 +3,6 @@ import "dotenv/config";
 import fastifyMultipart from "@fastify/multipart";
 import trackRoutes from "./modules/track/track.routes.js";
 import cors from "@fastify/cors";
-import { ApiError } from "./errors/index.js";
-import { ZodError } from "zod";
 import albumRoutes from "./modules/album/album.routes.js";
 import playlistRoutes from "./modules/playlist/playlist.routes.js";
 import collectionRoutes from "./modules/collection/collection.routes.js";
@@ -17,11 +15,27 @@ import aiRoutes from "./modules/ai/ai.routes.js";
 import fastifyStatic from "@fastify/static";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-
+import swaggerPlugin from "./plugins/swagger.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const server = fastify({ logger: { level: "info" } });
+import {
+  validatorCompiler,
+  serializerCompiler,
+} from "fastify-type-provider-zod";
+
+import type { ZodTypeProvider } from "fastify-type-provider-zod";
+
+const server = fastify({
+  logger: { level: "info" },
+}).withTypeProvider<ZodTypeProvider>();
+
+server.setValidatorCompiler(validatorCompiler);
+server.setSerializerCompiler(serializerCompiler);
+
+server.register(swaggerPlugin, {
+  prefix: `/api/${process.env.API_VERSION}`,
+});
 
 server.register(fastifyMultipart, {
   attachFieldsToBody: true,
@@ -35,14 +49,27 @@ server.register(fastifyStatic, {
   prefix: "/static",
 });
 
-server.register(trackRoutes, { prefix: "/api/v1/tracks" });
-server.register(albumRoutes, { prefix: "/api/v1/albums" });
-server.register(playlistRoutes, { prefix: "/api/v1/playlists" });
-server.register(collectionRoutes, { prefix: "/api/v1/collections" });
-server.register(userRoutes, { prefix: "/api/v1/users" });
-server.register(gameRoutes, { prefix: "/api/v1/games" });
-server.register(authRoutes, { prefix: "/api/v1/auth" });
-server.register(aiRoutes, { prefix: "/api/v1/ai" });
+server.register(trackRoutes, {
+  prefix: `/api/${process.env.API_VERSION}/tracks`,
+});
+// server.register(albumRoutes, {
+//   prefix: `/api/${process.env.API_VERSION}/albums`,
+// });
+// server.register(playlistRoutes, {
+//   prefix: `/api/${process.env.API_VERSION}/playlists`,
+// });
+// server.register(collectionRoutes, {
+//   prefix: `/api/${process.env.API_VERSION}/collections`,
+// });
+// server.register(userRoutes, {
+//   prefix: `/api/${process.env.API_VERSION}/users`,
+// });
+// server.register(gameRoutes, {
+//   prefix: `/api/${process.env.API_VERSION}/games`,
+// });
+// server.register(authRoutes, { prefix: `/api/${process.env.API_VERSION}/auth` });
+// server.register(aiRoutes, { prefix: `/api/${process.env.API_VERSION}/ai` });
+
 server.register(fastifyCookie, {
   secret: process.env.COOKIE_KEY!,
 });
@@ -56,6 +83,8 @@ server.get("*", function (_req, rep) {
 server.register(cors, { origin: process.env.CORS_ORIGIN || "*" });
 
 const port = Number(process.env.PORT) || 10000;
+
+await server.ready();
 
 server.listen({ port: port, host: process.env.HOST! }, (err, address) => {
   if (err) {

@@ -1,35 +1,37 @@
-import { DatabaseError } from "@/errors/index.js";
-import type {
-  Playlist,
-  Prisma,
-  Track,
-  User,
-} from "@/generated/prisma/client.js";
+import { BadRequestError, NotFoundError } from "@/errors/ApiError.js";
+import { DatabaseError } from "@/errors/InfrastructureError.js";
+import type { Prisma, User } from "@/generated/prisma/client.js";
 import { prisma } from "@/prisma.js";
 import type { queryType } from "@/types/common/query.js";
-import type { updateUserType } from "@/types/user/user.js";
+import type { IUserRepository } from "@/types/user/user.interface.js";
+import type {
+  AddToFavouriteResult,
+  AddToHistoryResult,
+  UpdateUserDTO,
+} from "@/types/user/index.js";
+import type { FindAllPlaylistsResult } from "@/types/playlist/playlist.result.js";
+import type { FindTracksResult } from "@/types/track/track.result.js";
 
-export class UserRepository {
-  async findById(userId: string) {
-    try {
-      const user = await prisma.user.findUniqueOrThrow({
-        where: {
-          id: userId,
-        },
-        include: {
-          role: {
-            select: {
-              role: true,
-            },
+export class UserRepository implements IUserRepository {
+  async findById(userId: string): Promise<User> {
+    const user = await prisma.user.findUniqueOrThrow({
+      where: {
+        id: userId,
+      },
+      include: {
+        role: {
+          select: {
+            role: true,
           },
         },
-      });
-      return formatUser(user);
-    } catch (error) {
-      throw new Error("Пользователь не обнаружен");
-    }
+      },
+    });
+    return user;
   }
-  async findPlaylists(userId: string, options?: queryType) {
+  async findPlaylists(
+    userId: string,
+    options?: queryType,
+  ): Promise<FindAllPlaylistsResult> {
     const { count = 10, offset = 0, searchQuery } = options || {};
 
     const where: Prisma.PlaylistWhereInput = {
@@ -70,14 +72,15 @@ export class UserRepository {
     ]);
 
     return {
-      data: playlists.map((playlist) => formatPlaylsit(playlist)),
+      playlists,
       total,
-      count,
-      offset,
     };
   }
 
-  async getFavourites(userId: string, options?: queryType) {
+  async getFavourites(
+    userId: string,
+    options?: queryType,
+  ): Promise<FindTracksResult> {
     const { count = 10, offset = 0, searchQuery } = options || {};
 
     const where: Prisma.FavouriteWhereInput = {
@@ -100,7 +103,15 @@ export class UserRepository {
       prisma.favourite.findMany({
         where: where,
         include: {
-          track: true,
+          track: {
+            include: {
+              album: {
+                select: {
+                  picture: true,
+                },
+              },
+            },
+          },
         },
         skip: offset,
         take: count,
@@ -112,16 +123,14 @@ export class UserRepository {
     const tracks = tracksData.map((item) => item.track);
 
     return {
-      data: tracks.map((track) => formatTrack(track)),
+      tracks,
       total,
-      count,
-      offset,
     };
   }
 
-  async addToFavourites(userId: string, trackId: string) {
+  async addToFavourites(userId: string, trackId: string): Promise<void> {
     try {
-      return await prisma.favourite.create({
+      await prisma.favourite.create({
         data: {
           userId,
           trackId,
@@ -132,9 +141,9 @@ export class UserRepository {
     }
   }
 
-  async addToHistory(userId: string, trackId: string) {
+  async addToHistory(userId: string, trackId: string): Promise<void> {
     try {
-      return await prisma.trackListened.create({
+      await prisma.trackListened.create({
         data: {
           userId,
           trackId,
@@ -145,8 +154,8 @@ export class UserRepository {
     }
   }
 
-  async removeFromFavourites(userId: string, trackId: string) {
-    return prisma.favourite.delete({
+  async removeFromFavourites(userId: string, trackId: string): Promise<void> {
+    await prisma.favourite.delete({
       where: {
         userId_trackId: {
           userId,
@@ -156,97 +165,85 @@ export class UserRepository {
     });
   }
 
-  async getHistory(userId: string, options?: queryType) {
-    const { count = 10, offset = 0, searchQuery } = options || {};
-    const where: Prisma.TrackListenedWhereInput = {
-      userId,
-      ...(searchQuery && {
-        track: {
-          name: {
-            contains: searchQuery,
-            mode: "insensitive",
+  async getHistory(
+    userId: string,
+    options?: queryType,
+  ): Promise<FindTracksResult> {
+    try {
+      const { count = 10, offset = 0, searchQuery } = options || {};
+      const where: Prisma.TrackListenedWhereInput = {
+        userId,
+        ...(searchQuery && {
+          track: {
+            name: {
+              contains: searchQuery,
+              mode: "insensitive",
+            },
+            artist: {
+              contains: searchQuery,
+              mode: "insensitive",
+            },
           },
-          artist: {
-            contains: searchQuery,
-            mode: "insensitive",
+        }),
+      };
+      const [tracksData, total] = await Promise.all([
+        prisma.trackListened.findMany({
+          where: where,
+          include: {
+            track: {
+              include: {
+                album: {
+                  select: {
+                    picture: true,
+                  },
+                },
+              },
+            },
           },
-        },
-      }),
-    };
-    const [tracksData, total] = await Promise.all([
-      prisma.trackListened.findMany({
-        where: where,
-        include: {
-          track: true,
-        },
-        skip: offset,
-        take: count,
-      }),
-      prisma.trackListened.count({ where }),
-    ]);
-    const tracks = tracksData.map((item) => item.track);
+          skip: offset,
+          take: count,
+        }),
+        prisma.trackListened.count({ where }),
+      ]);
+      const tracks = tracksData.map((item) => item.track);
 
-    return {
-      data: tracks.map((track) => formatTrack(track)),
-      total,
-      count,
-      offset,
-    };
+      return {
+        tracks,
+        total,
+      };
+    } catch (err: any) {
+      if (err.code === "P2025")
+        throw new BadRequestError(`Failed to fetch user's history!`);
+      throw err;
+    }
   }
 
-  async updateUser(userId: string, data: updateUserType) {
-    const updates = Object.fromEntries(
-      Object.entries(data).filter(([, v]) => v !== undefined),
-    );
-    return prisma.user.update({
-      where: { id: userId },
-      data: updates,
-    });
+  async updateUser(userId: string, data: UpdateUserDTO): Promise<User> {
+    try {
+      const updates = Object.fromEntries(
+        Object.entries(data).filter(([, v]) => v !== undefined),
+      );
+      const user = await prisma.user.update({
+        where: { id: userId },
+        data: updates,
+      });
+      return user;
+    } catch (err: any) {
+      if (err.code === "P2025")
+        throw new BadRequestError(`Failed to update user!`); // типо чтобы избежать userEnum, не notFound
+      throw err;
+    }
   }
 
-  async removeUser(userId: string) {
-    return prisma.user.delete({
-      where: { id: userId },
-    });
+  async removeUser(userId: string): Promise<void> {
+    try {
+      await prisma.user.delete({
+        where: { id: userId },
+      });
+    } catch (err: any) {
+      if (err.code === "P2025")
+        throw new BadRequestError(`Failed to delete user!`);
+      throw err;
+    }
   }
-}
-
-function formatPlaylsit(playlist: Playlist | any) {
-  return {
-    id: playlist.id,
-    name: playlist.name,
-    author: {
-      first_name: playlist.author.firstName,
-      last_name: playlist.author.lastName,
-    },
-    description: playlist.description,
-    crated_at: playlist.createdAt,
-    updated_at: playlist.updatedAt,
-  };
-}
-
-function formatUser(user: User | any) {
-  return {
-    id: user.id,
-    first_name: user.firstName,
-    last_name: user.lastName,
-    email: user.email,
-    is_activated: user.isActivated,
-    role: user.role.role,
-    crated_at: user.createdAt,
-    updated_at: user.updatedAt,
-  };
-}
-
-function formatTrack(track: Track | any) {
-  return {
-    id: track.id,
-    name: track.name,
-    artist: track.artist,
-    audio: track.audio,
-    tags: track.tags?.map((tag: any) => tag),
-    created_at: track.createdAt,
-    updated_at: track.updatedAt,
-    albumId: track.albumId,
-  };
 }

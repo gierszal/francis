@@ -1,17 +1,17 @@
-import { Prisma, type Track } from "@/generated/prisma/client.js";
+import { NotFoundError } from "@/errors/ApiError.js";
+import type { Track } from "@/generated/prisma/client.js";
 import { prisma } from "@/prisma.js";
-import { updateTrackSchema } from "@/schemas/track.schema.js";
 import type { queryType } from "@/types/common/query.js";
-import type { updatePlaylistType } from "@/types/playlist/playlist.js";
 import type {
-  addToAlbumType,
-  addToPlaylistType,
-  createTrackType,
-  updateTrackType,
-} from "@/types/track/track.js";
+  AddToPlaylistDTO,
+  CreateTrackDTO,
+  UpdateTrackDTO,
+  ITrackRepository,
+} from "@/types/track/index.js";
+import type { FindTracksResult } from "@/types/track/track.result.js";
 
-export class TrackRepository {
-  async findAll(options?: queryType) {
+export class TrackRepository implements ITrackRepository {
+  async findAll(options?: queryType): Promise<FindTracksResult> {
     const { count = 10, offset = 0, searchQuery } = options || {};
 
     const where: any = {};
@@ -40,14 +40,12 @@ export class TrackRepository {
     ]);
 
     return {
-      data: tracks.map((track) => formatTrack(track)),
+      tracks,
       total,
-      count,
-      offset,
     };
   }
 
-  async findById(id: string) {
+  async findById(id: string): Promise<Track | null> {
     const track = await prisma.track.findUnique({
       where: { id },
       include: {
@@ -66,35 +64,35 @@ export class TrackRepository {
         },
       },
     });
-    return track ? formatDetailedTrack(track) : null;
+    return track ?? null;
   }
 
   async create(
-    { artist, name, albumId, tags }: createTrackType,
+    { artist, name, albumId, tags }: CreateTrackDTO,
     audio: string,
-  ) {
-    try {
-      const track = await prisma.track.create({
-        data: {
-          artist,
-          audio,
-          name,
-          tags,
-          albumId,
+  ): Promise<Track> {
+    const track = await prisma.track.create({
+      data: {
+        artist,
+        audio,
+        name,
+        tags,
+        albumId,
+      },
+      include: {
+        album: {
+          select: { picture: true },
         },
-        include: {
-          album: {
-            select: { picture: true },
-          },
-        },
-      });
-      return formatTrack(track);
-    } catch (err) {
-      console.log(err);
-    }
+      },
+    });
+    return track;
   }
 
-  async update(id: string, data: updateTrackType, audioPath?: string) {
+  async update(
+    id: string,
+    data: UpdateTrackDTO,
+    audioPath?: string,
+  ): Promise<Track> {
     let updateData: any = data;
 
     if (audioPath) updateData = { ...data, audio: audioPath };
@@ -113,14 +111,15 @@ export class TrackRepository {
           },
         },
       });
-      return formatTrack(track);
+      return track;
     } catch (err: any) {
-      if (err.code === "P2025") return null;
+      if (err.code === "P2025")
+        throw new NotFoundError(`Track with id ${id} was not found!`);
       throw err;
     }
   }
 
-  async listenIncrement(id: string) {
+  async listenIncrement(id: string): Promise<void> {
     try {
       await prisma.track.update({
         where: { id },
@@ -130,46 +129,31 @@ export class TrackRepository {
           },
         },
       });
-      return;
     } catch (err: any) {
-      if (err.code === "P2025") return null;
+      if (err.code === "P2025")
+        throw new NotFoundError(`Playlist with id ${id} was not found!`);
       throw err;
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<void> {
     try {
-      const track = await prisma.track.delete({
+      await prisma.track.delete({
         where: { id },
-      });
-      return formatTrack(track);
-    } catch (err: any) {
-      if (err.code === "P2025") {
-        throw new Error(`Track with id ${id} not found`);
-      }
-      throw err;
-    }
-  }
-
-  async addToAlbum(data: addToAlbumType) {
-    const { albumId, trackId } = data;
-    try {
-      const track = await prisma.track.update({
-        where: { id: trackId },
-        data: {
-          albumId,
+        include: {
+          album: {
+            select: { picture: true },
+          },
         },
       });
-      return formatTrack(track);
     } catch (err: any) {
-      if (err.code === "P2025") {
-        throw new Error(`Track with id ${trackId} not found`);
-      }
+      if (err.code === "P2025")
+        throw new NotFoundError(`Playlist with id ${id} was not found!`);
       throw err;
     }
   }
 
-  async addToPlaylist(data: addToPlaylistType) {
+  async addToPlaylist(data: AddToPlaylistDTO): Promise<void> {
     const { playlistId, trackId } = data;
     try {
       await prisma.playlistTrack.create({
@@ -180,43 +164,9 @@ export class TrackRepository {
       });
       return;
     } catch (err: any) {
-      if (err.code === "P2025") {
-        throw new Error(`Track with id ${trackId} not found`);
-      }
+      if (err.code === "P2025")
+        throw new NotFoundError(`Track with id ${trackId} not found`);
       throw err;
     }
   }
-}
-
-function formatTrack(track: Track | any) {
-  return {
-    id: track.id,
-    name: track.name,
-    artist: track.artist,
-    audio: track.audio,
-    picture: track.album.picture,
-    tags: track.tags.map((tag: any) => tag),
-    created_at: track.createdAt,
-    updated_at: track.updatedAt,
-    albumId: track.albumId,
-  };
-}
-
-function formatDetailedTrack(track: Track | any) {
-  return {
-    id: track.id,
-    name: track.name,
-    artist: track.artist,
-    audio: track.audio,
-    tags: track.tags.map((tag: any) => tag),
-    created_at: track.createdAt,
-    updated_at: track.updatedAt,
-    listened: track._count.trackListeneds,
-    album: {
-      id: track.album.id,
-      name: track.album.name,
-      game: track.album.game,
-      picture: track.album.picture,
-    },
-  };
 }

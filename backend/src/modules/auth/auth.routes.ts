@@ -7,9 +7,17 @@ import {
   activationLinkSchema,
   signInSchema,
   signUpSchema,
-} from "@/schemas/auth.schema.js";
+} from "@/schemas/auth/auth.schema.js";
 import { TokenService } from "@/services/tokenService.js";
 import { MailService } from "@/services/mailService.js";
+import z from "zod";
+import {
+  emptyResponseSchema,
+  refreshResponseSchema,
+  signInResponseSchema,
+  signUpResponseSchema,
+} from "@/schemas/auth/index.js";
+import { errorResponseSchema } from "@/schemas/common/error.schema.js";
 
 type optionsType = {
   prefix: string;
@@ -28,23 +36,98 @@ const authRoutes = (fastify: FastifyInstance, _options: optionsType) => {
 
   fastify.post(
     "/sign-up",
-    { preHandler: [validate({ body: signUpSchema })] },
+    {
+      schema: {
+        description: "User registration route",
+        tags: ["Auth"],
+        body: z.toJSONSchema(signUpSchema),
+        response: {
+          201: signUpResponseSchema,
+          400: errorResponseSchema,
+          409: errorResponseSchema,
+          500: errorResponseSchema,
+          default: errorResponseSchema,
+        },
+        security: [{ bearerAuth: [] }],
+      },
+      preHandler: [validate({ body: signUpSchema })],
+    },
     authController.signUp,
   );
 
   fastify.post(
     "/sign-in",
-    { preHandler: [validate({ body: signInSchema })] },
+    {
+      schema: {
+        description: "User log-in route",
+        tags: ["Auth"],
+        body: signInSchema,
+        // response: {
+        //   200: signInResponseSchema,
+        //   400: errorResponseSchema,
+        //   401: errorResponseSchema,
+        //   500: errorResponseSchema,
+        //   default: errorResponseSchema,
+        // },
+        security: [{ bearerAuth: [] }],
+      },
+      preHandler: [validate({ body: signInSchema })],
+    },
     authController.signIn,
   );
 
-  fastify.post("/sign-out", authController.signOut);
+  fastify.post(
+    "/sign-out",
+    {
+      schema: {
+        description: "Invalidate the current refresh token (logout)",
+        tags: ["Auth"],
+        response: {
+          204: emptyResponseSchema,
+          401: errorResponseSchema,
+          500: errorResponseSchema,
+          default: errorResponseSchema,
+        },
+        security: [{ bearerAuth: [] }],
+      },
+    },
+    authController.signOut,
+  );
 
-  fastify.get("/refresh", authController.refresh);
+  fastify.get(
+    "/refresh",
+    {
+      schema: {
+        description:
+          "Refresh the access token using a valid refresh token (sent in Authorization header)",
+        tags: ["Auth"],
+        response: {
+          200: refreshResponseSchema,
+          401: errorResponseSchema,
+          403: errorResponseSchema,
+          500: errorResponseSchema,
+          default: errorResponseSchema,
+        },
+        security: [{ bearerAuth: [] }],
+      },
+    },
+    authController.refresh,
+  );
 
   fastify.get(
     "/activate/:link",
     {
+      schema: {
+        description: "User log-out route",
+        tags: ["Auth"],
+        response: {
+          204: emptyResponseSchema,
+          401: errorResponseSchema,
+          500: errorResponseSchema,
+          default: errorResponseSchema,
+        },
+        security: [{ bearerAuth: [] }],
+      },
       preHandler: [validate({ params: activationLinkSchema })],
     },
     authController.activate,

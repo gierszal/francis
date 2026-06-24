@@ -1,16 +1,16 @@
-import type { AIServiceType } from "@/types/ai/ai.js";
-import type { TrackRepositoryType } from "@/types/track/track.js";
-import type { UserRepositoryType } from "@/types/user/user.js";
+import type { IAIService, AIGenerateResponse } from "@/types/ai/index.js";
+import type { ITrackRepository } from "@/types/track/index.js";
+import type { IUserRepository } from "@/types/user/index.js";
 import { Ollama } from "ollama";
 
-export class AIService implements AIServiceType {
+export class AIService implements IAIService {
   constructor(
-    private trackRepository: TrackRepositoryType,
-    private userRepository: UserRepositoryType,
+    private trackRepository: ITrackRepository,
+    private userRepository: IUserRepository,
     private ollama = new Ollama({ host: process.env.OLLAMA_API_URL! }),
   ) {}
 
-  async generate(prompt: string) {
+  async generate(prompt: string): Promise<AIGenerateResponse> {
     try {
       const response = await this.ollama.chat({
         model: process.env.ollamaModel!,
@@ -22,10 +22,7 @@ export class AIService implements AIServiceType {
         response: response.message.content,
       };
     } catch (e) {
-      console.log(e);
       throw e;
     }
   }
-
-  async getRecommendations() {}
 }

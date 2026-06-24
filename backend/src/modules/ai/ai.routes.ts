@@ -4,10 +4,14 @@ import { AIController } from "./ai.controller.js";
 import { AIService } from "./ai.service.js";
 import { TrackRepository } from "@/repositories/prisma/track.repository.js";
 import { UserRepository } from "@/repositories/prisma/user.repository.js";
-import { generateQuerySchema } from "@/schemas/ai.schema.js";
-import { authMiddleware } from "@/middlewares/auth.middleware.js";
-import type { generateQueryType } from "@/types/ai/ai.js";
-
+import {
+  aiGenerateQuerySchema,
+  aiGenerateResponseSchema,
+} from "@/schemas/ai/index.js";
+import { authMiddleware, requireRole } from "@/middlewares/auth.middleware.js";
+import type { GenerateQueryDTO } from "@/types/ai/index.js";
+import { ROLES } from "@/types/auth/auth.roles.js";
+import { errorResponseSchema } from "@/schemas/common/error.schema.js";
 type optionsType = {
   prefix: string;
 };
@@ -19,21 +23,28 @@ const aiRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   const aiController = new AIController(service);
 
   fastify.post<{
-    Body: generateQueryType;
+    Body: GenerateQueryDTO;
   }>(
     "/generate",
     {
-      preHandler: [authMiddleware, validate({ body: generateQuerySchema })],
+      schema: {
+        tags: ["AI"],
+        summary: "Generate query",
+        body: aiGenerateQuerySchema,
+        response: {
+          200: aiGenerateResponseSchema,
+          401: errorResponseSchema,
+          403: errorResponseSchema,
+        },
+        security: [{ bearerAuth: [] }],
+      },
+      preHandler: [
+        authMiddleware,
+        requireRole(ROLES.ADMIN.name, ROLES.USER.name),
+        validate({ body: aiGenerateQuerySchema }),
+      ],
     },
     aiController.generate,
-  );
-
-  fastify.post(
-    "/recommendations",
-    {
-      preHandler: [authMiddleware],
-    },
-    aiController.getRecommendations,
   );
 };
 

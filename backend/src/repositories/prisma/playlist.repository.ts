@@ -1,18 +1,21 @@
+import { NotFoundError } from "@/errors/ApiError.js";
 import type { Playlist } from "@/generated/prisma/client.js";
 import { prisma } from "@/prisma.js";
 import type { queryType } from "@/types/common/query.js";
 import type {
-  createPlaylistType,
-  updatePlaylistType,
-} from "@/types/playlist/playlist.js";
+  CreatePlaylistDTO,
+  UpdatePlaylistDTO,
+  IPlaylistRepository,
+  FindAllPlaylistsResult,
+} from "@/types/playlist/index.js";
 
-export class PlaylistRepository {
-  async findAll(options?: queryType) {
+export class PlaylistRepository implements IPlaylistRepository {
+  async findAll(options?: queryType): Promise<FindAllPlaylistsResult> {
     const { count = 10, offset = 0, searchQuery } = options || {};
 
     const where: any = {};
 
-    if (searchQuery) where.name = { name: { contains: searchQuery } };
+    if (searchQuery) where.name = { contains: searchQuery };
 
     const [playlists, total] = await Promise.all([
       prisma.playlist.findMany({
@@ -25,14 +28,12 @@ export class PlaylistRepository {
     ]);
 
     return {
-      data: playlists.map((playlist) => formatPlaylist(playlist)),
+      playlists,
       total,
-      count,
-      offset,
     };
   }
 
-  async findById(id: string) {
+  async findById(id: string): Promise<Playlist | null> {
     const playlist = await prisma.playlist.findUnique({
       where: { id },
       include: {
@@ -71,10 +72,13 @@ export class PlaylistRepository {
         },
       },
     });
-    return playlist ? formatDetailedPlaylist(playlist) : null;
+    return playlist ?? null;
   }
 
-  async create(id: string, { description, name }: createPlaylistType) {
+  async create(
+    id: string,
+    { description, name }: CreatePlaylistDTO,
+  ): Promise<Playlist> {
     const playlist = await prisma.playlist.create({
       data: {
         name,
@@ -82,10 +86,10 @@ export class PlaylistRepository {
         authorId: id,
       },
     });
-    return formatPlaylist(playlist);
+    return playlist;
   }
 
-  async update(id: string, data: updatePlaylistType) {
+  async update(id: string, data: UpdatePlaylistDTO): Promise<Playlist> {
     const updates = Object.fromEntries(
       Object.entries(data).filter(([, v]) => v !== undefined),
     );
@@ -95,49 +99,23 @@ export class PlaylistRepository {
         where: { id },
         data: updates,
       });
-      return formatPlaylist(playlist);
+      return playlist;
     } catch (err: any) {
-      if (err.code === "P2025") return null;
+      if (err.code === "P2025")
+        throw new NotFoundError(`Playlist with id ${id} was not found!`);
       throw err;
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<void> {
     try {
-      const playlist = await prisma.playlist.delete({
+      await prisma.playlist.delete({
         where: { id },
       });
-      return formatPlaylist(playlist);
     } catch (err: any) {
-      if (err.code === "P2025") {
-        throw new Error(`Playlist with id ${id} not found`);
-      }
+      if (err.code === "P2025")
+        throw new NotFoundError(`Playlist with id ${id} was not found!`);
       throw err;
     }
   }
-}
-
-function formatPlaylist(playlist: Playlist) {
-  return {
-    id: playlist.id,
-    name: playlist.name,
-    description: playlist.description,
-    created_at: playlist.createdAt,
-    updated_at: playlist.updatedAt,
-  };
-}
-
-function formatDetailedPlaylist(playlist: Playlist | any) {
-  return {
-    id: playlist.id,
-    name: playlist.name,
-    tracks: playlist.tracks.map((track: any) => track),
-    author: {
-      id: playlist.author.id,
-      firstName: playlist.author.firstName,
-      lastName: playlist.author.lastName,
-    },
-    created_at: playlist.createdAt,
-    updated_at: playlist.updatedAt,
-  };
 }

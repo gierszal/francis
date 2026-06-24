@@ -1,9 +1,9 @@
-import { UserPayloadDTO } from "@/DTO/userDTO.js";
-import { InvalidTokenError } from "@/errors/index.js";
+import { InvalidTokenError } from "@/errors/ApiError.js";
+import type { FormattedUserPayload } from "@/types/user/user.model.js";
 import jwt from "jsonwebtoken";
 
 export class TokenService {
-  generateTokens(payload: UserPayloadDTO) {
+  generateTokens(payload: FormattedUserPayload) {
     try {
       const accessToken = jwt.sign(
         { ...payload },
@@ -28,23 +28,22 @@ export class TokenService {
     }
   }
 
-  validateAccessToken(token: string): UserPayloadDTO | null {
+  validateAccessToken(token: string): FormattedUserPayload | null {
     try {
       return jwt.verify(
         token,
         process.env.JWT_ACCESS_SECRET!,
-      ) as UserPayloadDTO;
+      ) as FormattedUserPayload;
     } catch (e) {
       throw new InvalidTokenError("Unable to validate access token!");
     }
   }
 
-  validateRefreshToken(token: string): UserPayloadDTO | null {
+  validateRefreshToken(token: string): FormattedUserPayload | null {
     try {
       const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET!);
       if (decoded) {
-        const userPayload = new UserPayloadDTO(decoded as any);
-        return userPayload;
+        return decoded as FormattedUserPayload;
       } else throw new InvalidTokenError("Unable to verify tokens!");
     } catch (e) {
       throw new InvalidTokenError("Unable to verify tokens!");

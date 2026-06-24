@@ -1,4 +1,4 @@
-import { EmailConfigError, EmailSendingError } from "@/errors/index.js";
+import { EmailServiceError } from "@/errors/InfrastructureError.js";
 import nodemailer, { type Transporter } from "nodemailer";
 
 export class MailService {
@@ -19,7 +19,7 @@ export class MailService {
   async sendActivationMail(to: string, link: string) {
     try {
       if (!process.env.SMTP_USER || !process.env.SMTP_PASSWORD) {
-        throw new EmailConfigError("Check SMTP configuration!");
+        throw new EmailServiceError("Check SMTP configuration!");
       }
 
       const info = await this.transporter.sendMail({
@@ -35,7 +35,7 @@ export class MailService {
       });
       return info;
     } catch (error: any) {
-      throw new EmailSendingError(error.message);
+      throw new EmailServiceError(error.message);
     }
   }
 }

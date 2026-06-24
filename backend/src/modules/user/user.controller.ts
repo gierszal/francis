@@ -1,21 +1,21 @@
+import { BadRequestError } from "@/errors/ApiError.js";
 import type { paramsType } from "@/types/common/params.js";
 import type { queryType } from "@/types/common/query.js";
-import type { addToFavouritesType } from "@/types/track/track.js";
-import type { updateUserType, UserServiceType } from "@/types/user/user.js";
+import type {
+  AddToFavoritesDTO,
+  IUserService,
+  UpdateUserDTO,
+} from "@/types/user/index.js";
 import type { FastifyReply, FastifyRequest } from "fastify";
 
 export class UserController {
-  constructor(private userService: UserServiceType) {}
+  constructor(private userService: IUserService) {}
 
   getUser = async (request: FastifyRequest, reply: FastifyReply) => {
     const id = request?.user?.id;
-    if (!id)
-      return reply
-        .code(404)
-        .send({ message: "User with this id does not exist!" });
-
+    if (!id) throw new BadRequestError("User id was not provided!");
     const user = await this.userService.getUser(id);
-    return reply.send({ user });
+    return reply.send({ data: user });
   };
 
   getPlaylists = async (
@@ -24,11 +24,10 @@ export class UserController {
   ) => {
     const id = request?.user?.id;
     const query = request.query;
-    if (!id)
-      return reply.code(404).send({ message: "User id was not provided!" });
+    if (!id) throw new BadRequestError("User id was not provided!");
 
     const playlists = await this.userService.getPlaylists(id, query);
-    return reply.send({ playlists });
+    return reply.send(playlists);
   };
 
   getFavourites = async (
@@ -36,26 +35,22 @@ export class UserController {
     reply: FastifyReply,
   ) => {
     const id = request?.user?.id;
-    const data = request.params;
-    if (!id)
-      return reply.code(401).send({ message: "User id was not provided!" });
-    const result = await this.userService.getFavourites(id, data);
-    return reply.send(result);
+    const data = request.query;
+    if (!id) throw new BadRequestError("User id was not provided!");
+    const favourites = await this.userService.getFavourites(id, data);
+    return reply.send(favourites);
   };
 
   addToFavourites = async (
-    request: FastifyRequest<{ Params: addToFavouritesType }>,
+    request: FastifyRequest<{ Params: AddToFavoritesDTO }>,
     reply: FastifyReply,
   ) => {
     const id = request?.user?.id;
     const { trackId } = request.params;
     if (!id || !trackId)
-      return reply
-        .code(400)
-        .send("Either track id or user id is not provided!");
-
-    const result = await this.userService.addToFavourites(id, trackId);
-    return reply.code(201).send(result);
+      throw new BadRequestError("Either track id or user id is not provided!");
+    await this.userService.addToFavourites(id, trackId);
+    return reply.code(204).send();
   };
 
   addToHistory = async (
@@ -65,12 +60,9 @@ export class UserController {
     const userId = request?.user?.id;
     const { id } = request.params;
     if (!id || !userId)
-      return reply
-        .code(400)
-        .send("Either track id or user id is not provided!");
-
-    const result = await this.userService.addToHistory(userId, id);
-    return reply.code(201).send(result);
+      throw new BadRequestError("Either track id or user id is not provided!");
+    await this.userService.addToHistory(userId, id);
+    return reply.code(204).send();
   };
 
   removeFromFavourites = async (
@@ -80,13 +72,21 @@ export class UserController {
     const userId = request?.user?.id;
     const { id } = request.params;
     if (!userId || !id)
-      return reply
-        .code(400)
-        .send("Either track id or user id is not provided!");
+      throw new BadRequestError("Either track id or user id is not provided!");
+    await this.userService.removeFromFavourites(userId, id);
+    return reply.code(204).send();
+  };
 
-    const result = await this.userService.removeFromFavourites(userId, id);
-
-    return reply.send(result);
+  public getRecommendations = (
+    request: FastifyRequest<{ Querystring: queryType }>,
+    reply: FastifyReply,
+  ) => {
+    const { count, offset } = request.query;
+    reply.send({
+      message: "Get track recommendations",
+      count,
+      offset,
+    });
   };
 
   getHistory = async (
@@ -94,37 +94,31 @@ export class UserController {
     reply: FastifyReply,
   ) => {
     const id = request?.user?.id;
-    const data = request.params;
-
-    if (!id)
-      return reply.code(401).send({ message: "User id was not provided!" });
-
-    const result = await this.userService.getHistory(id, data);
-
-    return reply.send(result);
+    const data = request.query;
+    if (!id) throw new BadRequestError("User id was not provided!");
+    const history = await this.userService.getHistory(id, data);
+    return reply.send(history);
   };
 
   updateUser = async (
-    request: FastifyRequest<{ Body: updateUserType }>,
+    request: FastifyRequest<{ Body: UpdateUserDTO }>,
     reply: FastifyReply,
   ) => {
     const id = request?.user?.id;
     const data = request.body;
-    if (!id)
-      return reply.code(401).send({ message: "User id was not provided!" });
+    if (!id) throw new BadRequestError("User id was not provided!");
 
-    const result = await this.userService.updateUser(id, data);
+    const user = await this.userService.updateUser(id, data);
 
-    return reply.send(result);
+    return reply.send({ data: user });
   };
 
   removeUser = async (request: FastifyRequest, reply: FastifyReply) => {
     const id = request?.user?.id;
-    if (!id)
-      return reply.code(401).send({ message: "User id was not provided!" });
+    if (!id) throw new BadRequestError("User id was not provided!");
 
-    const result = await this.userService.removeUser(id);
+    await this.userService.removeUser(id);
 
-    return reply.send(result);
+    return reply.code(204).send();
   };
 }

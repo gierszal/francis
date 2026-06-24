@@ -1,13 +1,26 @@
-import type { Album, Collection } from "@/generated/prisma/client.js";
+import { NotFoundError } from "@/errors/ApiError.js";
+import { DatabaseError } from "@/errors/InfrastructureError.js";
+import type { Collection } from "@/generated/prisma/client.js";
 import { prisma } from "@/prisma.js";
 import type {
-  createCollectionType,
-  updateCollectionType,
-} from "@/types/collection/collection.js";
+  CreateCollectionDTO,
+  UpdateCollectionDTO,
+} from "@/types/collection/collection.dto.js";
+import type { ICollectionRepository } from "@/types/collection/collection.interface.js";
+import type {
+  FormattedCollection,
+  FormattedDetailedCollection,
+} from "@/types/collection/collection.model.js";
+import type { CollectionsResponse } from "@/types/collection/collection.response.js";
+import type { FindAllCollectionsResult } from "@/types/collection/collection.result.js";
 import type { queryType } from "@/types/common/query.js";
+import {
+  formatCollection,
+  formatDetailedCollection,
+} from "@/utils/formatters/index.js";
 
-export class CollectionRepository {
-  async findAll(options?: queryType) {
+export class CollectionRepository implements ICollectionRepository {
+  async findAll(options?: queryType): Promise<FindAllCollectionsResult> {
     const { count = 10, offset = 0, searchQuery } = options || {};
 
     const where: any = {};
@@ -29,14 +42,12 @@ export class CollectionRepository {
     ]);
 
     return {
-      data: collections.map((collection) => formatCollection(collection)),
+      collections,
       total,
-      count,
-      offset,
     };
   }
 
-  async findById(id: string) {
+  async findById(id: string): Promise<Collection | null> {
     const collection = await prisma.collection.findUnique({
       where: { id },
       include: {
@@ -58,68 +69,43 @@ export class CollectionRepository {
         },
       },
     });
-    return collection ? formatDetailedCollection(collection) : null;
+    return collection ?? null;
   }
 
-  async create({ name }: createCollectionType) {
-    const collection = await prisma.collection.create({
+  async create({ name }: CreateCollectionDTO): Promise<Collection> {
+    return prisma.collection.create({
       data: {
         name,
       },
     });
-    return formatCollection(collection);
   }
 
-  async update(id: string, data: updateCollectionType) {
+  async update(id: string, data: UpdateCollectionDTO): Promise<Collection> {
     const updates = Object.fromEntries(
       Object.entries(data).filter(([, v]) => v !== undefined),
     );
-
     try {
-      const collection = await prisma.collection.update({
+      return prisma.collection.update({
         where: { id },
         data: updates,
       });
-      return formatCollection(collection);
     } catch (err: any) {
-      if (err.code === "P2025") return null;
-      throw err;
+      if (err.code === "P2025")
+        throw new NotFoundError(`Album with id ${id} was not found!`);
+      throw new DatabaseError(err.message ?? "Database error occured");
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<void> {
     try {
-      const collection = await prisma.collection.delete({
+      await prisma.collection.delete({
         where: { id },
       });
-      return formatCollection(collection);
     } catch (err: any) {
-      if (err.code === "P2025") {
-        throw new Error(`Collection with id ${id} not found`);
-      }
-      throw err;
+      if (err.code === "P2025")
+        throw new NotFoundError(`Album with id ${id} was not found!`);
+
+      throw new DatabaseError(err.message ?? "Database error occured");
     }
   }
-}
-
-function formatCollection(collection: Collection) {
-  return {
-    id: collection.id,
-    name: collection.name,
-    created_at: collection.createdAt,
-    updated_at: collection.updatedAt,
-  };
-}
-
-function formatDetailedCollection(collection: Collection | any) {
-  return {
-    id: collection.id,
-    name: collection.name,
-    albums_count: collection._count.albumCollections,
-    albums: collection.albumCollections.map(
-      (albumArray: any) => albumArray.album,
-    ),
-    created_at: collection.createdAt,
-    updated_at: collection.updatedAt,
-  };
 }

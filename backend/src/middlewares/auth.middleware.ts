@@ -1,10 +1,11 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
 import { TokenService } from "@/services/tokenService.js";
-import type { UserPayloadDTO } from "@/DTO/userDTO.js";
+import type { FormattedUserPayload } from "@/types/user/user.model.js";
+import { ForbiddenError, InvalidCredentialsError } from "@/errors/ApiError.js";
 
 declare module "fastify" {
   interface FastifyRequest {
-    user?: UserPayloadDTO;
+    user?: FormattedUserPayload;
   }
 }
 
@@ -16,28 +17,27 @@ export const authMiddleware = async (
   const { validateAccessToken } = new TokenService();
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return reply.code(401).send({ error: "Access token is missing" });
+    throw new InvalidCredentialsError("Access token is missing");
   }
 
   const token = authHeader.split(" ")[1];
 
   try {
     const payload = validateAccessToken(token!);
-    if (!payload) reply.code(401).send({ error: "Access token is missing" });
-    req.user = payload as UserPayloadDTO;
+    if (!payload) throw new InvalidCredentialsError("Access token is missing");
+    req.user = payload as FormattedUserPayload;
   } catch (err) {
-    return reply.code(401).send({ error: "Invalid or expired access token" });
+    throw new InvalidCredentialsError("Invalid or expired access token");
   }
 };
 
 export const requireRole = (...roleIds: string[]) => {
   return async (req: FastifyRequest, reply: FastifyReply) => {
     if (!req.user) {
-      return reply.code(401).send({ error: "Not authenticated" });
+      throw new InvalidCredentialsError("Not authenticated");
     }
-
-    if (!roleIds.includes(req.user.roleId)) {
-      return reply.code(403).send({ error: "Insufficient permissions" });
+    if (!roleIds.includes(req.user.role)) {
+      throw new ForbiddenError("Insufficient permissions");
     }
   };
 };

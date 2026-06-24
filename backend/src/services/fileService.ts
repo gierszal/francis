@@ -1,8 +1,8 @@
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs/promises";
-import { FileServiceError } from "@/errors/index.js";
-import type { Multipart, MultipartFile } from "@fastify/multipart";
+import { FileServiceError } from "@/errors/InfrastructureError.js";
+import type { MultipartFile } from "@fastify/multipart";
 
 export enum FileType {
   AUDIO = "audio",

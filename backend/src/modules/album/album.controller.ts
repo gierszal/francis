@@ -1,15 +1,16 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import type { AlbumServiceType } from "../../types/album/album.js";
 import type {
-  addToCollectionType,
-  createAlbumType,
-  updateAlbumType,
-} from "../../types/album/album.js";
+  AddToCollectionDTO,
+  CreateAlbumDTO,
+  IAlbumService,
+  UpdateAlbumDTO,
+} from "@/types/album/index.js";
 import type { paramsType } from "@/types/common/params.js";
 import type { queryType } from "@/types/common/query.js";
+import { BadRequestError, NotFoundError } from "@/errors/ApiError.js";
 
 export class AlbumController {
-  constructor(private albumService: AlbumServiceType) {}
+  constructor(private albumService: IAlbumService) {}
 
   public getAlbum = async (
     request: FastifyRequest<{ Params: paramsType }>,
@@ -17,12 +18,7 @@ export class AlbumController {
   ) => {
     const { id } = request.params;
     const album = await this.albumService.getAlbum(id);
-    if (!album) {
-      return reply.status(404).send({
-        error: "Not Found",
-        message: `Album with id ${id} not found`,
-      });
-    }
+    if (!album) throw new NotFoundError(`Album with id ${id} not found`);
     reply.send({ data: album });
   };
 
@@ -31,71 +27,48 @@ export class AlbumController {
     reply: FastifyReply,
   ) => {
     const opts = request.query;
-    const albums = await this.albumService.getAlbums(opts);
-    reply.send(albums);
+    const data = await this.albumService.getAlbums(opts);
+    reply.send(data);
   };
 
   public createAlbum = async (
-    request: FastifyRequest<{ Body: createAlbumType }>,
+    request: FastifyRequest<{ Body: CreateAlbumDTO }>,
     reply: FastifyReply,
   ) => {
     const data = request.body;
     const pic = request.body.picture;
-    if (!pic) reply.code(400).send("The file is not provided!");
+    if (!pic) throw new BadRequestError("The file is not provided!");
     const album = await this.albumService.createAlbum(data, pic);
-    reply.send({ data: album });
+    reply.code(201).send({ data: album });
   };
 
   public updateAlbum = async (
-    request: FastifyRequest<{ Body: updateAlbumType; Params: paramsType }>,
+    request: FastifyRequest<{ Body: UpdateAlbumDTO; Params: paramsType }>,
     reply: FastifyReply,
   ) => {
-    try {
-      const data = request.body;
-      const { id } = request.params;
-      const pic = request.body.picture;
-      const album = await this.albumService.updateAlbum(id, data, pic);
-      reply.send({ data: album });
-    } catch (err: any) {
-      throw err;
-    }
+    const data = request.body;
+    const { id } = request.params;
+    const pic = request.body.picture;
+    const album = await this.albumService.updateAlbum(id, data, pic);
+    reply.send({ data: album });
   };
 
   public deleteAlbum = async (
     request: FastifyRequest<{ Params: paramsType }>,
     reply: FastifyReply,
   ) => {
-    try {
-      const { id } = request.params;
-      const album = await this.albumService.deleteAlbum(id);
-      reply.send({ album });
-    } catch (err: any) {
-      if (err.message?.includes("not found")) {
-        return reply.status(404).send({
-          error: "Not Found",
-          message: err.message,
-        });
-      }
-      throw err;
-    }
+    const { id } = request.params;
+    if (!id) throw new BadRequestError("Album id was not provided!");
+    await this.albumService.deleteAlbum(id);
+    reply.code(204).send();
   };
 
   public addToCollection = async (
-    request: FastifyRequest<{ Params: addToCollectionType }>,
+    request: FastifyRequest<{ Params: AddToCollectionDTO }>,
     reply: FastifyReply,
   ) => {
-    try {
-      const data = request.params;
-      await this.albumService.addToCollection(data);
-      reply.send({ message: "success" });
-    } catch (err: any) {
-      if (err.message?.includes("not found")) {
-        return reply.status(404).send({
-          error: "Not Found",
-          message: err.message,
-        });
-      }
-      throw err;
-    }
+    const data = request.params;
+    await this.albumService.addToCollection(data);
+    reply.code(204).send();
   };
 }
