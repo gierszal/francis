@@ -70,9 +70,10 @@ export class AuthService implements IAuthService {
   ): Promise<Pick<AuthResult, "tokens">["tokens"]> {
     if (!refreshToken)
       throw new InvalidTokenError("Refresh token is not valid!");
-
+    console.log(refreshToken);
     const userData = this.tokenService.validateRefreshToken(refreshToken);
     const dbUserData = await this.authRepository.findRefreshToken(refreshToken);
+
     if (!dbUserData || !userData)
       throw new UnauthorizedError("Unathorized error");
 

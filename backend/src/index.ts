@@ -23,7 +23,7 @@ const server = fastify({
   logger: { level: "info" },
 });
 
-server.register(swaggerPlugin, {
+await server.register(swaggerPlugin, {
   prefix: `/api/${process.env.API_VERSION}`,
 });
 
