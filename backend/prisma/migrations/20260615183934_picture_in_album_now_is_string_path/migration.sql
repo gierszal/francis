@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "albums" ALTER COLUMN "picture" SET DATA TYPE VARCHAR(255);
+
+-- AlterTable
+ALTER TABLE "tracks" ALTER COLUMN "audio" SET DATA TYPE VARCHAR(255);
