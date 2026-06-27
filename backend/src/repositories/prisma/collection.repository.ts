@@ -7,17 +7,11 @@ import type {
   UpdateCollectionDTO,
 } from "@/types/collection/collection.dto.js";
 import type { ICollectionRepository } from "@/types/collection/collection.interface.js";
-import type {
-  FormattedCollection,
-  FormattedDetailedCollection,
-} from "@/types/collection/collection.model.js";
+import type { FormattedDetailedCollection } from "@/types/collection/collection.model.js";
 import type { CollectionsResponse } from "@/types/collection/collection.response.js";
 import type { FindAllCollectionsResult } from "@/types/collection/collection.result.js";
 import type { queryType } from "@/types/common/query.js";
-import {
-  formatCollection,
-  formatDetailedCollection,
-} from "@/utils/formatters/index.js";
+import { formatDetailedCollection } from "@/utils/formatters/index.js";
 
 export class CollectionRepository implements ICollectionRepository {
   async findAll(options?: queryType): Promise<FindAllCollectionsResult> {
@@ -35,6 +29,18 @@ export class CollectionRepository implements ICollectionRepository {
       prisma.collection.findMany({
         where,
         orderBy: { createdAt: "desc" },
+        include: {
+          _count: {
+            select: {
+              albumCollections: true,
+            },
+          },
+          albumCollections: {
+            select: {
+              album: true,
+            },
+          },
+        },
         skip: offset,
         take: count,
       }),

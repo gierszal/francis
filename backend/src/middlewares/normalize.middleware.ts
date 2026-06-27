@@ -13,6 +13,17 @@ export const normalizeAlbumMultipartBody = async (
   };
 };
 
+export const normalizeGameMultipartBody = async (
+  request: FastifyRequest,
+  reply: FastifyReply,
+) => {
+  const body = request.body as any;
+  request.body = {
+    name: body.name?.value,
+    picture: body.picture,
+  };
+};
+
 export const normalizeTrackMultipartBody = async (
   request: FastifyRequest,
   reply: FastifyReply,

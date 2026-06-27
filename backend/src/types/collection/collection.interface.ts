@@ -2,11 +2,11 @@ import type { Collection } from "@/generated/prisma/client.js";
 import type { queryType } from "../common/query.js";
 import type {
   CollectionsResponse,
-  FormattedCollection,
   FormattedDetailedCollection,
   CreateCollectionDTO,
   UpdateCollectionDTO,
   FindAllCollectionsResult,
+  FormattedCollection,
 } from "./index.js";
 
 export type ICollectionService = {

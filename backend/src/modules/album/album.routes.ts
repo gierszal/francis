@@ -85,7 +85,7 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Создать альбом (только ADMIN)",
         tags: ["Albums"],
-        consumes: ["multipart/form-data"],
+        // consumes: ["multipart/form-data"],
         response: {
           201: albumResponseSchema,
           400: errorResponseSchema,

@@ -23,14 +23,18 @@ import {
   querySchema,
 } from "@/schemas/common/index.js";
 import type { paramsType } from "@/types/common/index.js";
+import { validatePart } from "@/middlewares/validate.middleware.js";
+import { FileService } from "@/services/fileService.js";
+import { normalizeGameMultipartBody } from "@/middlewares/normalize.middleware.js";
 
 type optionsType = {
   prefix: string;
 };
 
 const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
+  const fileService = new FileService();
   const gameRepository = new GameRepository();
-  const gameService = new GameService(gameRepository);
+  const gameService = new GameService(gameRepository, fileService);
   const gameController = new GameController(gameService);
   fastify.get(
     "/",
@@ -78,7 +82,7 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       schema: {
         description: "Create a new game (ADMIN role required)",
         tags: ["Games"],
-        body: createGameSchema,
+        // body: createGameSchema,
         response: {
           201: gameResponseSchema,
           400: errorResponseSchema,
@@ -90,7 +94,12 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [authMiddleware, requireRole(ROLES.ADMIN.name)],
+      preHandler: [
+        normalizeGameMultipartBody,
+        authMiddleware,
+        requireRole(ROLES.ADMIN.name),
+        validatePart({ body: createGameSchema }),
+      ],
     },
     gameController.createGame,
   );
@@ -115,7 +124,11 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [authMiddleware, requireRole(ROLES.ADMIN.name)],
+      preHandler: [
+        authMiddleware,
+        requireRole(ROLES.ADMIN.name),
+        validatePart({ body: updateGameSchema }),
+      ],
     },
     gameController.updateGame,
   );

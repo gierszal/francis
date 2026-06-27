@@ -4,6 +4,7 @@ import { metaSchema } from "../common/meta.schema.js";
 const gameSchema = z.object({
   id: z.uuid(),
   name: z.string(),
+  picture: z.string(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
 });
@@ -11,6 +12,7 @@ const gameSchema = z.object({
 const detailedGameSchema = z.object({
   id: z.uuid(),
   name: z.string(),
+  picture: z.string(),
   albums: z.array(
     z.object({
       id: z.uuid(),

@@ -1,4 +1,5 @@
 import type { Collection } from "@/generated/prisma/client.js";
+import type { FormattedAlbum } from "../album/album.model.js";
 
 export type FormattedCollection = Omit<
   Collection,

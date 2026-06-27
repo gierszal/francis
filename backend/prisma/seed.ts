@@ -1,4 +1,4 @@
-import { pool, prisma } from "@/prisma.js";
+import { pool, prisma } from "../src/prisma";
 import { randomUUID } from "crypto";
 import bcrypt from "bcrypt";
 
@@ -45,18 +45,21 @@ async function main() {
   const kcd = await prisma.game.create({
     data: {
       name: "Kingdom Come: Deliverance",
+      picture: "/games/kcd.webp",
     },
   });
 
   const witcher = await prisma.game.create({
     data: {
-      name: "The Witcher 3",
+      name: "The Witcher 3: Wild Hunt",
+      picture: "/games/witcher3.webp",
     },
   });
 
   const skyrim = await prisma.game.create({
     data: {
-      name: "Skyrim",
+      name: "The Elder Scrolls V: Skyrim",
+      picture: "/games/skyrim.webp",
     },
   });
 
@@ -249,6 +252,8 @@ async function main() {
       userId: user.id,
     },
   });
+
+  console.log("✅ Seed completed successfully!");
 }
 
 main()

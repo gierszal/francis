@@ -14,9 +14,16 @@ import {
   formatDetailedGame,
   formatGame,
 } from "@/utils/formatters/game.formatter.js";
+import type { FileServiceType } from "@/types/services/fileService.js";
+import { FileType } from "@/services/fileService.js";
+import type { MultipartFile } from "@fastify/multipart";
+import { NotFoundError } from "@/errors/ApiError.js";
 
 export class GameService implements IGameService {
-  constructor(private gameRepository: IGameRepository) {}
+  constructor(
+    private gameRepository: IGameRepository,
+    private fileService: FileServiceType,
+  ) {}
   public getGame = async (
     id: string,
   ): Promise<FormattedDetailedGame | null> => {
@@ -38,18 +45,48 @@ export class GameService implements IGameService {
   };
 
   public createGame = async (
-    gameData: CreateGameDTO,
+    data: CreateGameDTO,
+    pic: MultipartFile,
   ): Promise<FormattedGame> => {
-    const game = await this.gameRepository.create(gameData);
-    return formatGame(game);
+    let picPath: string | undefined; // если потребуется откат
+    try {
+      const picturePath = await this.fileService.createFile(
+        FileType.IMAGE,
+        pic,
+      );
+      picPath = picturePath;
+      const game = await this.gameRepository.create(data, picturePath);
+      return formatGame(game);
+    } catch (err) {
+      if (picPath) await this.fileService.removeFile(picPath);
+      throw err;
+    }
   };
 
   public updateGame = async (
     id: string,
     data: UpdateGameDTO,
+    pic?: MultipartFile,
   ): Promise<FormattedGame> => {
-    const game = await this.gameRepository.update(id, data);
-    return formatGame(game);
+    let picPath: string | undefined; // если потребуется откат
+    try {
+      if (pic) {
+        const album = await this.gameRepository.findById(id);
+        if (!album)
+          throw new NotFoundError(`Game with id ${id} was not found!`);
+        await this.fileService.removeFile(album?.picture);
+        const picturePath = await this.fileService.createFile(
+          FileType.IMAGE,
+          pic,
+        );
+        picPath = picturePath;
+      }
+      const game = await this.gameRepository.update(id, data, picPath);
+      return formatGame(game);
+    } catch (err) {
+      if (picPath) await this.fileService.removeFile(picPath);
+      throw err;
+    }
   };
 
   public deleteGame = async (id: string): Promise<void> => {
