@@ -73,7 +73,7 @@ const Footer = () => {
                 <ScrollVelocity
                   velocity={70}
                   texts={[
-                    "Developed with love (and coffee)",
+                    "Developed with love (and lots of coffee)",
                     "Contribute us on GitHub!",
                   ]}
                 />

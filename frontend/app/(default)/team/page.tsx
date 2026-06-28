@@ -1,4 +1,5 @@
 import ChromaGrid from "@/components/motion/ChromaGrid";
+import GradientText from "@/components/motion/GradientText";
 
 const items = [
   {
@@ -24,7 +25,14 @@ const items = [
 const Contacts = () => {
   return (
     <div className="flex flex-col gap-2">
-      <h1 className="font-sans text-3xl p-4">Get to Know Our Team</h1>
+      <GradientText
+        colors={["#5227FF", "#FF9FFC", "#B497CF"]}
+        animationSpeed={8}
+        showBorder={false}
+        className="text-5xl ml-10 mt-7"
+      >
+        Get to Know Our Team
+      </GradientText>
       <div
         style={{
           height: "h-full",

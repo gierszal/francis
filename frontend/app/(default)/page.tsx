@@ -1,14 +1,14 @@
 import { Image } from "antd";
-import Divider from "../components/ui/Divider";
-import RevealByLetter from "../components/motion/RevealByLetter";
-import TextCarousel from "../components/motion/TextCarousel";
-import Video from "../components/video/Video";
-import MotionImage from "../components/motion/MotionImage";
-import AnimatedDiv from "../components/motion/AnimatedDiv";
-import Lenis from "../components/motion/Lenis";
-import Footer from "../components/shared/Footer";
-import MusicWidget from "../components/music/MusicWidget";
-import Sidebar from "../components/shared/Sidebar";
+import Divider from "../../components/ui/Divider";
+import RevealByLetter from "../../components/motion/RevealByLetter";
+import TextCarousel from "../../components/motion/TextCarousel";
+import Video from "../../components/video/Video";
+import MotionImage from "../../components/motion/MotionImage";
+import AnimatedDiv from "../../components/motion/AnimatedDiv";
+import Lenis from "../../components/motion/Lenis";
+import Footer from "../../components/shared/Footer";
+import MusicWidget from "../../components/music/MusicWidget";
+import Sidebar from "../../components/shared/Sidebar";
 
 const array = [
   ["Discover", "Dive", "Listen"],

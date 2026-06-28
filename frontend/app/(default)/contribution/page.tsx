@@ -6,7 +6,7 @@ const Contribution = () => {
   return (
     <div className="rounded-lg w-full h-full overflow-hidden">
       <MotionImage
-        src="/heros/river2.jpg"
+        src="/heros/sunset1.png"
         width={1920}
         height={1080}
         alt="pic"

@@ -55,25 +55,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <Lenis />
-        <div
-          style={{ background: "#1a1a1a" }}
-          className="border border-1 border-red-50"
-        >
-          <Sidebar
-            isFixed={true}
-            position="right"
-            items={menuItems}
-            socialItems={socialItems}
-            displaySocials
-            displayItemNumbering={true}
-            menuButtonColor="#000"
-            openMenuButtonColor="#000"
-            colors={["#B497CF", "#5227FF"]}
-            accentColor="#5227FF"
-          />
-        </div>
         {children}
-        <Footer />
       </body>
     </html>
   );
