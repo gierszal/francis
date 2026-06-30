@@ -47,7 +47,7 @@ export class AuthService implements IAuthService {
       `${process.env.API_URL}/api/v1/auth/activate/${activationLink}`,
     );
 
-    return { user: payload, tokens };
+    return { user: formatUser(user), tokens };
   }
 
   async signIn(data: SignInDTO): Promise<AuthResult> {
@@ -62,7 +62,7 @@ export class AuthService implements IAuthService {
     const payload = formatUserPayload(user);
     const tokens = this.tokenService.generateTokens(payload);
     await this.authRepository.saveRefreshToken(user.id, tokens.refreshToken);
-    return { user: payload, tokens };
+    return { user: formatUser(user), tokens };
   }
 
   async refresh(
@@ -70,7 +70,6 @@ export class AuthService implements IAuthService {
   ): Promise<Pick<AuthResult, "tokens">["tokens"]> {
     if (!refreshToken)
       throw new InvalidTokenError("Refresh token is not valid!");
-    console.log(refreshToken);
     const userData = this.tokenService.validateRefreshToken(refreshToken);
     const dbUserData = await this.authRepository.findRefreshToken(refreshToken);
 

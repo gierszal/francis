@@ -26,7 +26,7 @@ export class GameController {
   ) => {
     const opts = request.query;
     const games = await this.gameService.getGames(opts);
-    reply.send(games);
+    reply.header("x-total-count", games.meta.total.toString()).send(games);
   };
 
   public createGame = async (

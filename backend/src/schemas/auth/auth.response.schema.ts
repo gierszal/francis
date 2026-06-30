@@ -1,12 +1,13 @@
 import { ROLES } from "@/types/auth/auth.roles.js";
 import z from "zod";
+import { userSchema } from "../user/user.response.schema.js";
 
-const userAuthSchema = z.object({
-  id: z.uuid(),
-  email: z.email(),
-  is_activated: z.boolean(),
-  role: z.enum([ROLES.ADMIN.name, ROLES.USER.name]),
-});
+// const userAuthSchema = z.object({
+//   id: z.uuid(),
+//   email: z.email(),
+//   is_activated: z.boolean(),
+//   role: z.enum([ROLES.ADMIN.name, ROLES.USER.name]),
+// });
 
 const tokensSchema = z.object({
   accessToken: z.string(),
@@ -15,7 +16,7 @@ const tokensSchema = z.object({
 
 export const signUpSchema = z.object({
   tokens: tokensSchema,
-  user: userAuthSchema,
+  user: userSchema,
 });
 
 export const signUpResponseSchema = z.object({

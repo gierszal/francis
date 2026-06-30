@@ -29,7 +29,7 @@ export class TrackController {
   ) => {
     const opts = request.query;
     const tracks = await this.trackService.getTracks(opts);
-    reply.send(tracks);
+    reply.header("x-total-count", tracks.meta.total.toString()).send(tracks);
   };
 
   public createTrack = async (

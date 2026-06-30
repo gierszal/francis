@@ -20,7 +20,7 @@ const detailedGameSchema = z.object({
       picture: z.string(),
     }),
   ),
-  albums_amount: z.number().positive().min(0),
+  albums_amount: z.number().min(0),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
 });

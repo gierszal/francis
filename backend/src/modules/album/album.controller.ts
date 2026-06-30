@@ -28,7 +28,7 @@ export class AlbumController {
   ) => {
     const opts = request.query;
     const data = await this.albumService.getAlbums(opts);
-    reply.send(data);
+    reply.header("x-total-count", data.meta.total.toString()).send(data);
   };
 
   public createAlbum = async (
