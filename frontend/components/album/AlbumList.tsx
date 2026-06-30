@@ -1,17 +1,17 @@
 import React from "react";
-import { FormattedAlbum } from "@/types/album";
+import { CollectionAlbum, FormattedAlbum } from "@/types/album";
 import AlbumItem from "./AlbumItem";
 import Header from "../ui/Header";
 import AnimatedDiv from "../motion/AnimatedDiv";
 
 interface AlbumListProps {
-  albums: FormattedAlbum[];
+  albums: FormattedAlbum[] | CollectionAlbum[];
 }
 
 const AlbumList = ({ albums }: AlbumListProps) => {
   return (
     <>
-      <AnimatedDiv className="flex flex-row flex-wrap gap-8 ml-10">
+      <AnimatedDiv className="flex flex-row flex-wrap gap-8">
         {albums?.map((album, id) => (
           <AlbumItem key={id} album={album} />
         ))}

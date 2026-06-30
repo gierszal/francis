@@ -3,6 +3,7 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 
 export interface SidebarItem {
   label: string;
@@ -449,6 +450,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     };
   }, [closeOnClickAway, open, closeMenu]);
 
+  const router = useRouter();
+
   return (
     <div
       className={clsx(
@@ -584,7 +587,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   >
                     <a
                       className="sm-panel-item relative text-black font-semibold  cursor-pointer leading-none tracking-[-2px] uppercase transition-[background,color] duration-150 ease-linear inline-block no-underline pr-[1.4em]"
-                      href={it.link}
+                      // href={it.link}
+                      onClick={() => router.push(it.link)}
                       aria-label={it.ariaLabel}
                       data-index={idx + 1}
                     >

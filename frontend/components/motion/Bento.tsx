@@ -10,7 +10,7 @@ export interface BentoCardProps {
   color?: string;
   title?: string;
   description?: string;
-  label?: string;
+  name?: string;
   textAutoHide?: boolean;
   disableAnimations?: boolean;
   src?: string;
@@ -651,7 +651,8 @@ const MagicBento: React.FC<BentoProps> = ({
 
               const cardStyle = {
                 // backgroundColor: card.color || "var(--background-dark)",
-                backgroundImage: `url(${card.src})`,
+                // backgroundImage: `url(${card.src})`,
+                backgroundImage: `url(http://localhost:5000/static/image/9c399eaa-100e-4eb5-8594-31e57e408cf0.png)`,
                 backgroundSize: "cover",
                 // backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
@@ -662,33 +663,9 @@ const MagicBento: React.FC<BentoProps> = ({
                 "--glow-radius": "200px",
               } as React.CSSProperties;
 
-              if (enableStars) {
-                return (
-                  <ParticleCard
-                    key={index}
-                    className={baseClassName}
-                    style={cardStyle}
-                    disableAnimations={shouldDisableAnimations}
-                    particleCount={particleCount}
-                    glowColor={glowColor}
-                    enableTilt={enableTilt}
-                    clickEffect={clickEffect}
-                    enableMagnetism={enableMagnetism}
-                  >
-                    <div
-                      className="card__header flex justify-between gap-3 relative"
-                      onClick={() => handleCardClick(card.id)}
-                    >
-                      <span className="card__label text-base bg-gradient-to-tr from-black via-emerald-800 to-emerald-500 bg-clip-text text-transparent text-4xl font-extrabold">
-                        {card.label}
-                      </span>
-                    </div>
-                  </ParticleCard>
-                );
-              }
-
               return (
                 <div
+                  onClick={() => handleCardClick(card.id)}
                   key={index}
                   className={baseClassName}
                   style={cardStyle}
@@ -803,7 +780,7 @@ const MagicBento: React.FC<BentoProps> = ({
                   }}
                 >
                   <div className="card__header flex justify-between gap-3 relative text-white">
-                    <span className="card__label text-base">{card.label}</span>
+                    <span className="card__label text-base">{card.name}</span>
                   </div>
                   <div className="card__content flex flex-col relative text-white">
                     <h3

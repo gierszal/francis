@@ -1,7 +1,22 @@
+"use client";
+
 import MagicBento from "@/components/motion/Bento";
 import GradientText from "@/components/motion/GradientText";
+import { useGetGames } from "@/hooks/modules/game/useGame";
+import { Skeleton } from "antd";
 
 const Games = () => {
+  const { data, isLoading, isError, error } = useGetGames({
+    count: 10,
+  });
+  if (isLoading)
+    return (
+      <div className={"mt-10 ml-10 w-[90%]"}>
+        <Skeleton />
+      </div>
+    );
+  if (isError)
+    return <div className="text-5xl text-red-500">Error: {error?.message}</div>;
   return (
     <>
       <GradientText
@@ -25,7 +40,7 @@ const Games = () => {
           particleCount={12}
           glowColor="132, 0, 255"
           disableAnimations={false}
-          cardData={cardData}
+          cardData={data?.items.data}
         />
       </div>
     </>
@@ -33,56 +48,3 @@ const Games = () => {
 };
 
 export default Games;
-
-const cardData = [
-  {
-    id: "game_001",
-    label: "The Witcher 3",
-    src: "/playlists/1.jpg",
-  },
-  {
-    id: "game_002",
-    label: "Cyberpunk 2077",
-    src: "/playlists/1.jpg",
-  },
-  {
-    id: "game_003",
-    label: "Red Dead Redemption 2",
-    src: "/playlists/1.jpg",
-  },
-  {
-    id: "game_004",
-    label: "Elden Ring",
-    src: "/playlists/1.jpg",
-  },
-  {
-    id: "game_005",
-    label: "Baldur's Gate 3",
-    src: "/playlists/1.jpg",
-  },
-  {
-    id: "game_006",
-    label: "God of War Ragnarok",
-    src: "/playlists/1.jpg",
-  },
-  {
-    id: "game_007",
-    label: "The Last of Us Part II",
-    src: "/playlists/1.jpg",
-  },
-  {
-    id: "game_008",
-    label: "Kingdom Come Deliverance",
-    src: "/playlists/1.jpg",
-  },
-  {
-    id: "game_009",
-    label: "Hades",
-    src: "/playlists/1.jpg",
-  },
-  {
-    id: "game_010",
-    label: "Stardew Valley",
-    src: "/playlists/1.jpg",
-  },
-];

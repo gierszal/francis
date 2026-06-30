@@ -38,3 +38,10 @@ export type FormattedDetailedTrack = Omit<
     picture: string;
   };
 };
+
+export type AlbumTrack = {
+  id: string;
+  name: string;
+  artist: string;
+  picture: string;
+};

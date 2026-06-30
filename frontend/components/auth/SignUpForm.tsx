@@ -13,9 +13,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpSchema, SignUpFormData } from "@/schemas/auth/signUp.schema";
 import SubmitButton from "../ui/SubmitButton";
 import Input from "../ui/Input";
+import { useSignUp } from "@/hooks/modules/auth/useSignUp";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export function SignUpForm() {
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
+  const router = useRouter();
 
   const {
     register,
@@ -33,23 +38,12 @@ export function SignUpForm() {
   };
 
   const onSubmit = (data: SignUpFormData) => {
-    const serverRequest = async () => {
-      const result = await new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (!data.email.includes("taken@")) {
-            reset();
-            resolve("Success");
-          } else {
-            setError("email", { message: "This email is already taken!" });
-            reject("Error");
-          }
-        }, 1000);
-      });
-      console.log(result);
-    };
-    serverRequest();
+    signUp(data, {
+      onSuccess: () => router.replace(callbackUrl ?? "/"),
+    });
   };
 
+  const { mutate: signUp } = useSignUp();
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
       <div>

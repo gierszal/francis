@@ -28,26 +28,21 @@ export default function DefaultLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <body className="min-h-full flex flex-col">
-      <div
-        style={{ background: "#1a1a1a" }}
-        className="border border-1 border-red-50"
-      >
-        <Sidebar
-          isFixed={true}
-          position="right"
-          items={menuItems}
-          socialItems={socialItems}
-          displaySocials
-          displayItemNumbering={true}
-          menuButtonColor="#000"
-          openMenuButtonColor="#000"
-          colors={["#B497CF", "#5227FF"]}
-          accentColor="#5227FF"
-        />
-      </div>
+    <div>
+      <Sidebar
+        isFixed={true}
+        position="right"
+        items={menuItems}
+        socialItems={socialItems}
+        displaySocials
+        displayItemNumbering={true}
+        menuButtonColor="#000"
+        openMenuButtonColor="#000"
+        colors={["#B497CF", "#5227FF"]}
+        accentColor="#5227FF"
+      />
       {children}
       <Footer />
-    </body>
+    </div>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-import { FormattedTrack } from "@/types/track";
+import { FormattedDetailedTrack, FormattedTrack } from "@/types/track";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -44,7 +44,8 @@ const TrackItem = ({ track, idx }: TrackItemProps) => {
           width={56}
           height={56}
           className="size-14 rounded-lg object-cover shadow-lg"
-          src={track.picture}
+          // src={track.picture}
+          src={`/api/image/aff9e97a-fdc8-44e2-b026-cea911c36638.jpg`}
           alt={track.name}
         />
         <div className="absolute text-white -top-1 -right-1 size-5 rounded-full bg-black/80  flex items-center justify-center text-[10px] font-bold">

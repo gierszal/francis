@@ -1,23 +1,51 @@
+"use client";
+
 import GradientText from "@/components/motion/GradientText";
 import PlaylistList from "@/components/playlist/PlaylistList";
+import { useAuthGuard } from "@/hooks/modules/auth/useAuthGuard";
+import { useGetUser } from "@/hooks/modules/user/useUser";
 import { FormattedPlaylist } from "@/types/playlist";
+import { useQueryClient } from "@tanstack/react-query";
+import { Skeleton } from "antd";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const Playlists = () => {
+  const router = useRouter();
+
+  const { isAuthenticated, isLoading, user } = useAuthGuard();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/auth?callbackUrl=/playlists");
+    }
+  }, [isAuthenticated]);
+
   return (
     <>
-      <GradientText
-        colors={["#5227FF", "#FF9FFC", "#B497CF"]}
-        animationSpeed={8}
-        showBorder={false}
-        className="text-5xl ml-10 mt-7"
-      >
-        Playlists
-      </GradientText>
-      <div
-        className={"flex flex-row mt-5 gap-10 py-3 flex-wrap overflow-x-hidden"}
-      >
-        <PlaylistList playlists={mockPlaylists} />
-      </div>
+      {isAuthenticated ? (
+        <>
+          <GradientText
+            colors={["#5227FF", "#FF9FFC", "#B497CF"]}
+            animationSpeed={8}
+            showBorder={false}
+            className="text-5xl ml-10 mt-7"
+          >
+            Playlists
+          </GradientText>
+          <div
+            className={
+              "flex flex-row mt-5 gap-10 py-3 flex-wrap overflow-x-hidden"
+            }
+          >
+            <PlaylistList playlists={mockPlaylists} />
+          </div>
+        </>
+      ) : (
+        <div className="mt-10 ml-10 w-[50%]">
+          <Skeleton />
+        </div>
+      )}
     </>
   );
 };

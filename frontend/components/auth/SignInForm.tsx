@@ -7,10 +7,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SignInSchema, SignInFormData } from "@/schemas/auth/signIn.schema";
 import SubmitButton from "../ui/SubmitButton";
 import Input from "../ui/Input";
+import { useSignIn } from "@/hooks/modules/auth/useSignIn";
+import Notification from "../ui/Notification";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export function SignInForm() {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -27,22 +33,12 @@ export function SignInForm() {
   };
 
   const onSubmit = (data: SignInFormData) => {
-    const serverRequest = async () => {
-      const result = await new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (!data.email.includes("taken@")) {
-            reset();
-            resolve("Success");
-          } else {
-            setError("email", { message: "This email is already taken!" });
-            reject("Error");
-          }
-        }, 1000);
-      });
-      console.log(result);
-    };
-    serverRequest();
+    signIn(data, {
+      onSuccess: () => router.replace(callbackUrl ?? "/"),
+    });
   };
+
+  const { mutate: signIn, isError, error } = useSignIn();
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>

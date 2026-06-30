@@ -5,11 +5,7 @@ export const SignUpSchema = z
     firstName: z.string().min(2, "Min 1 chars"),
     lastName: z.string().optional(),
     email: z.email("Incorrect email"),
-    password: z
-      .string()
-      .min(8, "Min 8 chars")
-      .regex(/[A-Z]/, "Capital letter is required.")
-      .regex(/[0-9]/, "At least one number is reqired."),
+    password: z.string().min(1, "Min 1 chars"),
     confirmPassword: z.string(),
     agree: z.boolean().refine((v) => v === true, "Accept the conditions."),
   })
