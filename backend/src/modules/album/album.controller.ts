@@ -3,6 +3,7 @@ import type {
   AddToCollectionDTO,
   CreateAlbumDTO,
   IAlbumService,
+  RemoveFromCollectionDTO,
   UpdateAlbumDTO,
 } from "@/types/album/index.js";
 import type { paramsType } from "@/types/common/params.js";
@@ -69,6 +70,15 @@ export class AlbumController {
   ) => {
     const data = request.params;
     await this.albumService.addToCollection(data);
+    reply.code(204).send();
+  };
+
+  public removeFromCollection = async (
+    request: FastifyRequest<{ Params: RemoveFromCollectionDTO }>,
+    reply: FastifyReply,
+  ) => {
+    const data = request.params;
+    await this.albumService.removeFromCollection(data);
     reply.code(204).send();
   };
 }

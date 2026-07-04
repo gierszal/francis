@@ -9,6 +9,7 @@ import type {
   UpdateAlbumDTO,
   FormattedAlbum,
   FormattedDetailedAlbum,
+  RemoveFromCollectionDTO,
 } from "@/types/album/index.js";
 import type { queryType } from "@/types/common/query.js";
 import {
@@ -92,5 +93,9 @@ export class AlbumService implements IAlbumService {
 
   async addToCollection(data: AddToCollectionDTO): Promise<void> {
     return this.albumRepository.addToCollection(data);
+  }
+
+  async removeFromCollection(data: RemoveFromCollectionDTO): Promise<void> {
+    return this.albumRepository.removeFromCollection(data);
   }
 }

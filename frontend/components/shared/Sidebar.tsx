@@ -4,11 +4,13 @@ import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
+import { useGetUser } from "@/hooks/modules/user/useUser";
 
 export interface SidebarItem {
   label: string;
   ariaLabel: string;
   link: string;
+  requiredRole?: string;
 }
 export interface SidebarSocialItem {
   label: string;
@@ -51,6 +53,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onMenuOpen,
   onMenuClose,
 }: SidebarProps) => {
+  const { data, isLoading, isError, isSuccess, error } = useGetUser();
+
   const [open, setOpen] = useState(false);
   const openRef = useRef(false);
 
@@ -372,7 +376,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     const seq: string[] = [currentLabel];
     let last = currentLabel;
     for (let i = 0; i < cycles; i++) {
-      console.log(last);
       last = last === "Menu" ? "Close" : "Menu";
       seq.push(last);
     }
@@ -451,6 +454,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
   }, [closeOnClickAway, open, closeMenu]);
 
   const router = useRouter();
+
+  if (isError) console.error(error);
+
+  const user = data?.data?.data;
+  const userRole = user?.role;
 
   return (
     <div
@@ -580,24 +588,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
               data-numbering={displayItemNumbering || undefined}
             >
               {items && items.length ? (
-                items.map((it, idx) => (
-                  <li
-                    className="sm-panel-itemWrap relative overflow-hidden leading-none"
-                    key={it.label + idx}
-                  >
-                    <a
-                      className="sm-panel-item relative text-black font-semibold  cursor-pointer leading-none tracking-[-2px] uppercase transition-[background,color] duration-150 ease-linear inline-block no-underline pr-[1.4em]"
-                      // href={it.link}
-                      onClick={() => router.push(it.link)}
-                      aria-label={it.ariaLabel}
-                      data-index={idx + 1}
+                items.map((it, idx) => {
+                  const hasAccess = it?.requiredRole
+                    ? userRole === it.requiredRole
+                    : true;
+
+                  if (!hasAccess) return null;
+
+                  return (
+                    <li
+                      className="sm-panel-itemWrap relative overflow-hidden leading-none"
+                      key={it.label + idx}
                     >
-                      <span className="sm-panel-itemLabel text-[3rem] inline-block [transform-origin:50%_100%] will-change-transform">
-                        {it.label}
-                      </span>
-                    </a>
-                  </li>
-                ))
+                      <a
+                        className="sm-panel-item relative text-black font-semibold cursor-pointer leading-none tracking-[-2px] uppercase transition-[background,color] duration-150 ease-linear inline-block no-underline pr-[1.4em]"
+                        onClick={() => router.push(it.link)}
+                        aria-label={it.ariaLabel}
+                        data-index={idx + 1}
+                      >
+                        <span className="sm-panel-itemLabel text-[3rem] inline-block [transform-origin:50%_100%] will-change-transform">
+                          {it.label}
+                        </span>
+                      </a>
+                    </li>
+                  );
+                })
               ) : (
                 <li
                   className="sm-panel-itemWrap relative overflow-hidden leading-none"

@@ -4,6 +4,7 @@ import type {
   AddToPlaylistDTO,
   CreateTrackDTO,
   ITrackService,
+  RemoveTrackFromPlaylistDTO,
   UpdateTrackDTO,
 } from "../../types/track/index.js";
 import type { paramsType } from "@/types/common/params.js";
@@ -75,11 +76,28 @@ export class TrackController {
     reply.code(204).send();
   };
 
+  public removeFromPlaylist = async (
+    request: FastifyRequest<{ Params: RemoveTrackFromPlaylistDTO }>,
+    reply: FastifyReply,
+  ) => {
+    const data = request.params;
+    if (!data.playlistId || !data.trackId)
+      throw new BadRequestError(
+        "Either track id or playlist id was not provided!",
+      );
+    await this.trackService.removeFromPlaylist(data);
+    reply.code(204).send();
+  };
+
   public addToPlaylist = async (
     request: FastifyRequest<{ Params: AddToPlaylistDTO }>,
     reply: FastifyReply,
   ) => {
     const data = request.params;
+    if (!data.playlistId || !data.trackId)
+      throw new BadRequestError(
+        "Either track id or playlist id was not provided!",
+      );
     await this.trackService.addToPlaylist(data);
     reply.code(204).send();
   };

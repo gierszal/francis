@@ -10,7 +10,7 @@ export const authApi = {
     return $api.post("/auth/sign-up", data);
   },
 
-  logout: async () => {
-    return $api.post("/auth/logout");
+  signOut: async () => {
+    return $api.post("/auth/sign-out");
   },
 };

@@ -11,27 +11,36 @@ import {
   BsHeartFill,
 } from "react-icons/bs";
 import Header from "../ui/Header";
-
-//  "flex flex-row justify-between list-row bg-gray-" +
-//         (idx % 2 ? "100" : "300")
+import TrackPopover from "./popover/TrackPopover";
+import {
+  useAddToFavourites,
+  useRemoveFromFavourites,
+} from "@/hooks/modules/user/useUser";
 
 interface TrackItemProps {
   track: FormattedTrack;
   idx: number;
+  isFavourite: boolean;
 }
 
-const TrackItem = ({ track, idx }: TrackItemProps) => {
+const TrackItem = ({ track, idx, isFavourite }: TrackItemProps) => {
   const router = useRouter();
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [isFavourite, setIsFavourite] = useState<boolean>(false);
 
   const togglePlay = () => {
     setIsActive((prev) => !prev);
   };
 
-  const handleFavourite = () => {
-    setIsFavourite((prev) => !prev);
+  const addToFavourites = () => {
+    add({ trackId: track.id });
   };
+
+  const removeFromFavourites = () => {
+    remove({ trackId: track.id });
+  };
+
+  const { mutate: add } = useAddToFavourites();
+  const { mutate: remove } = useRemoveFromFavourites();
 
   return (
     <li
@@ -75,17 +84,15 @@ const TrackItem = ({ track, idx }: TrackItemProps) => {
         </div>
       </div>
 
-      <div className="flex flex-row gap-2">
-        <button
-          className="text-gray-400 hover:text-red-400 transition-colors ml-1 p-1 active:scale-105 cursor-pointer"
-          onClick={handleFavourite}
-        >
+      <div className="flex flex-row gap-2 items-center">
+        <button className="text-gray-400 hover:text-red-400 transition-colors ml-1 p-1 active:scale-105 cursor-pointer">
           {isFavourite ? (
-            <BsHeartFill color="red" size={18} />
+            <BsHeartFill color="red" size={18} onClick={removeFromFavourites} />
           ) : (
-            <BsHeart size={18} />
+            <BsHeart size={18} onClick={addToFavourites} />
           )}
         </button>
+        <TrackPopover trackId={track.id} size={22} />
         <button
           onClick={togglePlay}
           className="size-10 rounded-full cursor-pointer flex items-center justify-center transition-all duration-200 hover:scale-110"

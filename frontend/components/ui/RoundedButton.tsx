@@ -5,6 +5,7 @@ interface RoundedButtonProps {
   className?: string;
   onClick?: any;
   children: React.ReactNode;
+  disabled?: boolean;
 }
 
 const RoundedButton = ({
@@ -12,9 +13,11 @@ const RoundedButton = ({
   onClick,
   type = "submit",
   children,
+  disabled,
 }: RoundedButtonProps) => {
   return (
     <button
+      disabled={disabled}
       className={clsx(
         className,
         "cursor-pointer",
@@ -23,7 +26,7 @@ const RoundedButton = ({
         "rounded-full",
         "border border-gray-300",
         "bg-gray-200/50",
-        "text-sm font-medium font-sans text-gray-700",
+        "font-sans text-gray-700",
         "transition-colors duration-300",
         "hover:bg-gray-200",
         "hover:border-gray-400",

@@ -4,10 +4,10 @@ import { useState } from "react";
 import { BsEnvelope, BsLock, BsEye, BsEyeSlash } from "react-icons/bs";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SignInSchema, SignInFormData } from "@/schemas/auth/signIn.schema";
+import { SignInSchema, SignInFormData } from "@/schemas/auth/index";
 import SubmitButton from "../ui/SubmitButton";
 import Input from "../ui/Input";
-import { useSignIn } from "@/hooks/modules/auth/useSignIn";
+import { useSignIn } from "@/hooks/modules/auth/useAuth";
 import Notification from "../ui/Notification";
 import { useRouter, useSearchParams } from "next/navigation";
 

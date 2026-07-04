@@ -5,6 +5,7 @@ import { AlbumService } from "./album.service.js";
 import {
   addToCollectionSchema,
   createAlbumSchema,
+  removeFromCollectionSchema,
   updateAlbumSchema,
 } from "../../schemas/album/album.schema.js";
 import { AlbumRepository } from "@/repositories/prisma/album.repository.js";
@@ -12,6 +13,7 @@ import { normalizeAlbumMultipartBody } from "@/middlewares/normalize.middleware.
 import type {
   AddToCollectionDTO,
   CreateAlbumDTO,
+  RemoveFromCollectionDTO,
   UpdateAlbumDTO,
 } from "@/types/album/index.js";
 import { FileService } from "@/services/fileService.js";
@@ -180,6 +182,30 @@ const albumRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       preHandler: [authMiddleware, requireRole(ROLES.ADMIN.name)],
     },
     albumController.addToCollection,
+  );
+
+  fastify.delete<{ Params: RemoveFromCollectionDTO }>(
+    "/:albumId/collections/:collectionId",
+    {
+      schema: {
+        description:
+          "Add album to collection. Only admin may access this route",
+        tags: ["Albums"],
+        params: removeFromCollectionSchema,
+        response: {
+          200: emptyResponseSchema,
+          400: errorResponseSchema,
+          401: errorResponseSchema,
+          403: errorResponseSchema,
+          404: errorResponseSchema,
+          500: errorResponseSchema,
+          default: errorResponseSchema,
+        },
+        security: [{ bearerAuth: [] }],
+      },
+      preHandler: [authMiddleware, requireRole(ROLES.ADMIN.name)],
+    },
+    albumController.removeFromCollection,
   );
 };
 

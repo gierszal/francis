@@ -9,7 +9,7 @@ export const normalizeAlbumMultipartBody = async (
     name: body.name?.value,
     description: body.description?.value,
     gameId: body.gameId?.value,
-    picture: body.picture,
+    picture: body?.picture,
   };
 };
 
@@ -19,8 +19,8 @@ export const normalizeGameMultipartBody = async (
 ) => {
   const body = request.body as any;
   request.body = {
-    name: body.name?.value,
-    picture: body.picture,
+    name: body?.name?.value,
+    picture: body?.picture,
   };
 };
 

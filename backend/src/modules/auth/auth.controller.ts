@@ -66,10 +66,7 @@ export class AuthController {
     reply: FastifyReply,
   ) => {
     const data = request.params;
-    const user = await this.authService.activate(data);
-    return reply
-      .code(201)
-      .send({ data: user })
-      .redirect(process.env.CLIENT_URL!);
+    await this.authService.activate(data);
+    return reply.redirect(process.env.CLIENT_URL!, 301);
   };
 }

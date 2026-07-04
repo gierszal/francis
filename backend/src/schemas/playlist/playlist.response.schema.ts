@@ -27,7 +27,7 @@ const detailedPlaylistSchema = z.object({
           createdAt: z.coerce.date(),
           updatedAt: z.coerce.date(),
         }),
-        picture: z.uuid(),
+        picture: z.string(),
       }),
     }),
   ),

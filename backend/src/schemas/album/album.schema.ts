@@ -10,6 +10,7 @@ export const createAlbumSchema = z.object({
   picture: z
     .custom<MultipartFile>(
       (file) => {
+        console.log(file);
         return file !== undefined && file !== null;
       },
       {
@@ -28,21 +29,23 @@ export const createAlbumSchema = z.object({
   gameId: z.uuid("Game id is required"),
 });
 
+export const updateAlbumSchema = createAlbumSchema.partial();
+
+export const addToCollectionSchema = z.object({
+  albumId: z.uuid("Album id is required"),
+  collectionId: z.uuid("Collection id is required"),
+});
+
+export const removeFromCollectionSchema = addToCollectionSchema;
+
 export const createAlbumDocSchema = createAlbumSchema
   .omit({ picture: true })
   .extend({
     picture: z.string(),
   });
 
-export const updateAlbumSchema = createAlbumSchema.partial();
-
 export const updateAlbumDocSchema = updateAlbumSchema
   .omit({ picture: true })
   .extend({
     picture: z.string(),
   });
-
-export const addToCollectionSchema = z.object({
-  albumId: z.uuid("Album id is required"),
-  collectionId: z.uuid("Collection id is required"),
-});

@@ -49,7 +49,6 @@ export class GameController {
     const pic = request.body.picture;
     if (!id) throw new BadRequestError("Game id was not provided!");
     const game = await this.gameService.updateGame(id, data, pic);
-    console.log(game);
     reply.send({ data: game });
   };
 

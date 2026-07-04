@@ -17,10 +17,14 @@ export function useGetCollections(params: GetItemsParams = {}) {
   });
 }
 
-export function useGetCollection(id: string | undefined) {
+export function useGetCollection(
+  id: string | undefined,
+  enable: boolean = true,
+) {
   return useQuery({
     queryKey: ["collections", { id }],
     queryFn: () => collectionApi.getCollection(id),
+    enabled: enable,
     staleTime: 5 * 60 * 1000,
     placeholderData: keepPreviousData,
   });

@@ -1,3 +1,6 @@
+import { createUserSchema, updateUserSchema } from "@/schemas/user";
+import { z } from "zod";
+
 type User = {
   id: string;
   createdAt: Date;
@@ -44,3 +47,5 @@ export type FormattedUserPayload = Omit<
   is_activated: boolean;
   role: string;
 };
+
+export type UpdateUserDTO = z.infer<typeof updateUserSchema>;

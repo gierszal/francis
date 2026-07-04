@@ -6,7 +6,7 @@ const About = () => {
   return (
     <div className="rounded-lg w-full h-full overflow-hidden">
       <MotionImage
-        src="/kcd2-re-optimized2.png"
+        src="/heros/kcd2-re-optimized2.png"
         width={1920}
         height={1080}
         alt="pic"

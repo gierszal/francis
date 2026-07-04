@@ -10,6 +10,7 @@ import AnimatedDiv from "../motion/AnimatedDiv";
 import { Slider } from "antd";
 import { BsVolumeDown, BsVolumeMute, BsVolumeUp } from "react-icons/bs";
 import VolumeAdjuster from "./VolumeAdjuster";
+import TrackPopover from "../track/popover/TrackPopover";
 
 const MusicWidget = () => {
   const [isPaused, setIsPaused] = useState<boolean>(true);
@@ -79,7 +80,6 @@ const MusicWidget = () => {
                 <BsFillPauseFill size={32} />
               )}
             </button>
-
             <button className="text-gray-300 hover:text-purple-300 transition-colors p-1 active:scale-105 cursor-pointer">
               <BsFillSkipEndFill size={32} />
             </button>
@@ -94,7 +94,7 @@ const MusicWidget = () => {
 
             {/* <span className="text-gray-400 text-[10px] font-mono">3:45</span> */}
 
-            <div className="flex flex-row items-center gap-1 ">
+            <div className="flex flex-row items-center gap-2">
               <button
                 className="text-gray-400 hover:text-red-400 transition-colors ml-1 p-1 active:scale-105 cursor-pointer"
                 onClick={handleFavourite}
@@ -105,6 +105,9 @@ const MusicWidget = () => {
                   <BsHeart size={24} />
                 )}
               </button>
+              <div className="text-gray-400">
+                <TrackPopover trackId={"asd"} size={32} />
+              </div>
               <div className="group">
                 {/* <VolumeAdjuster
                   leftIcon={<BsVolumeMute size={20} />}

@@ -88,8 +88,7 @@ export class AuthService implements IAuthService {
     await this.authRepository.removeRefreshToken(refreshToken);
   }
 
-  async activate(data: ActivationLinkDTO): Promise<FormattedUser> {
-    const user = await this.authRepository.activateUser(data);
-    return formatUser(user);
+  async activate(data: ActivationLinkDTO): Promise<void> {
+    await this.authRepository.activateUser(data);
   }
 }

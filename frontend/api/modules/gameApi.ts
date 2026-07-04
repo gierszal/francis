@@ -15,4 +15,16 @@ export const gameApi = {
   getGame: async (id: string | undefined) => {
     return await $api.get(`/games/${id}`);
   },
+
+  createGame: async (data: FormData) => {
+    return $api.post("/games", data);
+  },
+
+  updateGame: async (data: FormData, id: string) => {
+    return $api.put(`/games/${id}`, data);
+  },
+
+  deleteGame: async (id: string | undefined) => {
+    return $api.delete(`/games/${id}`);
+  },
 };

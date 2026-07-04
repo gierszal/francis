@@ -10,7 +10,6 @@ import {
 import { authMiddleware, requireRole } from "@/middlewares/auth.middleware.js";
 import { ROLES } from "@/types/auth/auth.roles.js";
 import type { CreateGameDTO, UpdateGameDTO } from "@/types/game/game.dto.js";
-import z from "zod";
 import {
   detailedGameResponseSchema,
   gameResponseSchema,
@@ -111,7 +110,6 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
         description: "Update an existing game (ADMIN role required)",
         tags: ["Games"],
         params: paramsSchema,
-        body: updateGameSchema,
         response: {
           200: gameResponseSchema,
           400: errorResponseSchema,
@@ -127,6 +125,7 @@ const gameRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       preHandler: [
         authMiddleware,
         requireRole(ROLES.ADMIN.name),
+        normalizeGameMultipartBody,
         validatePart({ body: updateGameSchema }),
       ],
     },

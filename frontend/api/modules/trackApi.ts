@@ -7,7 +7,6 @@ export const trackApi = {
 
     const res = await $api.get("/tracks", { params: requestParams });
     const items = res.data;
-    console.log(res.headers["x-total-count"]);
     const total: number = res.headers["x-total-count"] ?? 0;
 
     return { items, total };
@@ -15,5 +14,25 @@ export const trackApi = {
 
   getTrack: async (id: string | undefined) => {
     return await $api.get(`/tracks/${id}`);
+  },
+
+  createTrack: async (data: FormData) => {
+    return $api.post("/tracks", data);
+  },
+
+  updateTrack: async (data: FormData, id: string) => {
+    return $api.put(`/tracks/${id}`, data);
+  },
+
+  deleteTrack: async (id: string | undefined) => {
+    return $api.delete(`/tracks/${id}`);
+  },
+
+  addTrackToPlaylist: async (trackId: string, playlistId: string) => {
+    return await $api.post(`/tracks/${trackId}/playlists/${playlistId}`);
+  },
+
+  removeTrackFromPlaylist: async (trackId: string, playlistId: string) => {
+    return await $api.delete(`/tracks/${trackId}/playlists/${playlistId}`);
   },
 };

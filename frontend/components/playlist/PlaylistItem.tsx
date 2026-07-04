@@ -4,6 +4,7 @@ import { FormattedPlaylist } from "@/types/playlist/index";
 import { useRouter } from "next/navigation";
 import TiltedCard from "../motion/TitledCard";
 import Header from "../ui/Header";
+import generateImage from "@/utils/images/generateImage";
 
 interface PlaylistItemProps {
   playlist: FormattedPlaylist;
@@ -11,15 +12,16 @@ interface PlaylistItemProps {
 
 const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
   const router = useRouter();
+  const img = generateImage();
   return (
     <div className={"shrink-0 w-[195.39px]"}>
       <div
-        onClick={() => router.push(`/Playlists/${playlist.id}`)}
+        onClick={() => router.push(`/playlists/${playlist.id}?img=${img}`)}
         style={{ cursor: "pointer" }}
       >
         <div className={"w-full h-[195.39px]"}>
           <TiltedCard
-            imageSrc={"/playlists/1.jpg"}
+            imageSrc={img}
             altText={playlist.description ?? "No description"}
             captionText={playlist.name}
             containerHeight="200px"

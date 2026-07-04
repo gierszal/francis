@@ -10,6 +10,8 @@ interface InputProps {
   ariaInvalid?: any;
   ariaDescribedby?: string;
   onBlur?: any;
+  disabled?: boolean;
+  defaultValue?: string;
 }
 
 const Input = ({
@@ -24,15 +26,19 @@ const Input = ({
   ariaDescribedby,
   ariaInvalid,
   onBlur,
+  disabled,
+  defaultValue,
 }: InputProps) => {
   return (
     <input
+      defaultValue={defaultValue}
       className={className}
       type={type ?? "text"}
       placeholder={placeholder}
       value={value}
       onChange={onChange}
       id={id}
+      disabled={disabled ?? false}
       checked={checked}
       aria-invalid={ariaInvalid}
       aria-describedby={ariaDescribedby}

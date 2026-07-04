@@ -70,7 +70,6 @@ export class UserRepository implements IUserRepository {
       }),
       prisma.playlist.count({ where }),
     ]);
-
     return {
       playlists,
       total,
@@ -226,6 +225,13 @@ export class UserRepository implements IUserRepository {
       const user = await prisma.user.update({
         where: { id: userId },
         data: updates,
+        include: {
+          role: {
+            select: {
+              role: true,
+            },
+          },
+        },
       });
       return user;
     } catch (err: any) {

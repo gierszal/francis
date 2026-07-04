@@ -16,6 +16,7 @@ import {
 } from "@/schemas/auth/index.js";
 import { errorResponseSchema } from "@/schemas/common/error.schema.js";
 import { emptyResponseSchema } from "@/schemas/common/empty.response.schema.js";
+import { userResponseSchema } from "@/schemas/user/user.response.schema.js";
 
 type optionsType = {
   prefix: string;

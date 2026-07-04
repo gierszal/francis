@@ -1,51 +1,35 @@
-import { FormattedTrack } from "@/types/track";
+import { Skeleton } from "antd";
 import TrackList from "../track/TrackList";
+import { useGetUserHistory } from "@/hooks/modules/user/useUser";
 
-interface HistoryProps {
-  userId: string;
-}
+const History = () => {
+  const { data, isSuccess, isError, isLoading, error } = useGetUserHistory();
 
-const History = ({ userId }: HistoryProps) => {
-  return <TrackList tracks={formattedTracks} />;
+  if (isLoading) {
+    return <Skeleton />;
+  }
+
+  if (isError) {
+    return (
+      <div className="text-2xl text-red-500">
+        Error occurred: {error.message}
+      </div>
+    );
+  }
+
+  if (isSuccess && (!data?.data?.data || data?.data?.data.length === 0)) {
+    return (
+      <div className="text-2xl mt-5 ml-10 self-center">
+        You haven't listened to anything yet.
+      </div>
+    );
+  }
+
+  if (isSuccess) {
+    return <TrackList tracks={data?.data} />;
+  }
+
+  return null;
 };
 
 export default History;
-
-const formattedTracks: FormattedTrack[] = [
-  {
-    id: "trk_001",
-    name: "Pirkstein Atmosphere 7",
-    artist: "Kingdom Come: Deliverance",
-    audio: "/audio/pirkstein-atmosphere-7.mp3",
-    tags: ["ambient", "soundtrack", "medieval"],
-    listens: 1247,
-    picture: "/misc/towns.webp",
-    created_at: new Date("2024-06-01T10:00:00Z"),
-    updated_at: new Date("2024-06-15T14:30:00Z"),
-    album_id: "alb_001",
-  },
-  {
-    id: "trk_002",
-    name: "Pirkstein Nibble 11",
-    artist: "Kingdom Come: Deliverance",
-    audio: "/audio/pirkstein-nibble-11.mp3",
-    tags: ["ambient", "soundtrack", "medieval"],
-    listens: 856,
-    picture: "/misc/towns.webp",
-    created_at: new Date("2024-06-01T10:00:00Z"),
-    updated_at: new Date("2024-06-15T14:30:00Z"),
-    album_id: "alb_001",
-  },
-  {
-    id: "trk_003",
-    name: "Pirkstein Nibble 12",
-    artist: "Kingdom Come: Deliverance",
-    audio: "/audio/pirkstein-nibble-12.mp3",
-    tags: ["ambient", "soundtrack", "medieval"],
-    listens: 732,
-    picture: "/misc/towns.webp",
-    created_at: new Date("2024-06-01T10:00:00Z"),
-    updated_at: new Date("2024-06-15T14:30:00Z"),
-    album_id: "alb_001",
-  },
-];

@@ -90,6 +90,6 @@ export class GameService implements IGameService {
   };
 
   public deleteGame = async (id: string): Promise<void> => {
-    return await this.gameRepository.remove(id);
+    return this.gameRepository.remove(id);
   };
 }

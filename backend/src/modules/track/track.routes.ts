@@ -3,6 +3,7 @@ import { TrackController } from "./track.controller.js";
 import { TrackService } from "./track.service.js";
 import { TrackRepository } from "@/repositories/prisma/track.repository.js";
 import {
+  addToAlbumSchema,
   addToPlaylistSchema,
   createTrackSchema,
   detailedTrackResponseSchema,
@@ -14,6 +15,7 @@ import { paramsSchema } from "@/schemas/common/params.schema.js";
 import { querySchema } from "@/schemas/common/query.schema.js";
 import { normalizeTrackMultipartBody } from "@/middlewares/normalize.middleware.js";
 import type {
+  AddToAlbumDTO,
   AddToPlaylistDTO,
   CreateTrackDTO,
   UpdateTrackDTO,
@@ -197,10 +199,36 @@ const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
       },
       preHandler: [
         authMiddleware,
-        requireRole(ROLES.ADMIN.name, ROLES.USER.name),
+        requireRole(ROLES.USER.name, ROLES.ADMIN.name),
       ],
     },
     controller.addToPlaylist,
+  );
+
+  fastify.delete<{ Params: AddToPlaylistDTO }>(
+    "/:trackId/playlists/:playlistId",
+    {
+      schema: {
+        description: "Delete track from playlist. Users may access this route",
+        tags: ["Tracks"],
+        params: addToPlaylistSchema,
+        response: {
+          200: emptyResponseSchema,
+          400: errorResponseSchema,
+          401: errorResponseSchema,
+          403: errorResponseSchema,
+          404: errorResponseSchema,
+          500: errorResponseSchema,
+          default: errorResponseSchema,
+        },
+        security: [{ bearerAuth: [] }],
+      },
+      preHandler: [
+        authMiddleware,
+        requireRole(ROLES.USER.name, ROLES.ADMIN.name),
+      ],
+    },
+    controller.removeFromPlaylist,
   );
 };
 

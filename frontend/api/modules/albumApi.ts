@@ -7,13 +7,38 @@ export const albumApi = {
 
     const res = await $api.get("/albums", { params: requestParams });
     const items = res.data;
-    console.log(res.headers["x-total-count"]);
     const total: number = res.headers["x-total-count"] ?? 0;
 
     return { items, total };
   },
 
-  getalbum: async (id: string | undefined) => {
-    return await $api.get(`/albums/${id}`);
+  getAlbum: async (id: string | undefined) => {
+    return $api.get(`/albums/${id}`);
+  },
+
+  createAlbum: async (data: FormData) => {
+    return $api.post("/albums", data);
+  },
+
+  updateAlbum: async (data: FormData, id: string) => {
+    return $api.put(`/albums/${id}`, data);
+  },
+
+  deleteAlbum: async (id: string | undefined) => {
+    return $api.delete(`/albums/${id}`);
+  },
+
+  addToCollection: async (
+    albumId: string | undefined,
+    collectionId: string | undefined,
+  ) => {
+    return $api.post(`/albums/${albumId}/collections/${collectionId}`);
+  },
+
+  removeFromCollection: async (
+    albumId: string | undefined,
+    collectionId: string | undefined,
+  ) => {
+    return $api.delete(`/albums/${albumId}/collections/${collectionId}`);
   },
 };

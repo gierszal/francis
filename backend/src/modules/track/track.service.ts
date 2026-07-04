@@ -11,6 +11,7 @@ import type {
   FormattedTrack,
   FormattedDetailedTrack,
   TracksResponse,
+  RemoveTrackFromPlaylistDTO,
 } from "@/types/track/index.js";
 import {
   formatDetailedTrack,
@@ -97,5 +98,9 @@ export class TrackService implements ITrackService {
 
   async addToPlaylist(data: AddToPlaylistDTO): Promise<void> {
     return this.trackRepository.addToPlaylist(data);
+  }
+
+  async removeFromPlaylist(data: RemoveTrackFromPlaylistDTO): Promise<void> {
+    return this.trackRepository.removeFromPlaylist(data);
   }
 }

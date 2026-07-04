@@ -1,4 +1,6 @@
+import { createPlaylistSchema, updatePlaylistSchema } from "@/schemas/playlist";
 import { Track } from "../track";
+import z from "zod";
 
 export type Playlist = {
   name: string;
@@ -30,3 +32,6 @@ export type FormattedDetailedPlaylist = Omit<
   created_at: Date;
   updated_at: Date;
 };
+
+export type CreatePlaylistDTO = z.infer<typeof createPlaylistSchema>;
+export type UpdatePlaylistDTO = z.infer<typeof updatePlaylistSchema>;

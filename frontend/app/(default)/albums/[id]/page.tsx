@@ -31,7 +31,7 @@ const AlbumPage = () => {
   if (isError)
     return <div className="p-5 text-5xl">Error: {error?.message}</div>;
 
-  const album = data?.data.data; // тут из за того как с бэка приходит
+  const album = data?.data?.data; // тут из за того как с бэка приходит
 
   return (
     <AnimatedDiv className="ml-10 mt-10 flex flex-col items-start font-sans">

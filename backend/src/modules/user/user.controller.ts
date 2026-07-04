@@ -27,6 +27,7 @@ export class UserController {
     if (!id) throw new BadRequestError("User id was not provided!");
 
     const playlists = await this.userService.getPlaylists(id, query);
+
     return reply.send(playlists);
   };
 

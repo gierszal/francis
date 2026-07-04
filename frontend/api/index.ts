@@ -18,9 +18,8 @@ let refreshPromise: Promise<RefreshResponse | null> | null = null;
 
 async function getTokenPair(): Promise<RefreshResponse | null> {
   try {
-    const { data } = await axios.post<RefreshResponse>(
-      `${process.env.SERVER_API}/auth/refresh`,
-      {},
+    const { data } = await axios.get<RefreshResponse>(
+      "http://localhost:5000/api/v1/auth/refresh",
       { withCredentials: true },
     );
     setAccessToken(data.data.accessToken);

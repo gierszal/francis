@@ -32,13 +32,13 @@ export const createTrackSchema = z.object({
   tags: z.array(z.string()).min(1, "At least one tag is required"),
 });
 
+export const updateTrackSchema = createTrackSchema.partial();
+
 export const createTrackDocSchema = createTrackSchema
   .omit({ audio: true })
   .extend({
     audio: z.string(),
   });
-
-export const updateTrackSchema = createTrackSchema.partial();
 
 export const updateTrackDocSchema = updateTrackSchema
   .omit({ audio: true })

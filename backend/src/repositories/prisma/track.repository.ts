@@ -7,6 +7,9 @@ import type {
   CreateTrackDTO,
   UpdateTrackDTO,
   ITrackRepository,
+  AddToAlbumDTO,
+  RemoveTrackFromAlbumDTO,
+  RemoveTrackFromPlaylistDTO,
 } from "@/types/track/index.js";
 import type { FindTracksResult } from "@/types/track/track.result.js";
 
@@ -161,6 +164,26 @@ export class TrackRepository implements ITrackRepository {
     } catch (err: any) {
       if (err.code === "P2025")
         throw new NotFoundError(`Track with id ${trackId} not found`);
+      throw err;
+    }
+  }
+
+  async removeFromPlaylist(data: RemoveTrackFromPlaylistDTO): Promise<void> {
+    const { playlistId, trackId } = data;
+    try {
+      await prisma.playlistTrack.delete({
+        where: {
+          trackId_playlistId: {
+            playlistId,
+            trackId,
+          },
+        },
+      });
+    } catch (err: any) {
+      if (err.code === "P2025")
+        throw new NotFoundError(
+          `Either track or playlist with id provided does not exist!`,
+        );
       throw err;
     }
   }

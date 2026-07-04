@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Sidebar from "@/components/shared/Sidebar";
 import Footer from "@/components/shared/Footer";
+import { ROLES } from "@/types/role";
 
 const menuItems = [
   { label: "Home", ariaLabel: "To home page", link: "/" },
@@ -10,6 +11,12 @@ const menuItems = [
   { label: "Games", ariaLabel: "To games", link: "/games" },
   { label: "Collections", ariaLabel: "To collections", link: "/collections" },
   { label: "Playlists", ariaLabel: "To playlists", link: "/playlists" },
+  {
+    label: "Content",
+    ariaLabel: "To content (admin role required)",
+    link: "/content",
+    requiredRole: ROLES.ADMIN,
+  },
 ];
 
 const socialItems = [

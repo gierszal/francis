@@ -10,10 +10,10 @@ import {
 } from "react-icons/bs";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SignUpSchema, SignUpFormData } from "@/schemas/auth/signUp.schema";
+import { SignUpSchema, SignUpFormData } from "@/schemas/auth/index";
 import SubmitButton from "../ui/SubmitButton";
 import Input from "../ui/Input";
-import { useSignUp } from "@/hooks/modules/auth/useSignUp";
+import { useSignUp } from "@/hooks/modules/auth/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export function SignUpForm() {

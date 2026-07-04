@@ -1,7 +1,6 @@
-import { SignUpSchema } from "@/schemas/auth/signUp.schema";
+import { SignInSchema, SignUpSchema } from "@/schemas/auth";
 import { FormattedUserPayload } from "../user";
 import z from "zod";
-import { SignInSchema } from "@/schemas/auth/signIn.schema";
 
 export type AuthResult = {
   user: FormattedUserPayload;

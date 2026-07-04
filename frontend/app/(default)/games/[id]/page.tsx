@@ -24,7 +24,7 @@ const GamePage = () => {
   if (isError)
     return <div className="p-5 text-5xl">Error: {error?.message}</div>;
 
-  const game = data?.data.data;
+  const game = data?.data?.data;
   return (
     <AnimatedDiv className="ml-10 mt-10 flex flex-col items-start font-sans">
       <div className="flex flex-row gap-5">

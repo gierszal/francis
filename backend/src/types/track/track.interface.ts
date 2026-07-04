@@ -6,6 +6,7 @@ import type {
   CreateTrackDTO,
   FormattedDetailedTrack,
   FormattedTrack,
+  RemoveTrackFromPlaylistDTO,
   TracksResponse,
   UpdateTrackDTO,
 } from "./index.js";
@@ -33,6 +34,8 @@ export type ITrackService = {
   deleteTrack: (id: string) => Promise<void>;
 
   addToPlaylist: (data: AddToPlaylistDTO) => Promise<void>;
+
+  removeFromPlaylist: (data: RemoveTrackFromPlaylistDTO) => Promise<void>;
 };
 
 export type ITrackRepository = {
@@ -53,4 +56,6 @@ export type ITrackRepository = {
   remove: (id: string) => Promise<void>;
 
   addToPlaylist: (data: AddToPlaylistDTO) => Promise<void>;
+
+  removeFromPlaylist: (data: RemoveTrackFromPlaylistDTO) => Promise<void>;
 };

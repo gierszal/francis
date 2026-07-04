@@ -83,7 +83,7 @@ export class GameRepository implements IGameRepository {
 
   async remove(id: string): Promise<void> {
     try {
-      prisma.game.delete({
+      await prisma.game.delete({
         where: { id },
       });
     } catch (err: any) {

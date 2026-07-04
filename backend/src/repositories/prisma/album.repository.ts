@@ -5,6 +5,7 @@ import { prisma } from "@/prisma.js";
 import type {
   AddToCollectionDTO,
   CreateAlbumDTO,
+  RemoveFromCollectionDTO,
   UpdateAlbumDTO,
 } from "@/types/album/album.dto.js";
 import type { IAlbumRepository } from "@/types/album/album.interface.js";
@@ -96,7 +97,7 @@ export class AlbumRepository implements IAlbumRepository {
 
   async remove(id: string): Promise<void> {
     try {
-      prisma.album.delete({ where: { id } });
+      const data = await prisma.album.delete({ where: { id } });
     } catch (err: any) {
       if (err.code === "P2025")
         throw new NotFoundError(`Album with id ${id} was not found!`);
@@ -109,6 +110,26 @@ export class AlbumRepository implements IAlbumRepository {
     try {
       await prisma.albumCollection.create({
         data: { albumId, collectionId },
+      });
+    } catch (err: any) {
+      if (err.code === "P2025")
+        throw new NotFoundError(
+          "Either the album or the collection with the provided ID was not found",
+        );
+      throw new DatabaseError(err.message ?? "Database error occured");
+    }
+  }
+
+  async removeFromCollection(data: RemoveFromCollectionDTO): Promise<void> {
+    const { albumId, collectionId } = data;
+    try {
+      await prisma.albumCollection.delete({
+        where: {
+          albumId_collectionId: {
+            albumId,
+            collectionId,
+          },
+        },
       });
     } catch (err: any) {
       if (err.code === "P2025")

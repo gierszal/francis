@@ -2,6 +2,7 @@ import type { queryType } from "@/types/common/query.js";
 import type {
   AddToCollectionDTO,
   CreateAlbumDTO,
+  RemoveFromCollectionDTO,
   UpdateAlbumDTO,
 } from "./album.dto.js";
 import type { AlbumsResponse } from "./album.response.js";
@@ -29,6 +30,8 @@ export type IAlbumService = {
   deleteAlbum: (id: string) => Promise<void>;
 
   addToCollection: (data: AddToCollectionDTO) => Promise<void>;
+
+  removeFromCollection: (data: RemoveFromCollectionDTO) => Promise<void>;
 };
 
 export interface IAlbumRepository {
@@ -47,4 +50,6 @@ export interface IAlbumRepository {
   remove(id: string): Promise<void>;
 
   addToCollection(data: AddToCollectionDTO): Promise<void>;
+
+  removeFromCollection(data: RemoveFromCollectionDTO): Promise<void>;
 }

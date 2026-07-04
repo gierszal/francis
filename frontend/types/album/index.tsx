@@ -1,3 +1,10 @@
+import {
+  addToCollectionSchema,
+  createAlbumSchema,
+  updateAlbumSchema,
+} from "@/schemas/album";
+import z from "zod";
+
 export type Album = {
   name: string;
   id: string;
@@ -44,3 +51,9 @@ export type FormattedDetailedAlbum = Omit<
   created_at: Date;
   updated_at: Date;
 };
+
+export type CreateAlbumDTO = z.infer<typeof createAlbumSchema>;
+
+export type UpdateAlbumDTO = z.infer<typeof updateAlbumSchema>;
+
+export type AddToCollectionDTO = z.infer<typeof addToCollectionSchema>;

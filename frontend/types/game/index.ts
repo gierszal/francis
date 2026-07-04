@@ -1,3 +1,7 @@
+import z from "zod";
+
+import { createGameSchema, updateGameSchema } from "@/schemas/game";
+
 type Game = {
   name: string;
   id: string;
@@ -24,3 +28,7 @@ export type FormattedDetailedGame = Omit<
   created_at: Date;
   updated_at: Date;
 };
+
+export type CreateGameDTO = z.infer<typeof createGameSchema>;
+
+export type UpdateGameDTO = z.infer<typeof updateGameSchema>;

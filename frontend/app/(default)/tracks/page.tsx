@@ -18,7 +18,11 @@ const Tracks = () => {
       </div>
     );
   if (isError)
-    return <div className="text-5xl text-red-500">Error: {error?.message}</div>;
+    return (
+      <div className="text-5xl text-red-500 mt-5 ml-10">
+        Error: {error?.message}
+      </div>
+    );
 
   return (
     <>

@@ -13,7 +13,7 @@ export type IAuthService = {
   signIn(data: SignInDTO): Promise<AuthResult>;
   signOut(refreshToken: string): Promise<void>;
   refresh(refreshToken: string): Promise<Pick<AuthResult, "tokens">["tokens"]>;
-  activate(link: ActivationLinkDTO): Promise<FormattedUser>;
+  activate(link: ActivationLinkDTO): Promise<void>;
 };
 
 export type IAuthRepository = {

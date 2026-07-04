@@ -10,3 +10,5 @@ export type CreateTrackDTO = z.infer<typeof createTrackSchema>;
 export type UpdateTrackDTO = z.infer<typeof updateTrackSchema>;
 export type AddToAlbumDTO = z.infer<typeof addToAlbumSchema>;
 export type AddToPlaylistDTO = z.infer<typeof addToPlaylistSchema>;
+export type RemoveTrackFromAlbumDTO = AddToAlbumDTO;
+export type RemoveTrackFromPlaylistDTO = AddToPlaylistDTO;

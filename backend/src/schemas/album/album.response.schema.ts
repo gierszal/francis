@@ -28,7 +28,7 @@ export const albumsReponseSchema = z.object({
 export const detailedAlbumSchema = z.object({
   id: z.uuid(),
   name: z.string(),
-  picture: z.uuid(),
+  picture: z.string(),
   description: z.string(),
   tracks: z.array(
     z.object({

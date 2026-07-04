@@ -1,5 +1,5 @@
 "use client";
-import { FormattedDetailedTrack } from "@/types/track";
+import { FormattedDetailedTrack, FormattedTrack } from "@/types/track";
 import GradientText from "@/components/motion/GradientText";
 import Image from "next/image";
 import formatDetailedTrack from "@/utils/formatters/formatDetailedTrackToFormatted";
@@ -9,6 +9,8 @@ import AnimatedDiv from "@/components/motion/AnimatedDiv";
 import { useGetTrack } from "@/hooks/modules/track/useTrack";
 import { Skeleton } from "antd";
 import { useParams } from "next/navigation";
+import { useGetUserFavourites } from "@/hooks/modules/user/useUser";
+import { useMemo } from "react";
 
 const TrackPage = () => {
   const params = useParams<{ id: string }>();
@@ -17,16 +19,25 @@ const TrackPage = () => {
     params.id?.toString(),
   );
 
+  const { data: favouritesData } = useGetUserFavourites();
+
+  const favourites = favouritesData?.data?.data;
+
+  const favouriteIds = useMemo(() => {
+    return new Set(favourites?.map((track: FormattedTrack) => track.id) || []);
+  }, [favourites]);
+
   if (isLoading)
     return (
       <div className={"mt-10 ml-10 w-[90%]"}>
         <Skeleton />
       </div>
     );
+
   if (isError)
     return <div className="p-5 text-5xl">Error: {error?.message}</div>;
 
-  const track = data?.data.data;
+  const track = data?.data?.data;
 
   const formattedTrack = formatDetailedTrack(track);
 
@@ -60,7 +71,13 @@ const TrackPage = () => {
         </div>
       </div>
       <div className="w-[98%] mt-20">
-        <TrackItem track={formattedTrack} idx={0} />
+        {formattedTrack && (
+          <TrackItem
+            track={formattedTrack}
+            isFavourite={favouriteIds?.has(track?.id)}
+            idx={0}
+          />
+        )}
       </div>
       <div className="mt-7 text-zinc-500">
         <span>Listens: {track.listens}</span>

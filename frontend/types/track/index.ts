@@ -1,3 +1,6 @@
+import { createTrackSchema, updateTrackSchema } from "@/schemas/track";
+import z from "zod";
+
 export type Track = {
   name: string;
   id: string;
@@ -45,3 +48,9 @@ export type AlbumTrack = {
   artist: string;
   picture: string;
 };
+
+export type PlaylistTrack = AlbumTrack; // если надо будет сменить
+
+export type CreateTrackDTO = z.infer<typeof createTrackSchema>;
+
+export type UpdateTrackDTO = z.infer<typeof updateTrackSchema>;

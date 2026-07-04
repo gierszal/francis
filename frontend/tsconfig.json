@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "app/(admin)/content/games/update"  ],
   "exclude": ["node_modules"]
 }
