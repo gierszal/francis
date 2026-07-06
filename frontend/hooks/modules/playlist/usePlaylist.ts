@@ -48,6 +48,7 @@ export function useCreatePlaylist() {
     onSuccess: async ({ data }) => {
       const id = data.data.id;
       queryClient.setQueryData(["playlists", { id }], data.data);
+      queryClient.invalidateQueries({ queryKey: ["playlists"] });
       notification.success({
         title: "Playlist was successfully created!",
       });

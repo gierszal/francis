@@ -14,8 +14,8 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api/image/:path*",
-        destination: "http://localhost:5000/static/image/:path*",
+        source: "/api/:path*",
+        destination: "http://localhost:5000/static/:path*",
       },
     ];
   },

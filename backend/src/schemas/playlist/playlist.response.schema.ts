@@ -14,28 +14,22 @@ const detailedPlaylistSchema = z.object({
   name: z.string(),
   tracks: z.array(
     z.object({
-      id: z.uuid(),
+      id: z.string(),
+
       name: z.string(),
-      audio: z.string(),
       artist: z.string(),
-      album: z.object({
-        id: z.uuid(),
-        name: z.string(),
-        game: z.object({
-          id: z.uuid(),
-          name: z.string(),
-          createdAt: z.coerce.date(),
-          updatedAt: z.coerce.date(),
-        }),
-        picture: z.string(),
-      }),
+
+      tags: z.array(z.string()),
+
+      audio: z.string(),
+      picture: z.string(),
     }),
   ),
   description: z.string().nullable(),
   author: z.object({
     id: z.uuid(),
     firstName: z.string(),
-    lastName: z.string(),
+    lastName: z.string().nullable(),
   }),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),

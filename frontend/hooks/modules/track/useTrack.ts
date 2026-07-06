@@ -113,6 +113,7 @@ export function useCreateTrack() {
     onSuccess: async ({ data }) => {
       const id = data.data.id;
       queryClient.setQueryData(["tracks", { id }], data.data);
+      queryClient.invalidateQueries({ queryKey: ["tracks"] });
       notification.success({
         title: "Track was successfully created!",
       });
@@ -141,7 +142,7 @@ export function useUpdateTrack() {
 
       queryClient.setQueryData(["tracks", { id }], updatedTrack);
 
-      queryClient.invalidateQueries({ queryKey: ["albums"] });
+      queryClient.invalidateQueries({ queryKey: ["tracks"] });
 
       notification.success({
         title: "Track was successfully updated!",

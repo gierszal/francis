@@ -1,3 +1,4 @@
+import { CreateCollectionDTO, UpdateCollectionDTO } from "@/types/collection";
 import $api from "..";
 import { GetItemsParams } from "@/types/api/common";
 
@@ -14,5 +15,17 @@ export const collectionApi = {
 
   getCollection: async (id: string | undefined) => {
     return await $api.get(`/collections/${id}`);
+  },
+
+  createCollection: async (data: CreateCollectionDTO) => {
+    return $api.post("/collections", data);
+  },
+
+  updateCollection: async (data: UpdateCollectionDTO, id: string) => {
+    return $api.put(`/collections/${id}`, data);
+  },
+
+  deleteCollection: async (id: string | undefined) => {
+    return $api.delete(`/collections/${id}`);
   },
 };

@@ -2,17 +2,12 @@
 
 import AnimatedDiv from "@/components/motion/AnimatedDiv";
 import GradientText from "@/components/motion/GradientText";
-import AlbumTrackItem from "@/components/track/albumTrack/AlbumTrackItem";
-import TrackItem from "@/components/track/TrackItem";
 import TrackList from "@/components/track/TrackList";
 import Header from "@/components/ui/Header";
 import { useGetAlbum } from "@/hooks/modules/album/useAlbum";
-import { FormattedDetailedAlbum } from "@/types/album";
-import { AlbumTrack, FormattedTrack } from "@/types/track";
 import { Skeleton } from "antd";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import React from "react";
 
 const AlbumPage = () => {
   const router = useRouter();
@@ -37,8 +32,7 @@ const AlbumPage = () => {
     <AnimatedDiv className="ml-10 mt-10 flex flex-col items-start font-sans">
       <div className="flex flex-row gap-5">
         <Image
-          //   src={album.picture}
-          src={`/api/image/aff9e97a-fdc8-44e2-b026-cea911c36638.jpg`}
+          src={`/api/${album?.picture}`}
           alt={"pic"}
           width={250}
           height={250}
@@ -63,16 +57,7 @@ const AlbumPage = () => {
       </div>
       <div className="w-[98%] mt-20">
         <ul className="bg-background flex flex-col gap-1">
-          {album.tracks?.map((track: AlbumTrack, idx: number) => (
-            <AlbumTrackItem
-              track={{
-                ...track,
-                picture: album.picture,
-              }}
-              idx={idx}
-              key={idx}
-            />
-          ))}
+          <TrackList tracks={album?.tracks} source={{ type: "default" }} />
         </ul>
       </div>
       <div className="mt-7 text-zinc-500">

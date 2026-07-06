@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 
 const letterVariants = {
   hidden: { opacity: 0, filter: "blur(8px)", y: -20 },
@@ -21,31 +21,36 @@ interface RevealByLetterProps {
   delayChildren?: number;
 }
 
-const RevealByLetter = ({ children, delayChildren }: RevealByLetterProps) => {
-  const characters = useMemo(() => children.split(""), [children]);
-  return (
-    <motion.h1
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.8 }}
-      transition={{ staggerChildren: 0.01, delayChildren: delayChildren || 0 }}
-    >
-      {characters.map((char, idx) => (
-        <motion.span
-          key={idx}
-          variants={letterVariants}
-          transition={transition}
-          className={
-            char === " "
-              ? "inline-block w-[0.3em]"
-              : "inline-block" + "break-words"
-          }
-        >
-          {char === " " ? "\u00A0" : char}
-        </motion.span>
-      ))}
-    </motion.h1>
-  );
-};
+const RevealByLetter = memo(
+  ({ children, delayChildren }: RevealByLetterProps) => {
+    const characters = useMemo(() => children.split(""), [children]);
+    return (
+      <motion.h1
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.8 }}
+        transition={{
+          staggerChildren: 0.01,
+          delayChildren: delayChildren || 0,
+        }}
+      >
+        {characters.map((char, idx) => (
+          <motion.span
+            key={idx}
+            variants={letterVariants}
+            transition={transition}
+            className={
+              char === " "
+                ? "inline-block w-[0.3em]"
+                : "inline-block" + "break-words"
+            }
+          >
+            {char === " " ? "\u00A0" : char}
+          </motion.span>
+        ))}
+      </motion.h1>
+    );
+  },
+);
 
 export default RevealByLetter;

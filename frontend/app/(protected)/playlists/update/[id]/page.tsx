@@ -17,8 +17,6 @@ const UpdatePlaylist = () => {
 
   const playlist = data?.data?.data ?? data;
 
-  console.log(playlist);
-
   return (
     <div className="mt-10 ml-10">
       <RoundedButton className="text-lg" onClick={() => router.back()}>

@@ -21,8 +21,7 @@ const AlbumItem = ({ album }: AlbumItemProps) => {
       >
         <div className={"w-full h-[195.39px]"}>
           <TiltedCard
-            // imageSrc={album.picture
-            imageSrc={`/api/image/aff9e97a-fdc8-44e2-b026-cea911c36638.jpg`}
+            imageSrc={`/api/${album?.picture}`}
             altText={album.name}
             captionText={album.name}
             containerHeight="200px"

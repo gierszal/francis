@@ -32,9 +32,15 @@ export const detailedAlbumSchema = z.object({
   description: z.string(),
   tracks: z.array(
     z.object({
-      id: z.uuid(),
+      id: z.string(),
+
       name: z.string(),
       artist: z.string(),
+
+      tags: z.array(z.string()),
+
+      audio: z.string(),
+      picture: z.string(),
     }),
   ),
   tracks_amount: z.number().int().min(0),

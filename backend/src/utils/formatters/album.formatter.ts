@@ -3,6 +3,7 @@ import type {
   FormattedAlbum,
   FormattedDetailedAlbum,
 } from "@/types/album/album.model.js";
+import { formatTrack } from "./track.formatter.js";
 
 export function formatAlbum(album: Album): FormattedAlbum {
   return {
@@ -24,7 +25,7 @@ export function formatDetailedAlbum(
     name: album.name,
     picture: album.picture,
     description: album.description,
-    tracks: album.tracks.map((track: any) => track),
+    tracks: album.tracks.map((track: any) => formatTrack(track)),
     tracks_amount: album._count.tracks,
     game: {
       id: album.game.id,

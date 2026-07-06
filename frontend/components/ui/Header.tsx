@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { memo } from "react";
 
 interface HeaderProps {
   children: React.ReactNode;
@@ -6,7 +7,7 @@ interface HeaderProps {
   ariaLabel?: string;
 }
 
-const Header = ({ children, className, ariaLabel }: HeaderProps) => {
+const Header = memo(({ children, className, ariaLabel }: HeaderProps) => {
   return (
     <h1
       aria-label={ariaLabel}
@@ -22,6 +23,6 @@ const Header = ({ children, className, ariaLabel }: HeaderProps) => {
       {children}
     </h1>
   );
-};
+});
 
 export default Header;

@@ -1,13 +1,12 @@
 "use client";
 
-import React from "react";
+import { memo, useRef } from "react";
 import ScrollVelocity from "../motion/ScrollVelocity";
 import RevealByLetter from "../motion/RevealByLetter";
 import AnimatedDiv from "../motion/AnimatedDiv";
-import MusicWidget from "../music/MusicWidget";
+import MusicWidget from "../player/MusicWidget";
 import Header from "../ui/Header";
 import Link from "next/link";
-import { LoadingBoundaryProvider } from "next/dist/client/components/layout-router";
 
 const additionalPages = [
   { label: "About", ariaLabel: "To about page", link: "/about" },
@@ -25,7 +24,10 @@ const languages = [
   { label: "French", ariaLabel: "Switch to French" },
 ];
 
-const Footer = () => {
+const Footer = memo(() => {
+  const renders = useRef(0);
+  renders.current++;
+  console.log(renders.current);
   return (
     <>
       <div className="flex flex-col gap-3 bg-background px-10 font-light text-2xl py-10">
@@ -58,7 +60,7 @@ const Footer = () => {
           <div className="py-2 flex flex-row justify-center items-center gap-15">
             {additionalPages.map((item, ind) => (
               <Header key={ind}>
-                <Link href={item.link} key={ind} aria-label={item.ariaLabel}>
+                <Link href={item.link} aria-label={item.ariaLabel}>
                   {item.label}
                 </Link>
               </Header>
@@ -84,6 +86,6 @@ const Footer = () => {
       </div>
     </>
   );
-};
+});
 
 export default Footer;

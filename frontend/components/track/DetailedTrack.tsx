@@ -12,7 +12,7 @@ const DetailedTrack = ({ track }: DetailedTrackProps) => {
     <div className="w-full flex flex-col">
       <div className="flex flex-row gap-2">
         <TiltedCard
-          imageSrc={track.album.picture}
+          imageSrc={`/api${track?.album?.picture}`}
           altText={track.name}
           captionText={track.name}
           containerHeight="200px"

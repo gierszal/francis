@@ -10,7 +10,6 @@ export const createAlbumSchema = z.object({
   picture: z
     .custom<MultipartFile>(
       (file) => {
-        console.log(file);
         return file !== undefined && file !== null;
       },
       {

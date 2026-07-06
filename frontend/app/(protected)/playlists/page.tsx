@@ -4,18 +4,47 @@ import AnimatedDiv from "@/components/motion/AnimatedDiv";
 import GradientText from "@/components/motion/GradientText";
 import PlaylistList from "@/components/playlist/PlaylistList";
 import { useGetPlaylists } from "@/hooks/modules/playlist/usePlaylist";
-import { Skeleton } from "antd";
-import { useRouter } from "next/navigation";
+import { useGetUserPlaylists } from "@/hooks/modules/user/useUser";
+import { Skeleton, Input, Pagination } from "antd";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 import { BsPlusCircle } from "react-icons/bs";
 
 const Playlists = () => {
+  const router = useRouter();
+  const gap = 10;
+  const pathname = usePathname();
+
+  const searchParams = useSearchParams();
+
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const searchQuery = searchParams.get("searchQuery") || "";
+
   const { data, isLoading, isError, error } = useGetPlaylists({
-    count: 10,
+    count: gap,
+    offset: (page - 1) * gap,
+    searchQuery: searchQuery,
   });
 
-  const router = useRouter();
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
 
-  if (isLoading)
+      if (value === "" || (name === "page" && value === "1")) {
+        params.delete(name);
+      } else {
+        params.set(name, value);
+      }
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  const playlistsAmount = data?.total;
+  const { Search } = Input;
+
+  if (isLoading || !playlistsAmount)
     return (
       <div className={"mt-10 ml-10 w-[90%]"}>
         <Skeleton />
@@ -27,25 +56,37 @@ const Playlists = () => {
   const playlists = data?.items.data;
 
   return (
-    <AnimatedDiv>
+    <AnimatedDiv className="ml-10">
       <GradientText
         colors={["#5227FF", "#FF9FFC", "#B497CF"]}
         animationSpeed={8}
         showBorder={false}
-        className="text-5xl ml-10 mt-7"
+        className="text-5xl ml-0 mt-7"
       >
         Playlists
       </GradientText>
-      <div className="flex flex-row ml-10 mt-10">
+      <div className="mb-5 mt-7">
+        <Search
+          placeholder="Search playlists..."
+          // onSearch={onSearch}
+          onSearch={(query) =>
+            router.push(
+              pathname + "?" + createQueryString("searchQuery", query),
+            )
+          }
+          style={{ width: 200 }}
+        />
+      </div>
+      <div className="flex flex-row mt-10">
         <div
           className="bg-gray-400/20 border-1 border-gray-300/60 flex flex-row gap-2 p-2 rounded-xl items-center gap-3 cursor-pointer active:scale-98"
           onClick={() => router.push("/playlists/create")}
         >
           <BsPlusCircle size={32} />
-          {playlists?.length ? (
-            <h1 className="text-xl">Create playlist</h1>
-          ) : (
+          {!playlists?.length && !searchQuery ? (
             <h1 className="text-xl">Create your first playlist!</h1>
+          ) : (
+            <h1 className="text-xl">Create playlist</h1>
           )}
         </div>
       </div>
@@ -55,8 +96,22 @@ const Playlists = () => {
         {playlists?.length ? (
           <PlaylistList playlists={playlists} />
         ) : (
-          <h1 className="ml-10 text-3xl">No playlists yet!</h1>
+          <h1 className="text-2xl">No playlists yet!</h1>
         )}
+      </div>
+      <div className="mt-5">
+        <Pagination
+          simple
+          defaultCurrent={1}
+          total={
+            playlistsAmount > 0 ? Math.ceil(playlistsAmount / gap) * 10 : 1
+          }
+          onChange={(newPage) =>
+            router.push(
+              pathname + "?" + createQueryString("page", newPage.toString()),
+            )
+          }
+        />
       </div>
     </AnimatedDiv>
   );

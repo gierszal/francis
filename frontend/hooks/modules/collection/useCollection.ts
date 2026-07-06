@@ -1,6 +1,14 @@
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import {
+  useQuery,
+  keepPreviousData,
+  useQueryClient,
+  useMutation,
+} from "@tanstack/react-query";
 import { GetItemsParams } from "@/types/api/common";
 import { collectionApi } from "@/api/modules/collectionApi";
+import { notification } from "antd";
+import { AxiosError } from "axios";
+import { UpdateCollectionDTO } from "@/types/collection";
 
 export function useGetCollections(params: GetItemsParams = {}) {
   const { count, offset, searchQuery } = params;
@@ -27,5 +35,88 @@ export function useGetCollection(
     enabled: enable,
     staleTime: 5 * 60 * 1000,
     placeholderData: keepPreviousData,
+  });
+}
+
+export function useCreateCollection() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: collectionApi.createCollection,
+    onSuccess: async ({ data }) => {
+      const id = data.data.id;
+      queryClient.setQueryData(["collections", { id }], data.data);
+      queryClient.invalidateQueries({ queryKey: ["collections"] });
+      notification.success({
+        title: "Collection was successfully created!",
+      });
+    },
+    onError: (err) => {
+      let title = err.message;
+      if (err instanceof AxiosError) title = err?.response?.data.error.message;
+      notification.error({
+        title: title,
+      });
+      console.log(err);
+    },
+  });
+}
+
+export function useUpdateCollection() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateCollectionDTO }) =>
+      collectionApi.updateCollection(data, id),
+
+    onSuccess: (response, variables) => {
+      const { id } = variables;
+      const updatedAlbum = response.data.data;
+
+      queryClient.setQueryData(["collections", { id }], updatedAlbum);
+
+      queryClient.invalidateQueries({ queryKey: ["collections"] });
+
+      notification.success({
+        title: "Collection was successfully updated!",
+      });
+    },
+
+    onError: (error: Error | AxiosError) => {
+      let title = "Failed to update collection";
+
+      if (error instanceof AxiosError) {
+        title = error?.response?.data?.error?.message || error.message;
+      } else {
+        title = error.message;
+      }
+
+      notification.error({
+        title: title,
+      });
+      console.error("Update album error:", error);
+    },
+  });
+}
+
+export function useRemoveCollection() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id }: { id: string | undefined }) =>
+      collectionApi.deleteCollection(id),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["collections"] });
+      notification.success({
+        title: "Collection was successfully deleted!",
+      });
+    },
+    onError: (err) => {
+      let title = err.message;
+      if (err instanceof AxiosError)
+        title = err?.response?.data?.error?.message;
+      notification.error({
+        title: title,
+      });
+      console.log(err);
+    },
   });
 }

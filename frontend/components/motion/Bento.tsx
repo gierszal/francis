@@ -13,7 +13,7 @@ export interface BentoCardProps {
   name?: string;
   textAutoHide?: boolean;
   disableAnimations?: boolean;
-  src?: string;
+  picture?: string;
 }
 
 export interface BentoProps {
@@ -648,11 +648,10 @@ const MagicBento: React.FC<BentoProps> = ({
               const baseClassName = `card flex flex-row flex-wrap justify-between relative aspect-[4/3] min-h-[200px] w-full max-w-full p-5 rounded-[20px] border border-solid font-light overflow-hidden transition-colors duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] ${
                 enableBorderGlow ? "card--border-glow" : ""
               }`;
-
               const cardStyle = {
                 // backgroundColor: card.color || "var(--background-dark)",
                 // backgroundImage: `url(${card.src})`,
-                backgroundImage: `url(http://localhost:5000/static/image/9c399eaa-100e-4eb5-8594-31e57e408cf0.png)`,
+                backgroundImage: `url(/api/${card?.picture})`,
                 backgroundSize: "cover",
                 // backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",

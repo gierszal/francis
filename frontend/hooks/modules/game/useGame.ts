@@ -41,6 +41,7 @@ export function useCreateGame() {
     onSuccess: async ({ data }) => {
       const id = data.data.id;
       queryClient.setQueryData(["games", { id }], data.data);
+      queryClient.invalidateQueries({ queryKey: ["games"] });
       notification.success({
         title: "Game was successfully created!",
       });

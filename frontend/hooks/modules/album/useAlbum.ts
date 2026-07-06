@@ -42,6 +42,7 @@ export function useCreateAlbum() {
     onSuccess: async ({ data }) => {
       const id = data.data.id;
       queryClient.setQueryData(["albums", { id }], data.data);
+      queryClient.invalidateQueries({ queryKey: ["albums"] });
       notification.success({
         title: "Album was successfully created!",
       });

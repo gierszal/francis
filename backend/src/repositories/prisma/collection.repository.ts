@@ -19,11 +19,7 @@ export class CollectionRepository implements ICollectionRepository {
 
     const where: any = {};
 
-    if (searchQuery)
-      where.OR = [
-        { name: { contains: searchQuery } },
-        { description: { contains: searchQuery } },
-      ];
+    if (searchQuery) where.OR = [{ name: { contains: searchQuery } }];
 
     const [collections, total] = await Promise.all([
       prisma.collection.findMany({

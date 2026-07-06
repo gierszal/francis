@@ -15,8 +15,16 @@ export const userApi = {
 
     return { items, total };
   },
-  getUserFavourites: async () => {
-    return $api.get("/users/me/favourites");
+  getUserFavourites: async (params: GetItemsParams = {}) => {
+    const requestParams: Record<string, any> = { ...params };
+
+    const res = await $api.get("/users/me/favourites", {
+      params: requestParams,
+    });
+    const items = res.data;
+    const total: number = res.headers["x-total-count"] ?? 0;
+
+    return { items, total };
   },
   addToFavourites: async (trackId: string) => {
     return $api.post(`/users/me/favourites/${trackId}`);
@@ -24,8 +32,17 @@ export const userApi = {
   removeFromFavourites: async (trackId: string) => {
     return $api.delete(`/users/me/favourites/${trackId}`);
   },
-  getUserHistory: async () => {
-    return $api.get("/users/me/history");
+  getUserHistory: async (params: GetItemsParams = {}) => {
+    const requestParams: Record<string, any> = { ...params };
+
+    const res = await $api.get("/users/me/history", {
+      params: requestParams,
+    });
+
+    const items = res.data;
+    const total: number = res.headers["x-total-count"] ?? 0;
+
+    return { items, total };
   },
   updateProfile: async (data: UpdateUserDTO) => {
     return $api.patch("/users/me", data);

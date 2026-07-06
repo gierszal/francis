@@ -9,17 +9,15 @@ import {
   useRemoveTrackFromPlaylist,
 } from "@/hooks/modules/track/useTrack";
 import { FormattedDetailedPlaylist, FormattedPlaylist } from "@/types/playlist";
-import { useQueryClient } from "@tanstack/react-query";
 import { Button, notification, Space } from "antd";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { BsPlusCircle } from "react-icons/bs";
-import { BsCheck2 } from "react-icons/bs";
 
 interface PopoverPlaylistsProps {
   trackId: string;
 }
-const PopoverPlaylists = ({ trackId }: PopoverPlaylistsProps) => {
+const PopoverPlaylists = memo(({ trackId }: PopoverPlaylistsProps) => {
   const [api, contextHolder] = notification.useNotification();
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
   const [playlistId, setPlaylistId] = useState<string>("");
@@ -127,6 +125,6 @@ const PopoverPlaylists = ({ trackId }: PopoverPlaylistsProps) => {
       </div>
     </div>
   );
-};
+});
 
 export default PopoverPlaylists;

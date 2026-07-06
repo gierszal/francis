@@ -25,7 +25,6 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
   });
 
   const onSubmit = (data: UpdateUserDTO) => {
-    console.log(data);
     update(data, {
       onSuccess: () => router.replace("/profile"),
     });

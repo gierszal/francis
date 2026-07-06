@@ -13,7 +13,7 @@ export function formatTrack(track: Track | any): FormattedTrack {
     audio: track.audio,
     picture: track.album.picture,
     listens: track.listens,
-    tags: track.tags.map((tag: any) => tag),
+    tags: track?.tags?.map((tag: any) => tag) ?? [],
     created_at: track.createdAt,
     updated_at: track.updatedAt,
     album_id: track.albumId,

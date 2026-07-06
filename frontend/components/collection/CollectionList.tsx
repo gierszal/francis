@@ -10,7 +10,7 @@ interface CollectionListProps {
 }
 const CollectionList = ({ collections }: CollectionListProps) => {
   return (
-    <AnimatedDiv className="ml-10 flex flex-col gap-2">
+    <AnimatedDiv className="flex flex-col gap-2">
       {collections?.map((collection, idx) => (
         <CollectionItem key={idx} collection={collection} />
       ))}

@@ -45,21 +45,21 @@ async function main() {
   const kcd = await prisma.game.create({
     data: {
       name: "Kingdom Come: Deliverance",
-      picture: "/games/kcd.webp",
+      picture: "image/2f7fcb21-a125-40be-9d93-5605033af68d.jpg",
     },
   });
 
   const witcher = await prisma.game.create({
     data: {
       name: "The Witcher 3: Wild Hunt",
-      picture: "/games/witcher3.webp",
+      picture: "image/2f7fcb21-a125-40be-9d93-5605033af68d.jpg",
     },
   });
 
   const skyrim = await prisma.game.create({
     data: {
       name: "The Elder Scrolls V: Skyrim",
-      picture: "/games/skyrim.webp",
+      picture: "image/2f7fcb21-a125-40be-9d93-5605033af68d.jpg",
     },
   });
 
@@ -67,7 +67,7 @@ async function main() {
     data: {
       name: "Original Soundtrack",
       description: "Kingdom Come Deliverance OST",
-      picture: randomUUID(),
+      picture: "image/2f7fcb21-a125-40be-9d93-5605033af68d.jpg",
       gameId: kcd.id,
     },
   });
@@ -76,7 +76,7 @@ async function main() {
     data: {
       name: "Wild Hunt OST",
       description: "The Witcher 3 soundtrack",
-      picture: randomUUID(),
+      picture: "image/2f7fcb21-a125-40be-9d93-5605033af68d.jpg",
       gameId: witcher.id,
     },
   });
@@ -85,7 +85,7 @@ async function main() {
     data: {
       name: "Original Game Soundtrack",
       description: "Skyrim soundtrack",
-      picture: randomUUID(),
+      picture: "image/2f7fcb21-a125-40be-9d93-5605033af68d.jpg",
       gameId: skyrim.id,
     },
   });
@@ -94,7 +94,7 @@ async function main() {
     data: {
       name: "Poverty and Famine",
       artist: "Jan Valta",
-      audio: "/audio/kcd/poverty-and-famine.mp3",
+      audio: "audio/1e9758c7-11e7-47c4-8c3b-385726ef481e.mp3",
       tags: ["medieval", "village", "ambient", "sad"],
       albumId: kcdAlbum.id,
     },
@@ -104,7 +104,7 @@ async function main() {
     data: {
       name: "Beer and Women",
       artist: "Jan Valta",
-      audio: "/audio/kcd/beer-and-women.mp3",
+      audio: "audio/1e9758c7-11e7-47c4-8c3b-385726ef481e.mp3",
       tags: ["tavern", "folk", "happy", "medieval"],
       albumId: kcdAlbum.id,
     },
@@ -114,7 +114,7 @@ async function main() {
     data: {
       name: "People of the Land",
       artist: "Jan Valta",
-      audio: "/audio/kcd/people-of-the-land.mp3",
+      audio: "audio/1e9758c7-11e7-47c4-8c3b-385726ef481e.mp3",
       tags: ["folk", "peaceful", "village"],
       albumId: kcdAlbum.id,
     },
@@ -124,7 +124,7 @@ async function main() {
     data: {
       name: "Kaer Morhen",
       artist: "Marcin Przybyłowicz",
-      audio: "/audio/witcher/kaer-morhen.mp3",
+      audio: "audio/1e9758c7-11e7-47c4-8c3b-385726ef481e.mp3",
       tags: ["fantasy", "castle", "ambient", "calm"],
       albumId: witcherAlbum.id,
     },
@@ -134,7 +134,7 @@ async function main() {
     data: {
       name: "Steel for Humans",
       artist: "Marcin Przybyłowicz",
-      audio: "/audio/witcher/steel-for-humans.mp3",
+      audio: "audio/1e9758c7-11e7-47c4-8c3b-385726ef481e.mp3",
       tags: ["battle", "combat", "epic"],
       albumId: witcherAlbum.id,
     },
@@ -144,7 +144,7 @@ async function main() {
     data: {
       name: "Ladies of the Woods",
       artist: "Marcin Przybyłowicz",
-      audio: "/audio/witcher/ladies-of-the-woods.mp3",
+      audio: "audio/1e9758c7-11e7-47c4-8c3b-385726ef481e.mp3",
       tags: ["dark", "forest", "mystery"],
       albumId: witcherAlbum.id,
     },
@@ -154,7 +154,7 @@ async function main() {
     data: {
       name: "Dragonborn",
       artist: "Jeremy Soule",
-      audio: "/audio/skyrim/dragonborn.mp3",
+      audio: "audio/1e9758c7-11e7-47c4-8c3b-385726ef481e.mp3",
       tags: ["epic", "heroic", "battle"],
       albumId: skyrimAlbum.id,
     },
@@ -164,7 +164,7 @@ async function main() {
     data: {
       name: "Far Horizons",
       artist: "Jeremy Soule",
-      audio: "/audio/skyrim/far-horizons.mp3",
+      audio: "audio/1e9758c7-11e7-47c4-8c3b-385726ef481e.mp3",
       tags: ["exploration", "ambient", "mountains"],
       albumId: skyrimAlbum.id,
     },
@@ -174,7 +174,7 @@ async function main() {
     data: {
       name: "Secunda",
       artist: "Jeremy Soule",
-      audio: "/audio/skyrim/secunda.mp3",
+      audio: "audio/1e9758c7-11e7-47c4-8c3b-385726ef481e.mp3",
       tags: ["night", "calm", "ambient"],
       albumId: skyrimAlbum.id,
     },

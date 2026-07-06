@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 
 import { BsCollectionFill, BsDiscFill, BsMusicNote } from "react-icons/bs";
+import { FaGamepad } from "react-icons/fa";
 import type { MenuProps } from "antd";
 import { Layout, Menu, theme } from "antd";
 import Image from "next/image";
@@ -44,10 +45,15 @@ const items: MenuItem[] = [
       "/content/albums/removeFromCollection",
     ),
   ]),
-  getItem("Games", "sub3", <BsCollectionFill />, [
+  getItem("Games", "sub3", <FaGamepad />, [
     getItem("Add game", "/content/games/create"),
     getItem("Update game", "/content/games/update"),
     getItem("Remove game", "/content/games/remove"),
+  ]),
+  getItem("Collections", "sub4", <BsCollectionFill />, [
+    getItem("Add collection", "/content/collections/create"),
+    getItem("Update collection", "/content/collections/update"),
+    getItem("Remove collection", "/content/collections/remove"),
   ]),
 ];
 

@@ -86,21 +86,27 @@ export class UserRepository implements IUserRepository {
       userId,
       ...(searchQuery && {
         track: {
-          name: {
-            contains: searchQuery,
-            mode: "insensitive",
-          },
-          artist: {
-            contains: searchQuery,
-            mode: "insensitive",
-          },
+          OR: [
+            {
+              name: {
+                contains: searchQuery,
+                mode: "insensitive",
+              },
+            },
+            {
+              artist: {
+                contains: searchQuery,
+                mode: "insensitive",
+              },
+            },
+          ],
         },
       }),
     };
 
     const [tracksData, total] = await Promise.all([
       prisma.favourite.findMany({
-        where: where,
+        where,
         include: {
           track: {
             include: {

@@ -1,4 +1,4 @@
-import React from "react";
+import { memo } from "react";
 import { Popover } from "antd";
 import { BsThreeDots } from "react-icons/bs";
 import { BsMusicNote } from "react-icons/bs";
@@ -10,7 +10,7 @@ interface TrackPopoverProps {
   trackId: string;
 }
 
-const TrackPopover = ({ size, trackId }: TrackPopoverProps) => {
+const TrackPopover = memo(({ size, trackId }: TrackPopoverProps) => {
   const content = () => (
     <div className="flex flex-col gap-2 bg-white/60 backdrop-blur-xl rounded-lg">
       <div className="w-full px-5 text-base flex flex-row gap-2 items-center py-1 cursor-pointer">
@@ -50,6 +50,6 @@ const TrackPopover = ({ size, trackId }: TrackPopoverProps) => {
       <BsThreeDots size={size ?? 18} className="cursor-pointer" />
     </Popover>
   );
-};
+});
 
 export default TrackPopover;

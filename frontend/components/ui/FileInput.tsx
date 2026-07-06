@@ -36,7 +36,6 @@ const FileInput = ({
 
   const handleClick = () => {
     fileInputRef?.current?.click();
-    console.log(fileInputRef?.current?.files?.length);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {

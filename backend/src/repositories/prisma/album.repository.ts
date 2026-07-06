@@ -46,7 +46,20 @@ export class AlbumRepository implements IAlbumRepository {
       include: {
         _count: { select: { tracks: true } },
         tracks: {
-          select: { id: true, name: true, artist: true },
+          select: {
+            id: true,
+            name: true,
+            audio: true,
+            artist: true,
+            album: {
+              select: {
+                id: true,
+                name: true,
+                game: true,
+                picture: true,
+              },
+            },
+          },
         },
         game: {
           select: { id: true, name: true },

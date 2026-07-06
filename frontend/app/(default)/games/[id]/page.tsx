@@ -29,8 +29,7 @@ const GamePage = () => {
     <AnimatedDiv className="ml-10 mt-10 flex flex-col items-start font-sans">
       <div className="flex flex-row gap-5">
         <Image
-          //   src={game.picture}
-          src={`/api/image/aff9e97a-fdc8-44e2-b026-cea911c36638.jpg`}
+          src={`/api/${game?.picture}`}
           alt={"pic"}
           width={250}
           height={250}

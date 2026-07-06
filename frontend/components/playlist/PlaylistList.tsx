@@ -11,7 +11,7 @@ interface PlaylistListProps {
 const PlaylistList = ({ playlists }: PlaylistListProps) => {
   return (
     <>
-      <AnimatedDiv className="flex flex-row flex-wrap gap-8 ml-10">
+      <AnimatedDiv className="flex flex-row flex-wrap gap-8">
         {playlists?.map((playlist, id) => (
           <PlaylistItem key={id} playlist={playlist} />
         ))}

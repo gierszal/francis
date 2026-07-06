@@ -28,7 +28,9 @@ export class PlaylistController {
   ) => {
     const opts = request.query;
     const playlists = await this.playlistService.getPlaylists(opts);
-    reply.send(playlists);
+    reply
+      .header("x-total-count", playlists.meta.total.toString())
+      .send(playlists);
   };
 
   public createPlaylist = async (

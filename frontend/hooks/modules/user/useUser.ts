@@ -1,5 +1,5 @@
 import { userApi } from "@/api/modules/user";
-import { UpdateUserDTO } from "@/types/user";
+import { GetItemsParams } from "@/types/api/common";
 import {
   keepPreviousData,
   useMutation,
@@ -27,19 +27,35 @@ export function useGetUserPlaylists() {
   });
 }
 
-export function useGetUserFavourites() {
+export function useGetUserFavourites(
+  params: GetItemsParams = {},
+  enabled: boolean = true,
+) {
+  const { count, offset, searchQuery } = params;
   return useQuery({
-    queryKey: ["me/favourites"],
-    queryFn: () => userApi.getUserFavourites(),
+    queryKey: ["me/favourites", { offset, count, searchQuery }],
+    queryFn: () =>
+      userApi.getUserFavourites({
+        count,
+        offset,
+        searchQuery,
+      }),
+    enabled: enabled,
     staleTime: 15 * 60 * 1000,
     placeholderData: keepPreviousData,
   });
 }
 
-export function useGetUserHistory() {
+export function useGetUserHistory(params: GetItemsParams = {}) {
+  const { count, offset, searchQuery } = params;
   return useQuery({
-    queryKey: ["me/history"],
-    queryFn: () => userApi.getUserHistory(),
+    queryKey: ["me/history", { offset, count, searchQuery }],
+    queryFn: () =>
+      userApi.getUserHistory({
+        count,
+        offset,
+        searchQuery,
+      }),
     staleTime: 15 * 60 * 1000,
     placeholderData: keepPreviousData,
   });
@@ -51,6 +67,7 @@ export function useUpdateProfile() {
     mutationFn: userApi.updateProfile,
     onSuccess: async ({ data }) => {
       queryClient.setQueryData(["me"], data.data.user);
+      queryClient.invalidateQueries({ queryKey: ["me"] });
       notification.success({
         title: "Information about you was successfully updated!",
       });

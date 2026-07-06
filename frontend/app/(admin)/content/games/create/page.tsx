@@ -3,18 +3,11 @@
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateAlbumDTO } from "@/types/album";
-import { useCreateAlbum } from "@/hooks/modules/album/useAlbum";
 import Input from "@/components/ui/Input";
-import AITooltip from "@/components/ai/AITooltip";
 import RoundedButton from "@/components/ui/RoundedButton";
-import { createAlbumSchema } from "@/schemas/album";
 import GradientText from "@/components/motion/GradientText";
-import { Button, Upload } from "antd";
 import FileInput from "@/components/ui/FileInput";
 import { useCreateGame, useGetGames } from "@/hooks/modules/game/useGame";
-import Select from "@/components/ui/Select";
-import SelectItems from "@/components/ui/Select";
 import { CreateGameDTO } from "@/types/game";
 import { createGameSchema } from "@/schemas/game";
 
@@ -28,8 +21,6 @@ const CreateGameForm = ({ callbackUrl }: CreateGameFormProps) => {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
-    setValue,
     control,
   } = useForm<CreateGameDTO>({
     resolver: zodResolver(createGameSchema),

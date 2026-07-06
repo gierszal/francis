@@ -1,3 +1,9 @@
+import {
+  createCollectionSchema,
+  updateCollectionSchema,
+} from "@/schemas/collection";
+import z from "zod";
+
 export type Collection = {
   name: string;
   id: string;
@@ -26,3 +32,7 @@ export type FormattedDetailedCollection = Omit<
   created_at: Date;
   updated_at: Date;
 };
+
+export type CreateCollectionDTO = z.infer<typeof createCollectionSchema>;
+
+export type UpdateCollectionDTO = z.infer<typeof updateCollectionSchema>;

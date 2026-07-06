@@ -21,7 +21,7 @@ const TrackPage = () => {
 
   const { data: favouritesData } = useGetUserFavourites();
 
-  const favourites = favouritesData?.data?.data;
+  const favourites = favouritesData?.items?.data;
 
   const favouriteIds = useMemo(() => {
     return new Set(favourites?.map((track: FormattedTrack) => track.id) || []);
@@ -46,7 +46,7 @@ const TrackPage = () => {
       <div className="flex flex-row gap-5">
         <Image
           // src={track.album.picture}
-          src={`/api/image/aff9e97a-fdc8-44e2-b026-cea911c36638.jpg`}
+          src={`/api/${track?.album?.picture}`}
           alt={"pic"}
           width={250}
           height={250}
@@ -73,6 +73,8 @@ const TrackPage = () => {
       <div className="w-[98%] mt-20">
         {formattedTrack && (
           <TrackItem
+            tracks={[track]}
+            source={{ type: "default" }}
             track={formattedTrack}
             isFavourite={favouriteIds?.has(track?.id)}
             idx={0}

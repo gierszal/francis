@@ -2,13 +2,12 @@
 
 import AnimatedDiv from "@/components/motion/AnimatedDiv";
 import GradientText from "@/components/motion/GradientText";
-import PlaylistTrackItem from "@/components/track/playlistTrack/PlaylistTrackItem";
 import { BsArrowRepeat } from "react-icons/bs";
 import { useGetPlaylist } from "@/hooks/modules/playlist/usePlaylist";
-import { PlaylistTrack } from "@/types/track";
 import { Skeleton } from "antd";
 import Image from "next/image";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+import TrackList from "@/components/track/TrackList";
 
 const PlaylistPage = () => {
   const router = useRouter();
@@ -64,16 +63,7 @@ const PlaylistPage = () => {
       <div className="w-[98%] mt-20">
         <ul className="bg-background flex flex-col gap-1">
           {playlist?.tracks?.length ? (
-            playlist.tracks?.map((track: PlaylistTrack, idx: number) => (
-              <PlaylistTrackItem
-                track={{
-                  ...track,
-                  picture: playlist.picture,
-                }}
-                idx={idx}
-                key={idx}
-              />
-            ))
+            <TrackList tracks={playlist?.tracks} source={{ type: "default" }} />
           ) : (
             <h1 className="text-3xl">Playlist is empty. Add something!</h1>
           )}
