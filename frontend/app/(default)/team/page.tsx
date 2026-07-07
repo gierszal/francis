@@ -24,7 +24,7 @@ const items = [
 
 const Contacts = () => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="ml-4 mt-6 md:ml-10 md:mt-10 flex flex-col items-start font-sans px-2 md:px-0">
       <GradientText
         colors={["#5227FF", "#FF9FFC", "#B497CF"]}
         animationSpeed={8}
