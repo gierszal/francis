@@ -124,7 +124,7 @@ export function useCreateTrack() {
       notification.error({
         title: title,
       });
-      console.log(err);
+      logger.error(err);
     },
   });
 }
@@ -184,7 +184,7 @@ export function useRemoveTrack() {
       notification.error({
         title: title,
       });
-      console.log(err);
+      logger.error(err);
     },
   });
 }

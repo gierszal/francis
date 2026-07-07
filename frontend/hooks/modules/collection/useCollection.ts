@@ -56,7 +56,7 @@ export function useCreateCollection() {
       notification.error({
         title: title,
       });
-      console.log(err);
+      logger.error(err);
     },
   });
 }
@@ -116,7 +116,7 @@ export function useRemoveCollection() {
       notification.error({
         title: title,
       });
-      console.log(err);
+      logger.error(err);
     },
   });
 }

@@ -52,7 +52,7 @@ export function useCreateGame() {
       notification.error({
         title: title,
       });
-      console.log(err);
+      logger.error(err);
     },
   });
 }
@@ -111,7 +111,7 @@ export function useRemoveGame() {
       notification.error({
         title: title,
       });
-      console.log(err);
+      logger.error(err);
     },
   });
 }

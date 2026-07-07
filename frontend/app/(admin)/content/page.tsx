@@ -100,7 +100,7 @@ const ContentPanel = () => {
                 borderRadius: borderRadiusLG,
               }}
             >
-              <div className="relative w-full h-[200px] md:h-[400px] overflow-hidden rounded-lg">
+              <div className="relative w-full h-[200px] md:min-h-screen overflow-hidden rounded-lg">
                 <Image
                   src="/content/1.png"
                   fill

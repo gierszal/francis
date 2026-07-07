@@ -271,8 +271,6 @@ export const createPlayerStore = (
 
       const hasMore = offset + (currentTracks?.length ?? 0) < total;
 
-      console.log(hasMore, total);
-
       if (currentIndex === currentTracks?.length - 1)
         if (hasMore) {
           // const newTracksData = await queryClient.fetchQuery({
@@ -372,7 +370,6 @@ export const createPlayerStore = (
         }
       else {
         const nextIndex = currentIndex + 1;
-        console.log(nextIndex, " next");
         loadTrack(currentTracks[nextIndex]);
         set({
           currentIndex: nextIndex,

@@ -53,7 +53,7 @@ export function useCreateAlbum() {
       notification.error({
         title: title,
       });
-      console.log(err);
+      logger.error(err);
     },
   });
 }
@@ -113,7 +113,7 @@ export function useRemoveAlbum() {
       notification.error({
         title: title,
       });
-      console.log(err);
+      logger.error(err);
     },
   });
 }
@@ -144,7 +144,7 @@ export function useAddToCollection() {
       notification.error({
         title: title,
       });
-      console.log(err);
+      logger.error(err);
     },
   });
 }
@@ -175,7 +175,7 @@ export function useRemoveFromCollection() {
       notification.error({
         title: title,
       });
-      console.log(err);
+      logger.error(err);
     },
   });
 }

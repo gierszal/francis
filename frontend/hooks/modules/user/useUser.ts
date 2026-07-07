@@ -78,7 +78,7 @@ export function useUpdateProfile() {
       notification.error({
         title: title,
       });
-      console.log(err);
+      logger.error(err);
     },
   });
 }

@@ -27,6 +27,8 @@ const GamePage = () => {
     );
 
   const game = data?.data?.data;
+  const gameAlbums = game?.albums;
+
   return (
     <AnimatedDiv className="ml-4 mt-6 md:ml-10 md:mt-10 flex flex-col items-start font-sans px-2 md:px-0">
       <div className="flex flex-col md:flex-row gap-5 w-full">
@@ -53,7 +55,7 @@ const GamePage = () => {
           </div>
         </div>
       </div>
-      {game.albums.lenght ? (
+      {gameAlbums.length ? (
         <>
           <div className="w-full md:w-[98%] mt-10 md:mt-20">
             <h1 className="text-2xl md:text-3xl mb-5">Albums</h1>
@@ -61,7 +63,7 @@ const GamePage = () => {
               {/* {game.albums?.map((album, idx) => (
             <AlbumItem album={album} idx={idx} key={idx} />
           ))} */}
-              <AlbumList albums={game.albums} />
+              <AlbumList albums={gameAlbums} />
             </ul>
           </div>
           <div className="mt-7 text-zinc-500 text-sm md:text-base">

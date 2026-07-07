@@ -18,7 +18,6 @@ export function formatPlaylist(playlist: Playlist): FormattedPlaylist {
 export function formatDetailedPlaylist(
   playlist: Playlist | any,
 ): FormattedDetailedPlaylist {
-  console.log(playlist);
   return {
     id: playlist.id,
     name: playlist.name,

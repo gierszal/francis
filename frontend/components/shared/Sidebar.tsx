@@ -3,7 +3,7 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import clsx from "clsx";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useGetUser } from "@/hooks/modules/user/useUser";
 
 export interface SidebarItem {
@@ -54,6 +54,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onMenuClose,
 }: SidebarProps) => {
   const { data, isLoading, isError, isSuccess, error } = useGetUser();
+
+  const pathname = usePathname();
+
+  const isActive = (link: string) => {
+    return pathname === link || pathname.startsWith(link + "/");
+  };
 
   const [open, setOpen] = useState(false);
   const openRef = useRef(false);
@@ -589,6 +595,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               {items && items.length ? (
                 items.map((it, idx) => {
+                  console.log(isActive(it.link));
                   const hasAccess = it?.requiredRole
                     ? userRole === it.requiredRole
                     : true;
@@ -606,7 +613,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         aria-label={it.ariaLabel}
                         data-index={idx + 1}
                       >
-                        <span className="sm-panel-itemLabel text-[3rem] inline-block [transform-origin:50%_100%] will-change-transform">
+                        <span
+                          className={clsx(
+                            "sm-panel-itemLabel text-[2.5rem] md:text-[3rem] inline-block [transform-origin:50%_100%] will-change-transform",
+                            "bg-linear-to-r from-purple-400 to-blue-400 bg-left-bottom bg-no-repeat",
+                            isActive(it.link)
+                              ? "bg-[length:100%_3px]"
+                              : "bg-[length:0%_2px]",
+                          )}
+                        >
                           {it.label}
                         </span>
                       </a>

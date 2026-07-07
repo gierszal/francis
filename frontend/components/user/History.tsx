@@ -71,7 +71,7 @@ const History = () => {
           />
         </div>
 
-        {!History || History.length === 0 ? (
+        {!history || History.length === 0 ? (
           <div className="text-2xl mt-5 self-center">
             {!searchQuery
               ? "You haven not listened to anything yet!"

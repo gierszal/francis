@@ -25,9 +25,6 @@ const languages = [
 ];
 
 const Footer = memo(() => {
-  const renders = useRef(0);
-  renders.current++;
-  console.log(renders.current);
   return (
     <>
       <div className="flex flex-col gap-3 bg-background px-4 md:px-10 font-light text-lg md:text-2xl py-6 md:py-10">
@@ -37,9 +34,9 @@ const Footer = memo(() => {
 
         <div className="font-bold text-2xl md:text-4xl">
           <div className="flex flex-row gap-2 items-center">
-            <RevealByLetter>Contact with us!</RevealByLetter>
+            <RevealByLetter>Contact us!</RevealByLetter>
             <AnimatedDiv>
-              <span className="relative flex size-3">
+              <span className="relative mb-5 flex size-3">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
                 <span className="relative inline-flex size-3 rounded-full bg-sky-500"></span>
               </span>
