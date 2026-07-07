@@ -30,13 +30,13 @@ const Footer = memo(() => {
   console.log(renders.current);
   return (
     <>
-      <div className="flex flex-col gap-3 bg-background px-10 font-light text-2xl py-10">
+      <div className="flex flex-col gap-3 bg-background px-4 md:px-10 font-light text-lg md:text-2xl py-6 md:py-10">
         <RevealByLetter>Feedback?</RevealByLetter>
         <RevealByLetter>Questions?</RevealByLetter>
         <RevealByLetter>Thoughts?</RevealByLetter>
 
-        <div className="font-bold text-4xl">
-          <div className="flex flex-row gap-2">
+        <div className="font-bold text-2xl md:text-4xl">
+          <div className="flex flex-row gap-2 items-center">
             <RevealByLetter>Contact with us!</RevealByLetter>
             <AnimatedDiv>
               <span className="relative flex size-3">
@@ -48,16 +48,16 @@ const Footer = memo(() => {
         </div>
       </div>
       <MusicWidget />
-      <div className="bg-background px-10">
+      <div className="bg-background px-4 md:px-10">
         <div>
-          <div className="py-5 flex flex-row justify-center items-center gap-15">
+          <div className="py-5 flex flex-row flex-wrap justify-center items-center gap-6 md:gap-15">
             {languages.map((lang, ind) => (
               <Header key={ind} ariaLabel={lang.ariaLabel}>
                 {lang.label}
               </Header>
             ))}
           </div>
-          <div className="py-2 flex flex-row justify-center items-center gap-15">
+          <div className="py-2 flex flex-row flex-wrap justify-center items-center gap-6 md:gap-15">
             {additionalPages.map((item, ind) => (
               <Header key={ind}>
                 <Link href={item.link} aria-label={item.ariaLabel}>
@@ -65,13 +65,10 @@ const Footer = memo(() => {
                 </Link>
               </Header>
             ))}
-            {/* <Header>About</Header>
-            <Header>Contacts</Header>
-            <Header>Project Contribution</Header> */}
           </div>
-          <div className="p-5">
+          <div className="p-3 md:p-5">
             <div className="bg-linear-to-r/oklch from-purple-500 via-sky-500 to-indigo-500 w-full overflow-x-hidden border border-transparent rounded-md">
-              <div className="ml-10 flex justify-center items-center py-5 px-10">
+              <div className="ml-0 md:ml-10 flex justify-center items-center py-4 md:py-5 px-4 md:px-10">
                 <ScrollVelocity
                   velocity={70}
                   texts={[

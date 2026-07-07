@@ -53,12 +53,12 @@ const Games = () => {
     return <div className="text-5xl text-red-500">Error: {error?.message}</div>;
 
   return (
-    <AnimatedDiv className="ml-10">
+    <AnimatedDiv className="ml-4 md:ml-10 pr-4 md:pr-0">
       <GradientText
         colors={["#5227FF", "#FF9FFC", "#B497CF"]}
         animationSpeed={8}
         showBorder={false}
-        className="text-5xl ml-0 mt-5"
+        className="text-3xl md:text-5xl ml-0 mt-5"
       >
         Games
       </GradientText>
@@ -91,7 +91,7 @@ const Games = () => {
           />
         </div>
       ) : (
-        <div className="text-2xl">No games found!</div>
+        <div className="text-xl md:text-2xl">No games found!</div>
       )}
       <div className="mt-5">
         <Pagination

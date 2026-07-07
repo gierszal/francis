@@ -46,22 +46,26 @@ const Playlists = () => {
 
   if (isLoading || !playlistsAmount)
     return (
-      <div className={"mt-10 ml-10 w-[90%]"}>
+      <div className={"mt-10 ml-4 md:ml-10 w-[90%]"}>
         <Skeleton />
       </div>
     );
   if (isError)
-    return <div className="text-5xl text-red-500">Error: {error?.message}</div>;
+    return (
+      <div className="text-3xl md:text-5xl text-red-500 px-4">
+        Error: {error?.message}
+      </div>
+    );
 
   const playlists = data?.items.data;
 
   return (
-    <AnimatedDiv className="ml-10">
+    <AnimatedDiv className="ml-4 md:ml-10 pr-4 md:pr-0">
       <GradientText
         colors={["#5227FF", "#FF9FFC", "#B497CF"]}
         animationSpeed={8}
         showBorder={false}
-        className="text-5xl ml-0 mt-7"
+        className="text-3xl md:text-5xl ml-0 mt-7"
       >
         Playlists
       </GradientText>
@@ -77,26 +81,31 @@ const Playlists = () => {
           style={{ width: 200 }}
         />
       </div>
-      <div className="flex flex-row mt-10">
+      <div className="flex flex-row mt-8 md:mt-12">
         <div
-          className="bg-gray-400/20 border-1 border-gray-300/60 flex flex-row gap-2 p-2 rounded-xl items-center gap-3 cursor-pointer active:scale-98"
+          className="bg-gray-400/20 border-1 border-gray-300/60 flex flex-row gap-2 p-2 rounded-xl items-center gap-3 cursor-pointer active:scale-98 max-w-full"
           onClick={() => router.push("/playlists/create")}
         >
-          <BsPlusCircle size={32} />
+          <BsPlusCircle size={28} className="md:hidden shrink-0" />
+          <BsPlusCircle size={32} className="hidden md:block shrink-0" />
           {!playlists?.length && !searchQuery ? (
-            <h1 className="text-xl">Create your first playlist!</h1>
+            <h1 className="text-base md:text-xl truncate">
+              Create your first playlist!
+            </h1>
           ) : (
-            <h1 className="text-xl">Create playlist</h1>
+            <h1 className="text-base md:text-xl">Create playlist</h1>
           )}
         </div>
       </div>
       <div
-        className={"flex flex-row mt-5 gap-10 py-3 flex-wrap overflow-x-hidden"}
+        className={
+          "flex flex-row mt-5 gap-4 md:gap-10 py-3 flex-wrap overflow-x-hidden justify-center md:justify-start"
+        }
       >
         {playlists?.length ? (
           <PlaylistList playlists={playlists} />
         ) : (
-          <h1 className="text-2xl">No playlists yet!</h1>
+          <h1 className="text-xl md:text-2xl">No playlists yet!</h1>
         )}
       </div>
       <div className="mt-5">

@@ -1,6 +1,7 @@
 "use client";
 
 import AlbumList from "@/components/album/AlbumList";
+import AnimatedDiv from "@/components/motion/AnimatedDiv";
 import GradientText from "@/components/motion/GradientText";
 import { useGetAlbums } from "@/hooks/modules/album/useAlbum";
 import { Input, Pagination, Skeleton } from "antd";
@@ -45,19 +46,23 @@ const Albums = () => {
 
   if (isLoading || !albumsAmount)
     return (
-      <div className={"mt-10 ml-10 w-[90%]"}>
+      <div className={"mt-10 ml-4 md:ml-10 w-[90%]"}>
         <Skeleton />
       </div>
     );
   if (isError)
-    return <div className="text-5xl text-red-500">Error: {error?.message}</div>;
+    return (
+      <div className="text-3xl md:text-5xl text-red-500 px-4">
+        Error: {error?.message}
+      </div>
+    );
   return (
-    <div className="ml-10">
+    <AnimatedDiv className="ml-4 md:ml-10 pr-4 md:pr-0">
       <GradientText
         colors={["#5227FF", "#FF9FFC", "#B497CF"]}
         animationSpeed={8}
         showBorder={false}
-        className="text-5xl ml-0 mt-7"
+        className="text-3xl md:text-5xl ml-0 mt-7"
       >
         Albums
       </GradientText>
@@ -75,13 +80,13 @@ const Albums = () => {
       {albumsAmount != 0 ? (
         <div
           className={
-            "flex flex-row mt-5 gap-10 py-3 flex-wrap overflow-x-hidden"
+            "flex flex-row mt-5 gap-4 md:gap-10 py-3 flex-wrap overflow-x-hidden justify-center md:justify-start"
           }
         >
           <AlbumList albums={data?.items.data} />
         </div>
       ) : (
-        <div className="text-2xl">No albums found!</div>
+        <div className="text-xl md:text-2xl">No albums found!</div>
       )}
       <div className="mt-5">
         <Pagination
@@ -95,7 +100,7 @@ const Albums = () => {
           }
         />
       </div>
-    </div>
+    </AnimatedDiv>
   );
 };
 

@@ -20,7 +20,7 @@ const TimelineSlider = memo(() => {
       }}
       value={currentTime}
       onChange={(e) => setCurrentTime(e)}
-      className="w-[99%] hover:bg-purple-300/20 transition-colors rounded-lg"
+      className="w-[99%] hover:bg-purple-300/20 transition-colors rounded-lg z-50"
       max={duration}
     />
   );

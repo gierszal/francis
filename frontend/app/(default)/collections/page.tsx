@@ -45,20 +45,24 @@ const Collections = () => {
 
   if (isLoading || !collectionsAmount)
     return (
-      <div className={"mt-10 ml-10 w-[90%]"}>
+      <div className={"mt-10 ml-4 md:ml-10 w-[90%]"}>
         <Skeleton />
       </div>
     );
   if (isError)
-    return <div className="text-5xl text-red-500">Error: {error?.message}</div>;
+    return (
+      <div className="text-3xl md:text-5xl text-red-500 px-4">
+        Error: {error?.message}
+      </div>
+    );
 
   return (
-    <div className="ml-10">
+    <div className="ml-4 md:ml-10 pr-4 md:pr-0">
       <GradientText
         colors={["#5227FF", "#FF9FFC", "#B497CF"]}
         animationSpeed={8}
         showBorder={false}
-        className="text-5xl ml-0 mt-7 mb-7"
+        className="text-3xl md:text-5xl ml-0 mt-7 mb-7"
       >
         Collections
       </GradientText>
@@ -76,7 +80,7 @@ const Collections = () => {
       {collectionsAmount != 0 ? (
         <CollectionList collections={data?.items.data} />
       ) : (
-        <div className={"text-2xl mt-5"}>No collections found!</div>
+        <div className={"text-xl md:text-2xl mt-5"}>No collections found!</div>
       )}
       <div className="mt-5">
         <Pagination

@@ -34,7 +34,7 @@ const CreateCollectionForm = ({ callbackUrl }: CreateCollectionFormProps) => {
   const { mutate: create, isError, error } = useCreateCollection();
 
   return (
-    <div className="mt-10 flex flex-col items-center">
+    <div className="mt-15 gap-7 px-4 flex flex-col items-center">
       <GradientText
         colors={["#5227FF", "#FF9FFC", "#B497CF"]}
         animationSpeed={8}

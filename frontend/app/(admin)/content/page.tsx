@@ -78,6 +78,8 @@ const ContentPanel = () => {
           collapsible
           collapsed={collapsed}
           onCollapse={(value) => setCollapsed(value)}
+          breakpoint="lg"
+          collapsedWidth={80}
         >
           <Menu
             onClick={(e) => handleMenuItemChange(e.key)}
@@ -90,23 +92,22 @@ const ContentPanel = () => {
         <Layout>
           <Content style={{ margin: "0 16px" }}>
             <div
-              className="mt-10"
+              className="mt-6 md:mt-10"
               style={{
-                padding: 24,
+                padding: 16,
                 minHeight: 360,
                 background: colorBgContainer,
                 borderRadius: borderRadiusLG,
               }}
             >
-              <div className="relative">
+              <div className="relative w-full h-[200px] md:h-[400px] overflow-hidden rounded-lg">
                 <Image
                   src="/content/1.png"
-                  width={1920}
-                  height={1080}
+                  fill
                   alt="pic"
-                  className="w-full h-full object-cover brightness-70 "
+                  className="object-cover brightness-70"
                 />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-fit h-fit text-white text-5xl font-sans">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full px-4 text-center text-white text-xl md:text-5xl font-sans">
                   {user && (
                     <h1>{`What brings you today, ${user?.first_name}?`}</h1>
                   )}

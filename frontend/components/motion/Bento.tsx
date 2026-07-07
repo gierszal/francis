@@ -454,7 +454,7 @@ const BentoCardGrid: React.FC<{
   gridRef?: React.RefObject<HTMLDivElement | null>;
 }> = ({ children, gridRef }) => (
   <div
-    className="bento-section w-full grid gap-2 p-3 w-full select-none relative"
+    className="bento-section w-full grid gap-2 md:p-3 w-full select-none relative"
     style={{ fontSize: "clamp(1rem, 0.9rem + 0.5vw, 1.5rem)" }}
     ref={gridRef}
   >
@@ -524,7 +524,7 @@ const MagicBento: React.FC<BentoProps> = ({
             grid-template-columns: 1fr;
             width: 90%;
             margin: 0 auto;
-            padding: 0.5rem;
+            padding: 0;
           }
           
           @media (min-width: 600px) {
@@ -536,6 +536,7 @@ const MagicBento: React.FC<BentoProps> = ({
           @media (min-width: 1024px) {
             .card-responsive {
               grid-template-columns: repeat(4, 1fr);
+              padding: 0.5rem;
             }
             
             .card-responsive .card:nth-child(3) {
@@ -619,14 +620,13 @@ const MagicBento: React.FC<BentoProps> = ({
           @media (max-width: 599px) {
             .card-responsive {
               grid-template-columns: 1fr;
-              width: 90%;
-              margin: 0 auto;
-              padding: 0.5rem;
+              width: 100%;
+              margin: 0;
             }
             
             .card-responsive .card {
-              width: 100%;
-              min-height: 180px;
+              width: 90%;
+              min-height: 300px;
             }
           }
         `}
@@ -643,7 +643,7 @@ const MagicBento: React.FC<BentoProps> = ({
         )}
 
         <BentoCardGrid gridRef={gridRef}>
-          <div className="card-responsive grid gap-2 cursor-pointer">
+          <div className="card-responsive grid gap-5 md:gap-2 cursor-pointer">
             {cardData.map((card, index) => {
               const baseClassName = `card flex flex-row flex-wrap justify-between relative aspect-[4/3] min-h-[200px] w-full max-w-full p-5 rounded-[20px] border border-solid font-light overflow-hidden transition-colors duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] ${
                 enableBorderGlow ? "card--border-glow" : ""

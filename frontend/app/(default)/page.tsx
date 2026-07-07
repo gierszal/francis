@@ -31,26 +31,26 @@ export default function Home() {
           <RevealByLetter delayChildren={0.1}>2026.</RevealByLetter>
         </div>
         <div className="bg-background flex flex-row justify-center">
-          <div className="mt-20 text-5xl text-light-dark font-mono">
+          <div className="mt-12 md:mt-20 text-3xl md:text-5xl text-light-dark font-mono text-center px-4">
             <RevealByLetter>Francis | Web Player</RevealByLetter>
           </div>
         </div>
         <div className="bg-background flex flex-row justify-center">
-          <div className="mt-10 text-light-dark text-xl">
+          <div className="mt-6 md:mt-10 text-light-dark text-lg md:text-xl px-4 text-center">
             <TextCarousel textArray={array} />
           </div>
         </div>
         <div className="bg-background flex flex-row justify-center items-center ">
-          <div className="w-[95%] rounded-lg py-5 px-5">
+          <div className="w-[95%] rounded-lg py-5 px-2 md:px-5">
             <Video path="/0617.mp4" />
           </div>
         </div>
         <div className="bg-background flex">
-          <div className="mt-15 ml-15 justify-between flex flex-row">
-            <div className="text-2xl font-light">
+          <div className="mt-10 ml-4 md:mt-15 md:ml-15 mr-4 md:mr-0 justify-between gap-5 flex flex-col md:flex-row w-full md:w-auto">
+            <div className="text-xl md:text-2xl font-light">
               <RevealByLetter>Theme & Purpose</RevealByLetter>
             </div>
-            <div className="flex mr-30 text-3xl w-[50%] font-semibold font-mono text-light-dark break-words">
+            <div className="flex md:mr-30 text-xl md:text-3xl w-full md:w-[50%] font-semibold font-mono text-light-dark break-words">
               <AnimatedDiv>
                 This project was initially created as a final task in SP 2026.
                 The theme of the project is a simple music player with any other
@@ -60,7 +60,7 @@ export default function Home() {
           </div>
         </div>
         <Divider />
-        <div className="bg-background flex flex-row items-center flex-wrap gap-5 px-10">
+        <div className="bg-background flex flex-row items-center flex-wrap gap-3 md:gap-5 px-4 md:px-10 justify-center md:justify-start">
           {games.map((game, idx) => (
             <MotionImage
               key={idx}

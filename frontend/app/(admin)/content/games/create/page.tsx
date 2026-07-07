@@ -40,7 +40,7 @@ const CreateGameForm = ({ callbackUrl }: CreateGameFormProps) => {
   const { mutate: create, isError, error } = useCreateGame();
 
   return (
-    <div className="mt-10 flex flex-col items-center">
+    <div className="mt-15 flex flex-col items-center gap-7 px-4">
       <GradientText
         colors={["#5227FF", "#FF9FFC", "#B497CF"]}
         animationSpeed={8}

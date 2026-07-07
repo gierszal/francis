@@ -44,7 +44,7 @@ const RemoveTrackForm = ({ callbackUrl }: RemoveTrackFormProps) => {
   const track = trackData?.data?.data;
 
   return (
-    <div className="mt-10 flex flex-col items-center w-full">
+    <div className="mt-15 flex flex-col items-center w-full px-4 gap-7">
       <GradientText
         colors={["#5227FF", "#FF9FFC", "#B497CF"]}
         animationSpeed={8}
@@ -64,7 +64,7 @@ const RemoveTrackForm = ({ callbackUrl }: RemoveTrackFormProps) => {
       </div>
 
       <RoundedButton
-        className="w-[20%] text-xl py-3 mt-5"
+        className="min-w-[30%] text-xl py-3 mt-5"
         disabled={!track}
         onClick={onClick}
       >

@@ -1,10 +1,10 @@
 "use client";
 
+import GradientText from "@/components/motion/GradientText";
 import UpdatePlaylistForm from "@/components/playlist/UpdatePlaylistForm";
 import RoundedButton from "@/components/ui/RoundedButton";
 import { useGetPlaylist } from "@/hooks/modules/playlist/usePlaylist";
 // import UpdatePlaylistForm from "@/components/user/UpdatePlaylistForm";
-import { useGetUser } from "@/hooks/modules/user/useUser";
 import { useParams, useRouter } from "next/navigation";
 
 const UpdatePlaylist = () => {
@@ -18,10 +18,20 @@ const UpdatePlaylist = () => {
   const playlist = data?.data?.data ?? data;
 
   return (
-    <div className="mt-10 ml-10">
-      <RoundedButton className="text-lg" onClick={() => router.back()}>
-        Go back
-      </RoundedButton>
+    <div className="mt-15 gap-7 px-4 flex flex-col">
+      <div className="flex flex-col items-start gap-5">
+        <GradientText
+          colors={["#5227FF", "#FF9FFC", "#B497CF"]}
+          animationSpeed={8}
+          showBorder={false}
+          className="text-5xl ml-10"
+        >
+          Update Playlist
+        </GradientText>
+        <RoundedButton className="text-lg ml-10" onClick={() => router.back()}>
+          Go back
+        </RoundedButton>
+      </div>
       <div>
         <UpdatePlaylistForm playlist={playlist} />
       </div>

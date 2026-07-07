@@ -42,15 +42,15 @@ const UpdatePlaylistForm = ({ playlist }: UpdatePlaylistFormProps) => {
   const description = watch("description");
 
   return (
-    <div className="mt-10 flex flex-col items-center">
+    <div className="mt-10 flex flex-col items-center px-4 md:px-0">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-2xl space-y-6"
       >
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
           <label
             htmlFor="name"
-            className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
+            className="text-base md:text-lg font-semibold text-gray-700 md:w-32 flex-shrink-0"
           >
             Name
           </label>
@@ -70,18 +70,18 @@ const UpdatePlaylistForm = ({ playlist }: UpdatePlaylistFormProps) => {
           </div>
         </div>
 
-        <div className="flex flex-row gap-5 items-center w-full">
+        <div className="flex flex-col md:flex-row gap-3 md:gap-5 items-start md:items-center w-full">
           <label
             htmlFor="description"
-            className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0 mt-2"
+            className="text-base md:text-lg font-semibold text-gray-700 md:w-32 flex-shrink-0 md:mt-2"
           >
             Description
           </label>
-          <div className="flex-1">
+          <div className="flex-1 w-full">
             <textarea
               {...register("description")}
               id="description"
-              className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base resize-y min-h-[120px]"
+              className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base resize-y min-h-[100px] md:min-h-[120px]"
               placeholder="Enter playlist description (optional)"
               defaultValue={playlist?.description ?? ""}
             />
@@ -91,7 +91,7 @@ const UpdatePlaylistForm = ({ playlist }: UpdatePlaylistFormProps) => {
               </span>
             )}
           </div>
-          <div className="ml-auto">
+          <div className="md:ml-auto self-end md:self-auto">
             <AITooltip
               fieldName="description"
               setValue={setValue}
@@ -104,7 +104,7 @@ const UpdatePlaylistForm = ({ playlist }: UpdatePlaylistFormProps) => {
           </div>
         </div>
 
-        <RoundedButton className="w-full text-xl py-3 mt-5">
+        <RoundedButton className="w-full text-lg md:text-xl py-3 mt-5">
           Save Playlist
         </RoundedButton>
       </form>

@@ -39,7 +39,7 @@ const RemoveCollectionForm = ({ callbackUrl }: RemoveCollectionFormProps) => {
   const collection = collectionData?.data?.data;
 
   return (
-    <div className="mt-10 flex flex-col items-center w-full">
+    <div className="mt-15 gap-7 px-4 flex flex-col items-center w-full">
       <GradientText
         colors={["#5227FF", "#FF9FFC", "#B497CF"]}
         animationSpeed={8}
@@ -59,7 +59,7 @@ const RemoveCollectionForm = ({ callbackUrl }: RemoveCollectionFormProps) => {
       </div>
 
       <RoundedButton
-        className="w-[20%] text-xl py-3 mt-5"
+        className="min-w-[30%] text-xl py-3 mt-5"
         disabled={!collection}
         onClick={onClick}
       >
