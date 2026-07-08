@@ -8,7 +8,7 @@ const VolumeAdjuster = memo(() => {
   const setVolume = usePlayerStore((s) => s.setVolume);
   return (
     <>
-      <div className="fixed bottom-16 rounded-2xl mb-[-10] ml-[-4]  bg-zinc-700/80 hidden group-hover:block">
+      <div className="z-51 fixed bottom-16 rounded-2xl mb-[-10] ml-[-4]  bg-zinc-700/80 hidden group-hover:block">
         <div className="flex ml-2 flex-col border-red-500 h-40 w-10 ">
           <Slider
             tooltip={{

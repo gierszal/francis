@@ -5,7 +5,7 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 
 const About = async () => {
-  const t = await getTranslations("AboutPage");
+  const t = await getTranslations("pages.AboutPage");
 
   return (
     <div className="rounded-lg w-full h-full overflow-hidden">

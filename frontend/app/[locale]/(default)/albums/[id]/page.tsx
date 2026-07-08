@@ -15,7 +15,7 @@ import { useEffect } from "react";
 const AlbumPage = () => {
   const router = useRouter();
   const params = useParams<{ id: string }>();
-  const t = useTranslations("AlbumPage");
+  const t = useTranslations("pages.AlbumPage");
 
   const { data, isLoading, isError, error } = useGetAlbum(
     params.id?.toString(),
@@ -75,7 +75,7 @@ const AlbumPage = () => {
       </div>
       {!!album?.tracks_amount && (
         <div className="mt-7 text-zinc-500 text-sm md:text-base">
-          <span>{t("trackAmount", { count: album?.tracks_amount })}</span>
+          <span>{t("tracksAmount", { count: album?.tracks_amount })}</span>
         </div>
       )}
     </AnimatedDiv>

@@ -13,6 +13,7 @@ import RoundedButton from "@/components/ui/RoundedButton";
 import GradientText from "@/components/motion/GradientText";
 import SelectItems from "@/components/ui/Select";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   useGetGame,
   useGetGames,
@@ -24,6 +25,7 @@ interface RemoveGameFormProps {
 }
 
 const RemoveGameForm = ({ callbackUrl }: RemoveGameFormProps) => {
+  const t = useTranslations("pages.RemoveGamePage");
   const router = useRouter();
   const [gameId, setGameId] = useState<string>("");
 
@@ -51,14 +53,14 @@ const RemoveGameForm = ({ callbackUrl }: RemoveGameFormProps) => {
         showBorder={false}
         className="text-5xl ml-10"
       >
-        Delete Game
+        {t("title")}
       </GradientText>
 
       <div className="w-full flex flex-row justify-center py-5">
         <SelectItems
           onChange={(id: string) => setGameId(id)}
           items={games}
-          placeholder="Select a game"
+          placeholder={t("selectGame")}
           className="w-full"
         />
       </div>
@@ -68,7 +70,7 @@ const RemoveGameForm = ({ callbackUrl }: RemoveGameFormProps) => {
         disabled={!game}
         onClick={onClick}
       >
-        Delete Game
+        {t("submit")}
       </RoundedButton>
     </div>
   );

@@ -3,17 +3,20 @@ import { authApi } from "@/api/modules/auth";
 import { useRouter } from "next/navigation";
 import { setAccessToken } from "@/api";
 import { notification } from "antd";
+import { getTranslations } from "next-intl/server";
 import { AxiosError } from "axios";
+import { useTranslations } from "next-intl";
 
 export function useSignUp() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useAuth");
   return useMutation({
     mutationFn: authApi.signUp,
     onSuccess: async ({ data }) => {
       setAccessToken(data.data.tokens.accessToken);
       queryClient.setQueryData(["me"], data.data.user);
       notification.success({
-        title: `Nice to meet you, ${data.data.user.first_name}!`,
+        title: t("signUpSuccess", { name: data.data.user.first_name }),
       });
     },
     onError: (err) => {
@@ -28,13 +31,14 @@ export function useSignUp() {
 
 export function useSignIn() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useAuth");
   return useMutation({
     mutationFn: authApi.signIn,
     onSuccess: async ({ data }) => {
       setAccessToken(data.data.tokens.accessToken);
       queryClient.setQueryData(["me"], data.data.user);
       notification.success({
-        title: `Welcome back, ${data.data.user.first_name}!`,
+        title: t("signInSuccess", { name: data.data.user.first_name }),
       });
     },
     onError: (err) => {
@@ -49,13 +53,14 @@ export function useSignIn() {
 
 export function useSignOut() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useAuth");
   return useMutation({
     mutationFn: authApi.signOut,
     onSuccess: async () => {
       setAccessToken("");
       queryClient.clear();
       notification.success({
-        title: `Hope to see you soon!`,
+        title: t("signOutSuccess"),
       });
     },
     onError: (err) => {

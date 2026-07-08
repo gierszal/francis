@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { VscLock } from "react-icons/vsc";
+import { useTranslations } from "next-intl";
 import { SignInForm } from "./SignInForm";
 import { SignUpForm } from "./SignUpForm";
 
 export function AuthForm() {
+  const t = useTranslations("components.AuthForm");
   const [isLogin, setIsLogin] = useState<boolean>(true);
 
   return (
@@ -17,13 +19,11 @@ export function AuthForm() {
           </div>
 
           <h1 className="text-3xl font-bold text-white">
-            {isLogin ? "Welcome back" : "Create account"}
+            {isLogin ? t("welcomeBack") : t("createAccount")}
           </h1>
 
           <p className="mt-2 text-sm text-zinc-400">
-            {isLogin
-              ? "Sign in to access more features."
-              : "Create an account to unlock full access."}
+            {isLogin ? t("signInDesc") : t("signUpDesc")}
           </p>
         </div>
 
@@ -31,14 +31,14 @@ export function AuthForm() {
 
         <div className="mt-8 text-center">
           <span className="text-zinc-500">
-            {isLogin ? "Don't have an account?" : "Already have an account?"}
+            {isLogin ? t("noAccount") : t("hasAccount")}
           </span>
 
           <button
             onClick={() => setIsLogin((prev) => !prev)}
             className="ml-2 font-medium text-emerald-400 transition hover:text-emerald-300 cursor-pointer"
           >
-            {isLogin ? "Create one" : "Sign in"}
+            {isLogin ? t("createOne") : t("signIn")}
           </button>
         </div>
       </div>

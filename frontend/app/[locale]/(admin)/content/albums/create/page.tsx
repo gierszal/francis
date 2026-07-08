@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { CreateAlbumDTO } from "@/types/album";
 import { useCreateAlbum } from "@/hooks/modules/album/useAlbum";
 import Input from "@/components/ui/Input";
@@ -21,7 +22,9 @@ interface CreateAlbumFormProps {
 }
 
 const CreateAlbumForm = ({ callbackUrl }: CreateAlbumFormProps) => {
+  const t = useTranslations("pages.CreateAlbumPage");
   const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -62,8 +65,9 @@ const CreateAlbumForm = ({ callbackUrl }: CreateAlbumFormProps) => {
         showBorder={false}
         className="text-5xl ml-10"
       >
-        Create Album
+        {t("title")}
       </GradientText>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-2xl space-y-6"
@@ -73,15 +77,17 @@ const CreateAlbumForm = ({ callbackUrl }: CreateAlbumFormProps) => {
             htmlFor="name"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Name
+            {t("name")}
           </label>
+
           <div className="flex-1">
             <Input
               id="name"
               inputProps={register("name")}
-              placeholder="Enter album name"
+              placeholder={t("namePlaceholder")}
               className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base"
             />
+
             {errors.name && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.name.message}
@@ -96,15 +102,17 @@ const CreateAlbumForm = ({ callbackUrl }: CreateAlbumFormProps) => {
               htmlFor="description"
               className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0 mt-2"
             >
-              Description
+              {t("description")}
             </label>
+
             <div className="flex-1">
               <textarea
                 {...register("description")}
                 id="description"
                 className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base resize-y min-h-[120px]"
-                placeholder="Enter album description"
+                placeholder={t("descriptionPlaceholder")}
               />
+
               {errors.description && (
                 <span className="text-sm text-red-500 font-medium">
                   {errors.description.message}
@@ -112,6 +120,7 @@ const CreateAlbumForm = ({ callbackUrl }: CreateAlbumFormProps) => {
               )}
             </div>
           </div>
+
           <div className="ml-auto">
             <AITooltip
               fieldName="description"
@@ -130,8 +139,9 @@ const CreateAlbumForm = ({ callbackUrl }: CreateAlbumFormProps) => {
             htmlFor="picture"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Picture
+            {t("picture")}
           </label>
+
           <div className="flex-1">
             <Controller
               control={control}
@@ -150,6 +160,7 @@ const CreateAlbumForm = ({ callbackUrl }: CreateAlbumFormProps) => {
                 />
               )}
             />
+
             {errors.picture && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.picture.message}
@@ -163,8 +174,9 @@ const CreateAlbumForm = ({ callbackUrl }: CreateAlbumFormProps) => {
             htmlFor="game"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Game
+            {t("game")}
           </label>
+
           <div className="flex-1">
             <Controller
               name="gameId"
@@ -179,6 +191,7 @@ const CreateAlbumForm = ({ callbackUrl }: CreateAlbumFormProps) => {
                 />
               )}
             />
+
             {errors.gameId && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.gameId.message}
@@ -188,7 +201,7 @@ const CreateAlbumForm = ({ callbackUrl }: CreateAlbumFormProps) => {
         </div>
 
         <RoundedButton className="w-full text-xl py-3 mt-5">
-          Create Album
+          {t("submit")}
         </RoundedButton>
       </form>
     </div>

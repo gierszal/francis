@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 const EditProfile = () => {
   const router = useRouter();
-  const t = useTranslations("EditProfilePage");
+  const t = useTranslations("pages.EditProfilePage");
 
   const { data } = useGetUser();
 

@@ -16,7 +16,7 @@ const PlaylistPage = () => {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
-  const t = useTranslations("PlaylistPage");
+  const t = useTranslations("pages.PlaylistPage");
 
   const img = searchParams.get("img");
 

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { UpdateCollectionDTO } from "@/types/collection";
 import Input from "@/components/ui/Input";
 import RoundedButton from "@/components/ui/RoundedButton";
@@ -21,8 +22,10 @@ interface UpdateCollectionFormProps {
 }
 
 const UpdateCollectionForm = ({ callbackUrl }: UpdateCollectionFormProps) => {
+  const t = useTranslations("pages.UpdateCollectionPage");
   const router = useRouter();
   const [collectionId, setcollectionId] = useState<string>("");
+
   const {
     reset,
     register,
@@ -67,14 +70,14 @@ const UpdateCollectionForm = ({ callbackUrl }: UpdateCollectionFormProps) => {
         showBorder={false}
         className="text-5xl ml-10"
       >
-        Edit Collection
+        {t("title")}
       </GradientText>
 
       <div className="w-full flex flex-row justify-center py-5">
         <SelectItems
           onChange={(id: string) => setcollectionId(id)}
           items={collections}
-          placeholder="Select a collection"
+          placeholder={t("selectCollection")}
           className="w-full"
         />
       </div>
@@ -88,16 +91,18 @@ const UpdateCollectionForm = ({ callbackUrl }: UpdateCollectionFormProps) => {
             htmlFor="name"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Name
+            {t("name")}
           </label>
+
           <div className="flex-1">
             <Input
               disabled={!collection}
               id="name"
               inputProps={register("name")}
-              placeholder="Enter collection name"
+              placeholder={t("namePlaceholder")}
               className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base"
             />
+
             {errors.name && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.name.message}
@@ -110,7 +115,7 @@ const UpdateCollectionForm = ({ callbackUrl }: UpdateCollectionFormProps) => {
           className="w-full text-xl py-3 mt-5"
           disabled={!collection}
         >
-          Edit collection
+          {t("submit")}
         </RoundedButton>
       </form>
     </div>

@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import clsx from "clsx";
 import { usePathname, useRouter } from "next/navigation";
 import { useGetUser } from "@/hooks/modules/user/useUser";
+import { useLocale } from "next-intl";
 
 export interface SidebarItem {
   label: string;
@@ -56,9 +57,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const { data, isLoading, isError, isSuccess, error } = useGetUser();
 
   const pathname = usePathname();
+  const locale = useLocale();
 
   const isActive = (link: string) => {
-    return pathname === link || pathname.startsWith(link + "/");
+    return (
+      pathname === "/" + locale + link ||
+      pathname.startsWith("/" + locale + link + "/") ||
+      (pathname === "/" + locale && link === "/")
+    );
   };
 
   const [open, setOpen] = useState(false);

@@ -9,10 +9,12 @@ import {
 import { GetItemsParams } from "@/types/api/common";
 import { playlistApi } from "@/api/modules/playlist";
 import { notification } from "antd";
+import { getTranslations } from "next-intl/server";
 import { AxiosError } from "axios";
 import { userApi } from "@/api/modules/user";
 import { UpdatePlaylistDTO } from "@/types/playlist";
 import { getErrorMessage } from "@/utils/errors/getErrorMessage";
+import { useTranslations } from "next-intl";
 
 export function useGetPlaylists(params: GetItemsParams = {}) {
   const { count, offset, searchQuery } = params;
@@ -44,6 +46,7 @@ export function useGetPlaylist(
 
 export function useCreatePlaylist() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.usePlaylist");
   return useMutation({
     mutationFn: playlistApi.createPlaylist,
     onSuccess: async ({ data }) => {
@@ -51,7 +54,7 @@ export function useCreatePlaylist() {
       queryClient.setQueryData(["playlists", { id }], data.data);
       queryClient.invalidateQueries({ queryKey: ["playlists"] });
       notification.success({
-        title: "Playlist was successfully created!",
+        title: t("createSuccess"),
       });
     },
     onError: (err) => {
@@ -66,12 +69,12 @@ export function useCreatePlaylist() {
 
 export function useUpdatePlaylist() {
   const queryClient = useQueryClient();
-
+  const t = useTranslations("hooks.usePlaylist");
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdatePlaylistDTO }) =>
       playlistApi.updatePlaylist(data, id),
 
-    onSuccess: (response, variables) => {
+    onSuccess: async (response, variables) => {
       const { id } = variables;
       const updatedPlaylist = response.data.data;
 
@@ -80,7 +83,7 @@ export function useUpdatePlaylist() {
       queryClient.invalidateQueries({ queryKey: ["playlists"] });
 
       notification.success({
-        title: "Playlist was successfully updated!",
+        title: t("updateSuccess"),
       });
     },
 

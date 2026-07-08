@@ -9,7 +9,7 @@ interface CreatePlaylistProps {
 }
 
 const CreatePlaylist = ({ callbackUrl }: CreatePlaylistProps) => {
-  const t = useTranslations("CreatePlaylistPage");
+  const t = useTranslations("pages.CreatePlaylistPage");
   return (
     <div className="mt-15 gap-7 px-4 flex flex-col items-center">
       <GradientText

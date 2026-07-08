@@ -13,7 +13,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
 const Tracks = () => {
-  const t = useTranslations("TracksPage");
+  const t = useTranslations("pages.TracksPage");
 
   const queryClient = useQueryClient();
   const router = useRouter();

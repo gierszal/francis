@@ -13,6 +13,7 @@ import RoundedButton from "@/components/ui/RoundedButton";
 import GradientText from "@/components/motion/GradientText";
 import SelectItems from "@/components/ui/Select";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   useGetTrack,
   useGetTracks,
@@ -24,6 +25,7 @@ interface RemoveTrackFormProps {
 }
 
 const RemoveTrackForm = ({ callbackUrl }: RemoveTrackFormProps) => {
+  const t = useTranslations("pages.RemoveTrackPage");
   const router = useRouter();
   const [trackId, setTrackId] = useState<string>("");
 
@@ -51,14 +53,14 @@ const RemoveTrackForm = ({ callbackUrl }: RemoveTrackFormProps) => {
         showBorder={false}
         className="text-5xl ml-10"
       >
-        Delete Album
+        {t("title")}
       </GradientText>
 
       <div className="w-full flex flex-row justify-center py-5">
         <SelectItems
           onChange={(id: string) => setTrackId(id)}
           items={tracks}
-          placeholder="Select a track"
+          placeholder={t("selectTrack")}
           className="w-full"
         />
       </div>
@@ -68,7 +70,7 @@ const RemoveTrackForm = ({ callbackUrl }: RemoveTrackFormProps) => {
         disabled={!track}
         onClick={onClick}
       >
-        Remove Track
+        {t("submit")}
       </RoundedButton>
     </div>
   );

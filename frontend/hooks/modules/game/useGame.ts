@@ -7,8 +7,10 @@ import {
 import { GetItemsParams } from "@/types/api/common";
 import { gameApi } from "@/api/modules/gameApi";
 import { notification } from "antd";
+import { getTranslations } from "next-intl/server";
 import { AxiosError } from "axios";
 import { getErrorMessage } from "@/utils/errors/getErrorMessage";
+import { useTranslations } from "next-intl";
 
 export function useGetGames(params: GetItemsParams = {}) {
   const { count, offset, searchQuery } = params;
@@ -37,6 +39,7 @@ export function useGetGame(id: string | undefined, enabled: boolean = true) {
 
 export function useCreateGame() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useGame");
   return useMutation({
     mutationFn: gameApi.createGame,
     onSuccess: async ({ data }) => {
@@ -44,7 +47,7 @@ export function useCreateGame() {
       queryClient.setQueryData(["games", { id }], data.data);
       queryClient.invalidateQueries({ queryKey: ["games"] });
       notification.success({
-        title: "Game was successfully created!",
+        title: t("createSuccess"),
       });
     },
     onError: (err) => {
@@ -60,12 +63,12 @@ export function useCreateGame() {
 
 export function useUpdateGame() {
   const queryClient = useQueryClient();
-
+  const t = useTranslations("hooks.useGame");
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: FormData }) =>
       gameApi.updateGame(data, id),
 
-    onSuccess: (response, variables) => {
+    onSuccess: async (response, variables) => {
       const { id } = variables;
       const updatedAlbum = response.data.data;
 
@@ -74,7 +77,7 @@ export function useUpdateGame() {
       queryClient.invalidateQueries({ queryKey: ["games"] });
 
       notification.success({
-        title: "Game was successfully updated!",
+        title: t("updateSuccess"),
       });
     },
 
@@ -91,12 +94,13 @@ export function useUpdateGame() {
 
 export function useRemoveGame() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useGame");
   return useMutation({
     mutationFn: ({ id }: { id: string | undefined }) => gameApi.deleteGame(id),
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["games"] });
       notification.success({
-        title: "Game was successfully deleted!",
+        title: t("deleteSuccess"),
       });
     },
     onError: (err) => {

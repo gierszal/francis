@@ -10,6 +10,7 @@ import {
 } from "react-icons/bs";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { SignUpSchema, SignUpFormData } from "@/schemas/auth/index";
 import SubmitButton from "../ui/SubmitButton";
 import Input from "../ui/Input";
@@ -17,6 +18,7 @@ import { useSignUp } from "@/hooks/modules/auth/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export function SignUpForm() {
+  const t = useTranslations("components.SignUpForm");
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
@@ -54,7 +56,7 @@ export function SignUpForm() {
           />
 
           <Input
-            placeholder="First name"
+            placeholder={t("firstNamePlaceholder")}
             id="firstName"
             ariaInvalid={!!errors.firstName}
             ariaDescribedby="firstName-error"
@@ -77,7 +79,7 @@ export function SignUpForm() {
           />
 
           <Input
-            placeholder="Last name (optional)"
+            placeholder={t("lastNamePlaceholder")}
             inputProps={register("lastName")}
             id="lastName"
             ariaInvalid={!!errors.lastName}
@@ -104,7 +106,7 @@ export function SignUpForm() {
           <Input
             type="email"
             id="email"
-            placeholder="Email"
+            placeholder={t("emailPlaceholder")}
             ariaInvalid={!!errors.email}
             ariaDescribedby="email-error"
             inputProps={register("email")}
@@ -127,7 +129,7 @@ export function SignUpForm() {
 
           <Input
             type={isVisible ? "text" : "password"}
-            placeholder="Password"
+            placeholder={t("passwordPlaceholder")}
             inputProps={register("password")}
             id="password"
             ariaInvalid={!!errors.password}
@@ -165,7 +167,7 @@ export function SignUpForm() {
 
           <Input
             type={isVisible ? "text" : "password"}
-            placeholder="Confirm password"
+            placeholder={t("confirmPasswordPlaceholder")}
             inputProps={register("confirmPassword")}
             id="confirmPassword"
             ariaInvalid={!!errors.confirmPassword}
@@ -207,7 +209,7 @@ export function SignUpForm() {
             ariaDescribedby="agree-error"
             inputProps={register("agree")}
           />
-          <label htmlFor="agree">I agree to the Terms of Service</label>
+          <label htmlFor="agree">{t("agreeLabel")}</label>
         </div>
         {errors.agree && (
           <label className="ml-2 text-xs text-red-400" htmlFor="agree">
@@ -216,7 +218,7 @@ export function SignUpForm() {
         )}
       </div>
 
-      <SubmitButton>Create account</SubmitButton>
+      <SubmitButton>{t("submit")}</SubmitButton>
     </form>
   );
 }

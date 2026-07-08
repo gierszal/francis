@@ -3,7 +3,7 @@ import GradientText from "@/components/motion/GradientText";
 import { getTranslations } from "next-intl/server";
 
 const Contacts = async () => {
-  const t = await getTranslations("ContactsPage");
+  const t = await getTranslations("pages.ContactsPage");
 
   const items = [
     {
@@ -17,7 +17,7 @@ const Contacts = async () => {
     },
     {
       image: "/team/coffee.webp",
-      title: t("team.cofee.name"),
+      title: t("team.coffee.name"),
       subtitle: t("team.coffee.subtitle"),
       handle: "@cup_of_cofee",
       borderColor: "#10B981",

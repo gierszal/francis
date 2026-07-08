@@ -4,6 +4,7 @@ import z from "zod";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { UpdateGameDTO } from "@/types/game";
 import Input from "@/components/ui/Input";
 import AITooltip from "@/components/ai/AITooltip";
@@ -24,8 +25,10 @@ interface UpdateGameFormProps {
 }
 
 const UpdateGameForm = ({ callbackUrl }: UpdateGameFormProps) => {
+  const t = useTranslations("pages.UpdateGamePage");
   const router = useRouter();
   const [gameId, setgameId] = useState<string>("");
+
   const {
     reset,
     register,
@@ -80,14 +83,14 @@ const UpdateGameForm = ({ callbackUrl }: UpdateGameFormProps) => {
         showBorder={false}
         className="text-5xl ml-10"
       >
-        Edit Game
+        {t("title")}
       </GradientText>
 
       <div className="w-full flex flex-row justify-center py-5">
         <SelectItems
           onChange={(id: string) => setgameId(id)}
           items={games}
-          placeholder="Select a game"
+          placeholder={t("selectGame")}
           className="w-full"
         />
       </div>
@@ -101,16 +104,18 @@ const UpdateGameForm = ({ callbackUrl }: UpdateGameFormProps) => {
             htmlFor="name"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Name
+            {t("name")}
           </label>
+
           <div className="flex-1">
             <Input
               disabled={!game}
               id="name"
               inputProps={register("name")}
-              placeholder="Enter game name"
+              placeholder={t("namePlaceholder")}
               className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base"
             />
+
             {errors.name && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.name.message}
@@ -124,8 +129,9 @@ const UpdateGameForm = ({ callbackUrl }: UpdateGameFormProps) => {
             htmlFor="picture"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Picture
+            {t("picture")}
           </label>
+
           <div className="flex-1">
             <Controller
               control={control}
@@ -145,6 +151,7 @@ const UpdateGameForm = ({ callbackUrl }: UpdateGameFormProps) => {
                 />
               )}
             />
+
             {errors.picture && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.picture.message}
@@ -154,7 +161,7 @@ const UpdateGameForm = ({ callbackUrl }: UpdateGameFormProps) => {
         </div>
 
         <RoundedButton className="w-full text-xl py-3 mt-5" disabled={!game}>
-          Edit game
+          {t("submit")}
         </RoundedButton>
       </form>
     </div>

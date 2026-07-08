@@ -2,6 +2,7 @@ import { Form } from "antd";
 import RoundedButton from "../ui/RoundedButton";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import Input from "../ui/Input";
 import { useRouter } from "next/navigation";
 import { FormattedDetailedPlaylist, UpdatePlaylistDTO } from "@/types/playlist";
@@ -15,6 +16,7 @@ interface UpdatePlaylistFormProps {
 
 const UpdatePlaylistForm = ({ playlist }: UpdatePlaylistFormProps) => {
   const router = useRouter();
+  const t = useTranslations("components.UpdatePlaylistForm");
   const {
     register,
     handleSubmit,
@@ -52,13 +54,13 @@ const UpdatePlaylistForm = ({ playlist }: UpdatePlaylistFormProps) => {
             htmlFor="name"
             className="text-base md:text-lg font-semibold text-gray-700 md:w-32 flex-shrink-0"
           >
-            Name
+            {t("nameLabel")}
           </label>
           <div className="flex-1">
             <Input
               id="name"
               inputProps={register("name")}
-              placeholder="Enter playlist name"
+              placeholder={t("namePlaceholder")}
               className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base"
               defaultValue={playlist?.name}
             />
@@ -75,14 +77,14 @@ const UpdatePlaylistForm = ({ playlist }: UpdatePlaylistFormProps) => {
             htmlFor="description"
             className="text-base md:text-lg font-semibold text-gray-700 md:w-32 flex-shrink-0 md:mt-2"
           >
-            Description
+            {t("descriptionLabel")}
           </label>
           <div className="flex-1 w-full">
             <textarea
               {...register("description")}
               id="description"
               className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base resize-y min-h-[100px] md:min-h-[120px]"
-              placeholder="Enter playlist description (optional)"
+              placeholder={t("descriptionPlaceholder")}
               defaultValue={playlist?.description ?? ""}
             />
             {errors.description && (
@@ -105,7 +107,7 @@ const UpdatePlaylistForm = ({ playlist }: UpdatePlaylistFormProps) => {
         </div>
 
         <RoundedButton className="w-full text-lg md:text-xl py-3 mt-5">
-          Save Playlist
+          {t("submit")}
         </RoundedButton>
       </form>
     </div>

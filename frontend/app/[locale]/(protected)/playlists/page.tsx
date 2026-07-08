@@ -13,7 +13,7 @@ import { BsPlusCircle } from "react-icons/bs";
 import { useTranslations } from "next-intl";
 
 const Playlists = () => {
-  const t = useTranslations("PlaylistsPage");
+  const t = useTranslations("pages.PlaylistsPage");
   const router = useRouter();
   const gap = 10;
   const pathname = usePathname();

@@ -5,11 +5,13 @@ import {
   useGetUserPlaylists,
 } from "@/hooks/modules/user/useUser";
 import { Input, Skeleton } from "antd";
+import { useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 
 const History = () => {
   const router = useRouter();
+  const t = useTranslations("components.History");
   const gap = 10;
   const pathname = usePathname();
 
@@ -49,7 +51,7 @@ const History = () => {
   if (isError) {
     return (
       <div className="text-2xl text-red-500">
-        Error occurred: {error.message}
+        {t("errorOccurred")} {error.message}
       </div>
     );
   }
@@ -61,7 +63,7 @@ const History = () => {
         <div className="mt-2">
           <Search
             defaultValue={searchQuery}
-            placeholder="Search History..."
+            placeholder={t("searchPlaceholder")}
             onSearch={(query) =>
               router.push(
                 pathname + "?" + createQueryString("searchQuery", query),
@@ -73,9 +75,7 @@ const History = () => {
 
         {!history || History.length === 0 ? (
           <div className="text-2xl mt-5 self-center">
-            {!searchQuery
-              ? "You haven not listened to anything yet!"
-              : "No tracks in history found."}
+            {!searchQuery ? t("noHistory") : t("noTracksFound")}
           </div>
         ) : (
           <TrackList tracks={history} source={{ type: "me/history" }} />

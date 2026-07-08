@@ -7,9 +7,11 @@ import {
 import { GetItemsParams } from "@/types/api/common";
 import { collectionApi } from "@/api/modules/collectionApi";
 import { notification } from "antd";
+import { getTranslations } from "next-intl/server";
 import { AxiosError } from "axios";
 import { UpdateCollectionDTO } from "@/types/collection";
 import { getErrorMessage } from "@/utils/errors/getErrorMessage";
+import { useTranslations } from "next-intl";
 
 export function useGetCollections(params: GetItemsParams = {}) {
   const { count, offset, searchQuery } = params;
@@ -41,6 +43,7 @@ export function useGetCollection(
 
 export function useCreateCollection() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useCollection");
   return useMutation({
     mutationFn: collectionApi.createCollection,
     onSuccess: async ({ data }) => {
@@ -48,7 +51,7 @@ export function useCreateCollection() {
       queryClient.setQueryData(["collections", { id }], data.data);
       queryClient.invalidateQueries({ queryKey: ["collections"] });
       notification.success({
-        title: "Collection was successfully created!",
+        title: t("createSuccess"),
       });
     },
     onError: (err) => {
@@ -63,12 +66,13 @@ export function useCreateCollection() {
 
 export function useUpdateCollection() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useCollection");
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateCollectionDTO }) =>
       collectionApi.updateCollection(data, id),
 
-    onSuccess: (response, variables) => {
+    onSuccess: async (response, variables) => {
       const { id } = variables;
       const updatedAlbum = response.data.data;
 
@@ -77,7 +81,7 @@ export function useUpdateCollection() {
       queryClient.invalidateQueries({ queryKey: ["collections"] });
 
       notification.success({
-        title: "Collection was successfully updated!",
+        title: t("updateSuccess"),
       });
     },
 
@@ -94,13 +98,14 @@ export function useUpdateCollection() {
 
 export function useRemoveCollection() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useCollection");
   return useMutation({
     mutationFn: ({ id }: { id: string | undefined }) =>
       collectionApi.deleteCollection(id),
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["collections"] });
       notification.success({
-        title: "Collection was successfully deleted!",
+        title: t("deleteSuccess"),
       });
     },
     onError: (err) => {

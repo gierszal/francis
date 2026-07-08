@@ -19,7 +19,7 @@ const games = [
 ];
 
 export default async function Home() {
-  const t = await getTranslations("HomePage");
+  const t = await getTranslations("pages.HomePage");
   const array = [
     t.raw("carousel.row1"),
     t.raw("carousel.row2"),

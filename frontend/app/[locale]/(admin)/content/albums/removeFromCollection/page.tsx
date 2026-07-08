@@ -4,6 +4,7 @@ import z from "zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import {
   useGetAlbum,
   useGetAlbums,
@@ -28,6 +29,7 @@ const RemoveFromCollectionForm = ({
   callbackUrl,
 }: RemoveFromCollectionFormProps) => {
   const router = useRouter();
+  const t = useTranslations("pages.RemoveFromCollectionPage");
   const [albumId, setAlbumId] = useState<string>("");
   const [collectionId, setCollectionId] = useState<string>("");
 
@@ -41,8 +43,8 @@ const RemoveFromCollectionForm = ({
   const onClick = () => {
     if (!isAlbumInCollection())
       notification.error({
-        title: "Error ocurred!",
-        description: "This collection does not contain this album!",
+        title: t("errorTitle"),
+        description: t("errorDescription"),
       });
     else {
       remove(
@@ -79,7 +81,7 @@ const RemoveFromCollectionForm = ({
         showBorder={false}
         className="text-5xl ml-10"
       >
-        Remove Album from Collection
+        {t("title")}
       </GradientText>
 
       <div className="flex flex-row gap-5">
@@ -87,7 +89,7 @@ const RemoveFromCollectionForm = ({
           <SelectItems
             onChange={(id: string) => setAlbumId(id)}
             items={albums}
-            placeholder="Select a album"
+            placeholder={t("selectAlbum")}
             className="w-full"
           />
         </div>
@@ -95,7 +97,7 @@ const RemoveFromCollectionForm = ({
           <SelectItems
             onChange={(id: string) => setCollectionId(id)}
             items={collections}
-            placeholder="Select a collection"
+            placeholder={t("selectCollection")}
             className="w-full"
           />
         </div>
@@ -106,7 +108,7 @@ const RemoveFromCollectionForm = ({
         disabled={!album && !collection}
         onClick={onClick}
       >
-        Remove from collection
+        {t("submit")}
       </RoundedButton>
     </div>
   );

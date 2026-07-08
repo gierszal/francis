@@ -1,3 +1,5 @@
+"use client";
+
 import {
   useQuery,
   keepPreviousData,
@@ -8,18 +10,13 @@ import { GetItemsParams } from "@/types/api/common";
 import { albumApi } from "@/api/modules/albumApi";
 import { notification } from "antd";
 import { AxiosError } from "axios";
-import { UpdateAlbumDTO } from "@/types/album";
+import { useTranslations } from "next-intl";
 
 export function useGetAlbums(params: GetItemsParams = {}) {
   const { count, offset, searchQuery } = params;
   return useQuery({
     queryKey: ["albums", { offset, count, searchQuery }],
-    queryFn: () =>
-      albumApi.get({
-        count,
-        offset,
-        searchQuery,
-      }),
+    queryFn: () => albumApi.get({ count, offset, searchQuery }),
     staleTime: 5 * 60 * 1000,
     placeholderData: keepPreviousData,
   });
@@ -29,7 +26,7 @@ export function useGetAlbum(id: string | undefined, enabled: boolean = true) {
   return useQuery({
     queryKey: ["albums", { id }],
     queryFn: () => albumApi.getAlbum(id),
-    enabled: enabled,
+    enabled,
     staleTime: 5 * 60 * 1000,
     placeholderData: keepPreviousData,
   });
@@ -37,22 +34,20 @@ export function useGetAlbum(id: string | undefined, enabled: boolean = true) {
 
 export function useCreateAlbum() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useAlbum");
+
   return useMutation({
     mutationFn: albumApi.createAlbum,
     onSuccess: async ({ data }) => {
       const id = data.data.id;
       queryClient.setQueryData(["albums", { id }], data.data);
       queryClient.invalidateQueries({ queryKey: ["albums"] });
-      notification.success({
-        title: "Album was successfully created!",
-      });
+      notification.success({ title: t("createSuccess") });
     },
     onError: (err) => {
       let title = err.message;
       if (err instanceof AxiosError) title = err?.response?.data.error.message;
-      notification.error({
-        title: title,
-      });
+      notification.error({ title });
       logger.error(err);
     },
   });
@@ -60,26 +55,23 @@ export function useCreateAlbum() {
 
 export function useUpdateAlbum() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useAlbum");
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: FormData }) =>
       albumApi.updateAlbum(data, id),
 
-    onSuccess: (response, variables) => {
+    onSuccess: async (response, variables) => {
       const { id } = variables;
       const updatedAlbum = response.data.data;
 
       queryClient.setQueryData(["albums", { id }], updatedAlbum);
-
       queryClient.invalidateQueries({ queryKey: ["albums"] });
-
-      notification.success({
-        title: "Album was successfully updated!",
-      });
+      notification.success({ title: t("updateSuccess") });
     },
 
     onError: (error: Error | AxiosError) => {
-      let title = "Failed to update album";
+      let title = t("updateFallbackError");
 
       if (error instanceof AxiosError) {
         title = error?.response?.data?.error?.message || error.message;
@@ -87,9 +79,7 @@ export function useUpdateAlbum() {
         title = error.message;
       }
 
-      notification.error({
-        title: title,
-      });
+      notification.error({ title });
       console.error("Update album error:", error);
     },
   });
@@ -97,22 +87,20 @@ export function useUpdateAlbum() {
 
 export function useRemoveAlbum() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useAlbum");
+
   return useMutation({
     mutationFn: ({ id }: { id: string | undefined }) =>
       albumApi.deleteAlbum(id),
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["albums"] });
-      notification.success({
-        title: "Album was successfully deleted!",
-      });
+      notification.success({ title: t("deleteSuccess") });
     },
     onError: (err) => {
       let title = err.message;
       if (err instanceof AxiosError)
         title = err?.response?.data?.error?.message;
-      notification.error({
-        title: title,
-      });
+      notification.error({ title });
       logger.error(err);
     },
   });
@@ -120,6 +108,8 @@ export function useRemoveAlbum() {
 
 export function useAddToCollection() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useAlbum");
+
   return useMutation({
     mutationFn: ({
       albumId,
@@ -133,17 +123,13 @@ export function useAddToCollection() {
         queryClient.invalidateQueries({ queryKey: ["albums"] }),
         queryClient.invalidateQueries({ queryKey: ["collections"] }),
       ]);
-      notification.success({
-        title: "Album was successfully added to collection!",
-      });
+      notification.success({ title: t("addCollectionSuccess") });
     },
     onError: (err) => {
       let title = err.message;
       if (err instanceof AxiosError)
         title = err?.response?.data?.error?.message;
-      notification.error({
-        title: title,
-      });
+      notification.error({ title });
       logger.error(err);
     },
   });
@@ -151,6 +137,8 @@ export function useAddToCollection() {
 
 export function useRemoveFromCollection() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useAlbum");
+
   return useMutation({
     mutationFn: ({
       albumId,
@@ -164,17 +152,13 @@ export function useRemoveFromCollection() {
         queryClient.invalidateQueries({ queryKey: ["albums"] }),
         queryClient.invalidateQueries({ queryKey: ["collections"] }),
       ]);
-      notification.success({
-        title: "Album was successfully removed from collection!",
-      });
+      notification.success({ title: t("removeCollectionSuccess") });
     },
     onError: (err) => {
       let title = err.message;
       if (err instanceof AxiosError)
         title = err?.response?.data?.error?.message;
-      notification.error({
-        title: title,
-      });
+      notification.error({ title });
       logger.error(err);
     },
   });

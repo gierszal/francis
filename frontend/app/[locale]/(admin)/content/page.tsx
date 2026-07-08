@@ -65,7 +65,7 @@ const ContentPanel = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const { data } = useGetUser();
-  const t = useTranslations("ContentPanel");
+  const t = useTranslations("pages.ContentPanel");
 
   const user = data?.data?.data;
 
@@ -110,7 +110,7 @@ const ContentPanel = () => {
                   className="object-cover brightness-70"
                 />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full px-4 text-center text-white text-xl md:text-5xl font-sans">
-                  {user && <h1>{t("greeting")}</h1>}
+                  {user && <h1>{t("greeting", { name: user?.first_name })}</h1>}
                 </div>
               </div>
             </div>

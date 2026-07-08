@@ -15,7 +15,7 @@ import { getErrorMessage } from "@/utils/errors/getErrorMessage";
 import { useTranslations } from "next-intl";
 
 const TrackPage = () => {
-  const t = useTranslations("TrackPage");
+  const t = useTranslations("pages.TrackPage");
   const params = useParams<{ id: string }>();
 
   const { data, isLoading, isError, error } = useGetTrack(

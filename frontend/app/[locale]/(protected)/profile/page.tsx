@@ -16,7 +16,7 @@ import { VscMail } from "react-icons/vsc";
 import { useTranslations } from "next-intl";
 
 const Profile = () => {
-  const t = useTranslations("ProfilePage");
+  const t = useTranslations("pages.ProfilePage");
   const router = useRouter();
   const { data } = useGetUser();
   const notificationShown = useRef<boolean>(false);

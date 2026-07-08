@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import RoundedButton from "@/components/ui/RoundedButton";
 import GradientText from "@/components/motion/GradientText";
 import SelectItems from "@/components/ui/Select";
@@ -16,6 +17,7 @@ interface RemoveCollectionFormProps {
 }
 
 const RemoveCollectionForm = ({ callbackUrl }: RemoveCollectionFormProps) => {
+  const t = useTranslations("pages.RemoveCollectionPage");
   const router = useRouter();
   const [collectionId, setCollectionId] = useState<string>("");
 
@@ -46,14 +48,14 @@ const RemoveCollectionForm = ({ callbackUrl }: RemoveCollectionFormProps) => {
         showBorder={false}
         className="text-5xl ml-10"
       >
-        Delete Collection
+        {t("title")}
       </GradientText>
 
       <div className="w-full flex flex-row justify-center py-5">
         <SelectItems
           onChange={(id: string) => setCollectionId(id)}
           items={collections}
-          placeholder="Select a collection"
+          placeholder={t("selectCollection")}
           className="w-full"
         />
       </div>
@@ -63,7 +65,7 @@ const RemoveCollectionForm = ({ callbackUrl }: RemoveCollectionFormProps) => {
         disabled={!collection}
         onClick={onClick}
       >
-        Delete Collection
+        {t("submit")}
       </RoundedButton>
     </div>
   );

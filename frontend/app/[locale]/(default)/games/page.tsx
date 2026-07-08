@@ -20,7 +20,7 @@ const Games = () => {
   const page = parseInt(searchParams.get("page") || "1", 10);
   const searchQuery = searchParams.get("searchQuery") || "";
 
-  const t = useTranslations("GamesPage");
+  const t = useTranslations("pages.GamesPage");
 
   const { data, isLoading, isError, error, isSuccess } = useGetGames({
     count: gap,

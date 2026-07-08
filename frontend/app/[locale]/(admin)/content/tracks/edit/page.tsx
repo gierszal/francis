@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { UpdateTrackDTO } from "@/types/track";
 import Input from "@/components/ui/Input";
 import RoundedButton from "@/components/ui/RoundedButton";
@@ -24,15 +25,15 @@ interface UpdateTrackFormProps {
 }
 
 const UpdateTrackForm = ({ callbackUrl }: UpdateTrackFormProps) => {
+  const t = useTranslations("pages.UpdateTrackPage");
   const router = useRouter();
   const [trackId, setTrackId] = useState<string>("");
+
   const {
     reset,
     register,
     handleSubmit,
     formState: { errors },
-    watch,
-    setValue,
     control,
   } = useForm({
     resolver: zodResolver(updateTrackSchema),
@@ -70,7 +71,7 @@ const UpdateTrackForm = ({ callbackUrl }: UpdateTrackFormProps) => {
     );
   };
 
-  const { mutate: update, isError, error } = useUpdateTrack();
+  const { mutate: update } = useUpdateTrack();
 
   const { data: albumsData } = useGetAlbums();
   const { data: tracksData } = useGetTracks();
@@ -78,11 +79,11 @@ const UpdateTrackForm = ({ callbackUrl }: UpdateTrackFormProps) => {
 
   const tracks = tracksData?.items?.data;
   const track = trackData?.data?.data;
-
   const albums = albumsData?.items?.data;
 
   useEffect(() => {
     if (!track) return;
+
     reset({
       name: track?.name,
       albumId: track?.album?.id,
@@ -99,14 +100,14 @@ const UpdateTrackForm = ({ callbackUrl }: UpdateTrackFormProps) => {
         showBorder={false}
         className="text-5xl ml-10"
       >
-        Edit Track
+        {t("title")}
       </GradientText>
 
       <div className="w-full flex flex-row justify-center py-5">
         <SelectItems
           onChange={(id: string) => setTrackId(id)}
           items={tracks}
-          placeholder="Select a track"
+          placeholder={t("selectTrack")}
           className="w-full"
         />
       </div>
@@ -120,16 +121,18 @@ const UpdateTrackForm = ({ callbackUrl }: UpdateTrackFormProps) => {
             htmlFor="name"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Name
+            {t("name")}
           </label>
+
           <div className="flex-1">
             <Input
               id="name"
               disabled={!track}
               inputProps={register("name")}
-              placeholder="Enter track name"
+              placeholder={t("namePlaceholder")}
               className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base"
             />
+
             {errors.name && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.name.message}
@@ -143,16 +146,18 @@ const UpdateTrackForm = ({ callbackUrl }: UpdateTrackFormProps) => {
             htmlFor="artist"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Artist
+            {t("artist")}
           </label>
+
           <div className="flex-1">
             <Input
               disabled={!track}
               id="artist"
               inputProps={register("artist")}
-              placeholder="Enter artist name"
+              placeholder={t("artistPlaceholder")}
               className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base"
             />
+
             {errors.artist && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.artist.message}
@@ -166,8 +171,9 @@ const UpdateTrackForm = ({ callbackUrl }: UpdateTrackFormProps) => {
             htmlFor="audio"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Audio
+            {t("audio")}
           </label>
+
           <div className="flex-1">
             <Controller
               control={control}
@@ -187,6 +193,7 @@ const UpdateTrackForm = ({ callbackUrl }: UpdateTrackFormProps) => {
                 />
               )}
             />
+
             {errors.audio && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.audio.message}
@@ -200,8 +207,9 @@ const UpdateTrackForm = ({ callbackUrl }: UpdateTrackFormProps) => {
             htmlFor="albumId"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Album
+            {t("album")}
           </label>
+
           <div className="flex-1">
             <Controller
               name="albumId"
@@ -214,10 +222,11 @@ const UpdateTrackForm = ({ callbackUrl }: UpdateTrackFormProps) => {
                   onBlur={field.onBlur}
                   items={albums}
                   id="albumId"
-                  placeholder="Select an album"
+                  placeholder={t("selectAlbum")}
                 />
               )}
             />
+
             {errors.albumId && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.albumId.message}
@@ -231,8 +240,9 @@ const UpdateTrackForm = ({ callbackUrl }: UpdateTrackFormProps) => {
             htmlFor="tags"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Tags
+            {t("tags")}
           </label>
+
           <div className="flex-1">
             <Controller
               name="tags"
@@ -251,6 +261,7 @@ const UpdateTrackForm = ({ callbackUrl }: UpdateTrackFormProps) => {
                 />
               )}
             />
+
             {errors.tags && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.tags.message}
@@ -260,7 +271,7 @@ const UpdateTrackForm = ({ callbackUrl }: UpdateTrackFormProps) => {
         </div>
 
         <RoundedButton className="w-full text-xl py-3 mt-5" disabled={!track}>
-          Edit Track
+          {t("submit")}
         </RoundedButton>
       </form>
     </div>

@@ -11,7 +11,7 @@ import { useCallback, useEffect } from "react";
 import { useTranslations } from "next-intl";
 
 const Collections = () => {
-  const t = useTranslations("CollectionsPage");
+  const t = useTranslations("pages.CollectionsPage");
   const router = useRouter();
   const gap = 10;
   const pathname = usePathname();

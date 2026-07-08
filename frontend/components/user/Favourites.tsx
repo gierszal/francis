@@ -5,12 +5,14 @@ import {
   useGetUserPlaylists,
 } from "@/hooks/modules/user/useUser";
 import { Input, Skeleton } from "antd";
+import { useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import { QueueSource } from "@/types/player";
 
 const Favourites = () => {
   const router = useRouter();
+  const t = useTranslations("components.Favourites");
   const gap = 10;
   const pathname = usePathname();
 
@@ -50,7 +52,7 @@ const Favourites = () => {
   if (isError) {
     return (
       <div className="text-2xl text-red-500">
-        Error occurred: {error.message}
+        {t("errorOccurred")} {error.message}
       </div>
     );
   }
@@ -62,7 +64,7 @@ const Favourites = () => {
         <div className="mt-2">
           <Search
             defaultValue={searchQuery}
-            placeholder="Search favourites..."
+            placeholder={t("searchPlaceholder")}
             onSearch={(query) =>
               router.push(
                 pathname + "?" + createQueryString("searchQuery", query),
@@ -74,9 +76,7 @@ const Favourites = () => {
 
         {!favourites || favourites.length === 0 ? (
           <div className="text-2xl mt-5 self-center">
-            {!searchQuery
-              ? "No favourite tracks yet. Add something!"
-              : "No favourite tracks found."}
+            {!searchQuery ? t("noTracks") : t("noTracksFound")}
           </div>
         ) : (
           <TrackList tracks={favourites} source={{ type: "me/favourites" }} />

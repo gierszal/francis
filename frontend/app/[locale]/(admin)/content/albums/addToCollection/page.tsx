@@ -4,6 +4,7 @@ import z from "zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import {
   useGetAlbum,
   useGetAlbums,
@@ -25,7 +26,9 @@ interface AddToCollectionFormProps {
 }
 
 const AddToCollectionForm = ({ callbackUrl }: AddToCollectionFormProps) => {
+  const t = useTranslations("pages.AddToCollectionPage");
   const router = useRouter();
+
   const [albumId, setAlbumId] = useState<string>("");
   const [collectionId, setCollectionId] = useState<string>("");
 
@@ -39,8 +42,8 @@ const AddToCollectionForm = ({ callbackUrl }: AddToCollectionFormProps) => {
   const onClick = () => {
     if (isAlbumInCollection())
       notification.error({
-        title: "Error ocurred!",
-        description: "This album is already in this collection!",
+        title: t("errorTitle"),
+        description: t("alreadyExists"),
       });
     else {
       add(
@@ -77,7 +80,7 @@ const AddToCollectionForm = ({ callbackUrl }: AddToCollectionFormProps) => {
         showBorder={false}
         className="text-5xl w-full ml-10"
       >
-        Add Album To Collection
+        {t("title")}
       </GradientText>
 
       <div className="flex flex-row gap-5">
@@ -85,15 +88,16 @@ const AddToCollectionForm = ({ callbackUrl }: AddToCollectionFormProps) => {
           <SelectItems
             onChange={(id: string) => setAlbumId(id)}
             items={albums}
-            placeholder="Select a album"
+            placeholder={t("selectAlbum")}
             className="w-full"
           />
         </div>
+
         <div className="w-full flex flex-row justify-center py-5">
           <SelectItems
             onChange={(id: string) => setCollectionId(id)}
             items={collections}
-            placeholder="Select a collection"
+            placeholder={t("selectCollection")}
             className="w-full"
           />
         </div>
@@ -104,7 +108,7 @@ const AddToCollectionForm = ({ callbackUrl }: AddToCollectionFormProps) => {
         disabled={!album && !collection}
         onClick={onClick}
       >
-        Add to collection
+        {t("submit")}
       </RoundedButton>
     </div>
   );

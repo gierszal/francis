@@ -3,6 +3,7 @@
 import { useGetUser } from "@/hooks/modules/user/useUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { notification, Skeleton } from "antd";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -13,6 +14,7 @@ interface RoleGuardProps {
 
 const RoleGuard = ({ children, requiredRole }: RoleGuardProps) => {
   const router = useRouter();
+  const t = useTranslations("components.RoleGuard");
   const queryClient = useQueryClient();
   const { data, isLoading, isError, isSuccess } = useGetUser();
   const cachedUser = queryClient.getQueryData(["me"]);
@@ -31,9 +33,8 @@ const RoleGuard = ({ children, requiredRole }: RoleGuardProps) => {
 
     if (isError) {
       notification.error({
-        title: "Failed to load data about role!",
-        description:
-          "Seems you do not have enough rights to access this route!",
+        title: t("loadErrorTitle"),
+        description: t("loadErrorDescription"),
       });
       router.push("/");
       return;
@@ -41,9 +42,8 @@ const RoleGuard = ({ children, requiredRole }: RoleGuardProps) => {
 
     if (isSuccess && !hasAccess) {
       notification.error({
-        title: "Insufficient permissions!",
-        description:
-          "Seems you do not have enough rights to access this route!",
+        title: t("permissionErrorTitle"),
+        description: t("permissionErrorDescription"),
       });
       router.push("/");
       return;

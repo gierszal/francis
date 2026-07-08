@@ -3,17 +3,13 @@
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { CreateTrackDTO } from "@/types/track/index";
-import { useCreateAlbum, useGetAlbums } from "@/hooks/modules/album/useAlbum";
+import { useGetAlbums } from "@/hooks/modules/album/useAlbum";
 import Input from "@/components/ui/Input";
-import AITooltip from "@/components/ai/AITooltip";
 import RoundedButton from "@/components/ui/RoundedButton";
-import { createAlbumSchema } from "@/schemas/album";
 import GradientText from "@/components/motion/GradientText";
-import { Button, Upload } from "antd";
 import FileInput from "@/components/ui/FileInput";
-import { useGetGames } from "@/hooks/modules/game/useGame";
-import Select from "@/components/ui/Select";
 import SelectItems from "@/components/ui/Select";
 import { createTrackSchema } from "@/schemas/track";
 import { useCreateTrack } from "@/hooks/modules/track/useTrack";
@@ -24,13 +20,13 @@ interface CreateTrackFormProps {
 }
 
 const CreateAlbumForm = ({ callbackUrl }: CreateTrackFormProps) => {
+  const t = useTranslations("pages.CreateTrackPage");
   const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
-    setValue,
     control,
   } = useForm<CreateTrackDTO>({
     resolver: zodResolver(createTrackSchema),
@@ -44,12 +40,13 @@ const CreateAlbumForm = ({ callbackUrl }: CreateTrackFormProps) => {
     formData.append("artist", data.artist);
     formData.append("audio", data.audio);
     formData.append("tags", JSON.stringify(data.tags));
+
     create(formData, {
       onSuccess: () => router.push(callbackUrl ?? "/tracks"),
     });
   };
 
-  const { mutate: create, isError, error } = useCreateTrack();
+  const { mutate: create } = useCreateTrack();
   const { data } = useGetAlbums();
 
   const albums = data?.items?.data;
@@ -62,8 +59,9 @@ const CreateAlbumForm = ({ callbackUrl }: CreateTrackFormProps) => {
         showBorder={false}
         className="text-5xl ml-10"
       >
-        Create Track
+        {t("title")}
       </GradientText>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-2xl space-y-6"
@@ -73,15 +71,17 @@ const CreateAlbumForm = ({ callbackUrl }: CreateTrackFormProps) => {
             htmlFor="name"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Name
+            {t("name")}
           </label>
+
           <div className="flex-1">
             <Input
               id="name"
               inputProps={register("name")}
-              placeholder="Enter track name"
+              placeholder={t("namePlaceholder")}
               className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base"
             />
+
             {errors.name && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.name.message}
@@ -92,18 +92,20 @@ const CreateAlbumForm = ({ callbackUrl }: CreateTrackFormProps) => {
 
         <div className="flex items-center gap-4">
           <label
-            htmlFor="name"
+            htmlFor="artist"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Artist
+            {t("artist")}
           </label>
+
           <div className="flex-1">
             <Input
               id="artist"
               inputProps={register("artist")}
-              placeholder="Enter artist name"
+              placeholder={t("artistPlaceholder")}
               className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base"
             />
+
             {errors.artist && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.artist.message}
@@ -117,8 +119,9 @@ const CreateAlbumForm = ({ callbackUrl }: CreateTrackFormProps) => {
             htmlFor="picture"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Audio
+            {t("audio")}
           </label>
+
           <div className="flex-1">
             <Controller
               control={control}
@@ -137,6 +140,7 @@ const CreateAlbumForm = ({ callbackUrl }: CreateTrackFormProps) => {
                 />
               )}
             />
+
             {errors.audio && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.audio.message}
@@ -150,8 +154,9 @@ const CreateAlbumForm = ({ callbackUrl }: CreateTrackFormProps) => {
             htmlFor="game"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Album
+            {t("album")}
           </label>
+
           <div className="flex-1">
             <Controller
               name="albumId"
@@ -166,6 +171,7 @@ const CreateAlbumForm = ({ callbackUrl }: CreateTrackFormProps) => {
                 />
               )}
             />
+
             {errors.albumId && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.albumId.message}
@@ -179,8 +185,9 @@ const CreateAlbumForm = ({ callbackUrl }: CreateTrackFormProps) => {
             htmlFor="game"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Tags
+            {t("tags")}
           </label>
+
           <div className="flex-1">
             <Controller
               name="tags"
@@ -198,6 +205,7 @@ const CreateAlbumForm = ({ callbackUrl }: CreateTrackFormProps) => {
                 />
               )}
             />
+
             {errors.tags && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.tags.message}
@@ -207,7 +215,7 @@ const CreateAlbumForm = ({ callbackUrl }: CreateTrackFormProps) => {
         </div>
 
         <RoundedButton className="w-full text-xl py-3 mt-5">
-          Create Track
+          {t("submit")}
         </RoundedButton>
       </form>
     </div>

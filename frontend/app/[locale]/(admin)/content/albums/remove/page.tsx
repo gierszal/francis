@@ -4,6 +4,7 @@ import z from "zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import {
   useGetAlbum,
   useGetAlbums,
@@ -20,6 +21,7 @@ interface RemoveAlbumFormProps {
 
 const RemoveAlbumForm = ({ callbackUrl }: RemoveAlbumFormProps) => {
   const router = useRouter();
+  const t = useTranslations("pages.RemoveAlbumPage");
   const [albumId, setAlbumId] = useState<string>("");
 
   const onClick = () => {
@@ -46,14 +48,14 @@ const RemoveAlbumForm = ({ callbackUrl }: RemoveAlbumFormProps) => {
         showBorder={false}
         className="text-5xl ml-10"
       >
-        Delete Album
+        {t("title")}
       </GradientText>
 
       <div className="w-full flex flex-row justify-center py-5">
         <SelectItems
           onChange={(id: string) => setAlbumId(id)}
           items={albums}
-          placeholder="Select a album"
+          placeholder={t("selectAlbum")}
           className="w-full"
         />
       </div>
@@ -63,7 +65,7 @@ const RemoveAlbumForm = ({ callbackUrl }: RemoveAlbumFormProps) => {
         disabled={!album}
         onClick={onClick}
       >
-        Delete Album
+        {t("submit")}
       </RoundedButton>
     </div>
   );

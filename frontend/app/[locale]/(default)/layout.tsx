@@ -2,22 +2,7 @@ import type { Metadata } from "next";
 import Sidebar from "@/components/shared/Sidebar";
 import Footer from "@/components/shared/Footer";
 import { ROLES } from "@/types/role";
-
-const menuItems = [
-  { label: "Home", ariaLabel: "To home page", link: "/" },
-  { label: "Profile", ariaLabel: "To profile", link: "/profile" },
-  { label: "Tracks", ariaLabel: "To tracks", link: "/tracks" },
-  { label: "Albums", ariaLabel: "To albums", link: "/albums" },
-  { label: "Games", ariaLabel: "To games", link: "/games" },
-  { label: "Collections", ariaLabel: "To collections", link: "/collections" },
-  { label: "Playlists", ariaLabel: "To playlists", link: "/playlists" },
-  {
-    label: "Content",
-    ariaLabel: "To content (admin role required)",
-    link: "/content",
-    requiredRole: ROLES.ADMIN,
-  },
-];
+import { getTranslations } from "next-intl/server";
 
 const socialItems = [
   { label: "Telegram", link: "https://web.telegram.org" },
@@ -29,11 +14,35 @@ export const metadata: Metadata = {
   description: "The music web player.",
 };
 
-export default function DefaultLayout({
+export default async function DefaultLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const t = await getTranslations("Navigation");
+  const menuItems = [
+    { label: t("homeLabel"), ariaLabel: t("homeAria"), link: "/" },
+    { label: t("profileLabel"), ariaLabel: t("profileAria"), link: "/profile" },
+    { label: t("tracksLabel"), ariaLabel: t("tracksAria"), link: "/tracks" },
+    { label: t("albumsLabel"), ariaLabel: t("albumsAria"), link: "/albums" },
+    { label: t("gamesLabel"), ariaLabel: t("gamesAria"), link: "/games" },
+    {
+      label: t("collectionsLabel"),
+      ariaLabel: t("collectionsAria"),
+      link: "/collections",
+    },
+    {
+      label: t("playlistsLabel"),
+      ariaLabel: t("playlistsAria"),
+      link: "/playlists",
+    },
+    {
+      label: t("contentLabel"),
+      ariaLabel: t("contentAria"),
+      link: "/content",
+      requiredRole: ROLES.ADMIN,
+    },
+  ];
   return (
     <div>
       <Sidebar

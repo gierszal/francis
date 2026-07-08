@@ -2,6 +2,7 @@ import RoundedButton from "../ui/RoundedButton";
 import { FormattedUser, UpdateUserDTO } from "@/types/user";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { updateUserSchema } from "@/schemas/user";
 import Input from "../ui/Input";
 import { useUpdateProfile } from "@/hooks/modules/user/useUser";
@@ -13,6 +14,7 @@ interface EditProfileFormProps {
 
 const EditProfileForm = ({ user }: EditProfileFormProps) => {
   const router = useRouter();
+  const t = useTranslations("components.EditProfileForm");
   const {
     register,
     handleSubmit,
@@ -43,7 +45,7 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
             htmlFor="firstName"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            First name
+            {t("firstNameLabel")}
           </label>
           <div className="flex-1">
             <Input
@@ -51,7 +53,7 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
               ariaInvalid={!!errors.firstName}
               ariaDescribedby="firstName-error"
               inputProps={register("firstName")}
-              placeholder="Enter your first name"
+              placeholder={t("firstNamePlaceholder")}
               defaultValue={user.first_name}
               className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base"
             />
@@ -68,7 +70,7 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
             htmlFor="lastName"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Last name
+            {t("lastNameLabel")}
           </label>
           <div className="flex-1">
             <Input
@@ -77,7 +79,7 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
               ariaInvalid={!!errors.lastName}
               ariaDescribedby="lastName-error"
               className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base"
-              placeholder="Enter your last name"
+              placeholder={t("lastNamePlaceholder")}
               defaultValue={user.last_name}
             />
             {errors.lastName && (
@@ -93,7 +95,7 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
             htmlFor="email"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Email
+            {t("emailLabel")}
           </label>
           <div className="flex-1">
             <Input
@@ -105,7 +107,7 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
         </div>
 
         <RoundedButton className="w-full text-xl py-3 mt-5">
-          Submit
+          {t("submit")}
         </RoundedButton>
       </form>
     </div>

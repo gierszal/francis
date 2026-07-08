@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import RoundedButton from "../ui/RoundedButton";
 import Input from "../ui/Input";
 import { CreatePlaylistDTO } from "@/types/playlist";
@@ -16,6 +17,7 @@ interface CreatePlaylistFormProps {
 
 const CreatePlaylistForm = ({ callbackUrl }: CreatePlaylistFormProps) => {
   const router = useRouter();
+  const t = useTranslations("components.CreatePlaylistForm");
   const {
     register,
     handleSubmit,
@@ -51,13 +53,13 @@ const CreatePlaylistForm = ({ callbackUrl }: CreatePlaylistFormProps) => {
             htmlFor="name"
             className="text-base md:text-lg font-semibold text-gray-700 md:w-32 flex-shrink-0"
           >
-            Name
+            {t("nameLabel")}
           </label>
           <div className="flex-1">
             <Input
               id="name"
               inputProps={register("name")}
-              placeholder="Enter playlist name"
+              placeholder={t("namePlaceholder")}
               className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base"
             />
             {errors.name && (
@@ -74,14 +76,14 @@ const CreatePlaylistForm = ({ callbackUrl }: CreatePlaylistFormProps) => {
               htmlFor="description"
               className="text-base md:text-lg font-semibold text-gray-700 md:w-32 flex-shrink-0 md:mt-2"
             >
-              Description
+              {t("descriptionLabel")}
             </label>
             <div className="flex-1 w-full">
               <textarea
                 {...register("description")}
                 id="description"
                 className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base resize-y min-h-[100px] md:min-h-[120px]"
-                placeholder="Enter playlist description (optional)"
+                placeholder={t("descriptionPlaceholder")}
               />
               {errors.description && (
                 <span className="text-sm text-red-500 font-medium">
@@ -104,7 +106,7 @@ const CreatePlaylistForm = ({ callbackUrl }: CreatePlaylistFormProps) => {
         </div>
 
         <RoundedButton className="w-full text-lg md:text-xl py-3 mt-5">
-          Create Playlist
+          {t("submit")}
         </RoundedButton>
       </form>
     </div>

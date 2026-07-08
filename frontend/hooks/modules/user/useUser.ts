@@ -8,7 +8,9 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { notification } from "antd";
+import { getTranslations } from "next-intl/server";
 import { AxiosError } from "axios";
+import { useTranslations } from "next-intl";
 
 export function useGetUser() {
   return useQuery({
@@ -64,13 +66,14 @@ export function useGetUserHistory(params: GetItemsParams = {}) {
 
 export function useUpdateProfile() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useUser");
   return useMutation({
     mutationFn: userApi.updateProfile,
     onSuccess: async ({ data }) => {
       queryClient.setQueryData(["me"], data.data.user);
       queryClient.invalidateQueries({ queryKey: ["me"] });
       notification.success({
-        title: "Information about you was successfully updated!",
+        title: t("updateProfileSuccess"),
       });
     },
     onError: (err) => {
@@ -85,20 +88,21 @@ export function useUpdateProfile() {
 
 export function useAddToFavourites() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useUser");
   return useMutation({
     mutationFn: ({ trackId }: { trackId: string }) =>
       userApi.addToFavourites(trackId),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["me/favourites"] });
       notification.success({
-        title: "Track added to favourites!",
+        title: t("addFavouritesSuccess"),
       });
     },
-    onError: (error: Error | AxiosError) => {
+    onError: async (error: Error | AxiosError) => {
       const message = getErrorMessage(error);
 
       notification.error({
-        title: "Error",
+        title: t("errorTitle"),
         description: message,
       });
 
@@ -109,20 +113,21 @@ export function useAddToFavourites() {
 
 export function useRemoveFromFavourites() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useUser");
   return useMutation({
     mutationFn: ({ trackId }: { trackId: string }) =>
       userApi.removeFromFavourites(trackId),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["me/favourites"] });
       notification.success({
-        title: "Track removed from favourites!",
+        title: t("removeFavouritesSuccess"),
       });
     },
-    onError: (error: Error | AxiosError) => {
+    onError: async (error: Error | AxiosError) => {
       const message = getErrorMessage(error);
 
       notification.error({
-        title: "Error",
+        title: t("errorTitle"),
         description: message,
       });
 

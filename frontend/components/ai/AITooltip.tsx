@@ -3,6 +3,7 @@
 import { useAskAI } from "@/hooks/modules/ai/useAi";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button, notification, Popconfirm, Spin, Tooltip } from "antd";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import {
   FieldPath,
@@ -31,6 +32,7 @@ const AITooltip = <T extends FieldValues>({
   fieldName = "description" as FieldPath<T>, // пока только description
   setValue,
 }: AITooltipProps<T>) => {
+  const t = useTranslations("components.AITooltip");
   const [isEnable, setIsEnable] = useState<boolean>(false);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const [hasResponse, setHasResponse] = useState<boolean>(false);
@@ -49,12 +51,11 @@ const AITooltip = <T extends FieldValues>({
   const handleClick = () => {
     if (isItemEmpty(item))
       notification.error({
-        title:
-          "No fields provided! Write down something to get pricise response!",
+        title: t("errorNoFields"),
       });
     else if (!topic)
       notification.error({
-        title: "No topic provided!",
+        title: t("errorNoTopic"),
       });
     else {
       setHasResponse(false);
@@ -101,32 +102,30 @@ const AITooltip = <T extends FieldValues>({
           <div className="w-full max-w-sm">
             {isError && (
               <div className="flex flex-col p-3 gap-2">
-                <p className="font-bold text-red-400">
-                  Error occured while trying quering AI
-                </p>
-                <p className="text-sm text-gray-500">
-                  You may try again or close the window
-                </p>
+                <p className="font-bold text-red-400">{t("aiErrorTitle")}</p>
+                <p className="text-sm text-gray-500">{t("aiErrorSubtitle")}</p>
                 <Button
                   onClick={closeTooltip}
                   className="mt-2"
                   size="small"
                   danger
                 >
-                  Close
+                  {t("btnClose")}
                 </Button>
               </div>
             )}
             {!isError && hasResponse && (
               <div className="p-3">
-                <h2 className="text-md font-semibold">AI response:</h2>
+                <h2 className="text-md font-semibold">
+                  {t("aiResponseTitle")}
+                </h2>
                 <p className="mt-3 text-gray-700">{data.data.response}</p>
                 <div className="flex flex-row gap-3 mt-5 mb-2">
                   <Button size="small" type="primary" onClick={saveResponse}>
-                    Accept
+                    {t("btnAccept")}
                   </Button>
                   <Button size="small" onClick={closeTooltip}>
-                    Close
+                    {t("btnClose")}
                   </Button>
                 </div>
               </div>
@@ -145,7 +144,7 @@ const AITooltip = <T extends FieldValues>({
             variant="filled"
             icon={<BsArrowRepeat />}
           >
-            Refetch
+            {t("btnRefetch")}
           </Button>
         ) : (
           <Button
@@ -155,7 +154,9 @@ const AITooltip = <T extends FieldValues>({
             disabled={isLoading || isRefetching}
             className="flex items-center gap-2"
           >
-            {isLoading || isRefetching ? "Generating..." : "Generate"}
+            {isLoading || isRefetching
+              ? t("statusGenerating")
+              : t("statusGenerate")}
           </Button>
         )}
       </Tooltip>

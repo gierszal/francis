@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import Input from "@/components/ui/Input";
 import RoundedButton from "@/components/ui/RoundedButton";
 import GradientText from "@/components/motion/GradientText";
@@ -15,7 +16,9 @@ interface CreateCollectionFormProps {
 }
 
 const CreateCollectionForm = ({ callbackUrl }: CreateCollectionFormProps) => {
+  const t = useTranslations("pages.CreateCollectionPage");
   const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -41,8 +44,9 @@ const CreateCollectionForm = ({ callbackUrl }: CreateCollectionFormProps) => {
         showBorder={false}
         className="text-5xl ml-10"
       >
-        Create collection
+        {t("title")}
       </GradientText>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-2xl space-y-6"
@@ -52,15 +56,17 @@ const CreateCollectionForm = ({ callbackUrl }: CreateCollectionFormProps) => {
             htmlFor="name"
             className="text-lg font-semibold text-gray-700 w-32 flex-shrink-0"
           >
-            Name
+            {t("name")}
           </label>
+
           <div className="flex-1">
             <Input
               id="name"
               inputProps={register("name")}
-              placeholder="Enter collection name"
+              placeholder={t("namePlaceholder")}
               className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-base"
             />
+
             {errors.name && (
               <span className="text-sm text-red-500 font-medium">
                 {errors.name.message}
@@ -70,7 +76,7 @@ const CreateCollectionForm = ({ callbackUrl }: CreateCollectionFormProps) => {
         </div>
 
         <RoundedButton className="w-full text-xl py-3 mt-5">
-          Create collection
+          {t("submit")}
         </RoundedButton>
       </form>
     </div>

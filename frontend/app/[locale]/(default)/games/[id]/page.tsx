@@ -14,7 +14,7 @@ import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 
 const GamePage = () => {
-  const t = useTranslations("GamePage");
+  const t = useTranslations("pages.GamePage");
   const params = useParams<{ id: string }>();
 
   const { data, isLoading, isError, error } = useGetGame(params.id?.toString());

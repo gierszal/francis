@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BsEnvelope, BsLock, BsEye, BsEyeSlash } from "react-icons/bs";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { SignInSchema, SignInFormData } from "@/schemas/auth/index";
 import SubmitButton from "../ui/SubmitButton";
 import Input from "../ui/Input";
@@ -12,6 +13,7 @@ import Notification from "../ui/Notification";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export function SignInForm() {
+  const t = useTranslations("components.SignInForm");
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
@@ -52,7 +54,7 @@ export function SignInForm() {
           <Input
             type="email"
             id="email"
-            placeholder="Email"
+            placeholder={t("emailPlaceholder")}
             ariaInvalid={!!errors.email}
             ariaDescribedby="email-error"
             inputProps={register("email")}
@@ -76,7 +78,7 @@ export function SignInForm() {
 
           <Input
             type={isVisible ? "text" : "password"}
-            placeholder="Password"
+            placeholder={t("passwordPlaceholder")}
             inputProps={register("password")}
             ariaInvalid={!!errors.password}
             ariaDescribedby="password-error"
@@ -108,7 +110,7 @@ export function SignInForm() {
         </div>
       </div>
 
-      <SubmitButton>Sign in</SubmitButton>
+      <SubmitButton>{t("submit")}</SubmitButton>
     </form>
   );
 }

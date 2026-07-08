@@ -1,7 +1,9 @@
 import { notification } from "antd";
 import { useGetUser } from "../user/useUser";
+import { useTranslations } from "next-intl";
 
 export const useRequireActivated = () => {
+  const t = useTranslations("hooks.useRequireActivated");
   const { data } = useGetUser();
   const user = data?.data?.data;
 
@@ -10,16 +12,15 @@ export const useRequireActivated = () => {
   const requireActivated = (action: () => void) => {
     if (!user) {
       notification.warning({
-        title: "Sign in first!",
-        description: "Sign in to get more features!",
+        title: t("signInTitle"),
+        description: t("signInDescription"),
       });
       return false;
     }
     if (!isActivated) {
       notification.warning({
-        title: "Verify your profile!",
-        description:
-          "Visit Profile page and verify your email address to unlock this feature.",
+        title: t("verifyTitle"),
+        description: t("verifyDescription"),
       });
       return false;
     }

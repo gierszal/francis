@@ -8,8 +8,10 @@ import { trackApi } from "../../../api/modules/trackApi";
 import $api from "@/api";
 import { GetItemsParams } from "@/types/api/common";
 import { notification } from "antd";
+import { getTranslations } from "next-intl/server";
 import { AxiosError } from "axios";
 import { getErrorMessage } from "@/utils/errors/getErrorMessage";
+import { useTranslations } from "next-intl";
 
 export function useGetTracks(params: GetItemsParams = {}) {
   const { count, offset, searchQuery } = params;
@@ -38,6 +40,7 @@ export function useGetTrack(id: string | undefined, enabled: boolean = true) {
 
 export function useAddTrackToPlaylist() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useTrack");
   return useMutation({
     mutationFn: ({
       trackId,
@@ -46,18 +49,18 @@ export function useAddTrackToPlaylist() {
       trackId: string;
       playlistId: string;
     }) => trackApi.addTrackToPlaylist(trackId, playlistId),
-    onSuccess: (data, { trackId, playlistId }) => {
+    onSuccess: async (data, { trackId, playlistId }) => {
       queryClient.setQueryData(["playlists", { id: playlistId }], data.data);
       queryClient.invalidateQueries({ queryKey: ["playlists"] });
       notification.success({
-        title: "Track added to playlist!",
+        title: t("addPlaylistSuccess"),
       });
     },
-    onError: (error: Error | AxiosError) => {
+    onError: async (error: Error | AxiosError) => {
       const message = getErrorMessage(error);
 
       notification.error({
-        title: "Error",
+        title: t("errorTitle"),
         description: message,
       });
 
@@ -68,6 +71,7 @@ export function useAddTrackToPlaylist() {
 
 export function useRemoveTrackFromPlaylist() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useTrack");
   return useMutation({
     mutationFn: ({
       trackId,
@@ -76,17 +80,17 @@ export function useRemoveTrackFromPlaylist() {
       trackId: string;
       playlistId: string;
     }) => trackApi.removeTrackFromPlaylist(trackId, playlistId),
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["playlists"] });
       notification.success({
-        title: "Track removed from playlist!",
+        title: t("removePlaylistSuccess"),
       });
     },
-    onError: (error: Error | AxiosError) => {
+    onError: async (error: Error | AxiosError) => {
       const message = getErrorMessage(error);
 
       notification.error({
-        title: "Error",
+        title: t("errorTitle"),
         description: message,
       });
 
@@ -97,6 +101,7 @@ export function useRemoveTrackFromPlaylist() {
 
 export function useCreateTrack() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useTrack");
   return useMutation({
     mutationFn: trackApi.createTrack,
     onSuccess: async ({ data }) => {
@@ -104,7 +109,7 @@ export function useCreateTrack() {
       queryClient.setQueryData(["tracks", { id }], data.data);
       queryClient.invalidateQueries({ queryKey: ["tracks"] });
       notification.success({
-        title: "Track was successfully created!",
+        title: t("createSuccess"),
       });
     },
     onError: (err) => {
@@ -119,12 +124,12 @@ export function useCreateTrack() {
 
 export function useUpdateTrack() {
   const queryClient = useQueryClient();
-
+  const t = useTranslations("hooks.useTrack");
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: FormData }) =>
       trackApi.updateTrack(data, id),
 
-    onSuccess: (response, variables) => {
+    onSuccess: async (response, variables) => {
       const { id } = variables;
       const updatedTrack = response.data.data;
 
@@ -133,7 +138,7 @@ export function useUpdateTrack() {
       queryClient.invalidateQueries({ queryKey: ["tracks"] });
 
       notification.success({
-        title: "Track was successfully updated!",
+        title: t("updateSuccess"),
       });
     },
 
@@ -150,13 +155,14 @@ export function useUpdateTrack() {
 
 export function useRemoveTrack() {
   const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useTrack");
   return useMutation({
     mutationFn: ({ id }: { id: string | undefined }) =>
       trackApi.deleteTrack(id),
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["tracks"] });
       notification.success({
-        title: "Track was successfully deleted!",
+        title: t("deleteSuccess"),
       });
     },
     onError: (error) => {

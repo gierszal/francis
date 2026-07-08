@@ -11,7 +11,7 @@ import { useParams, useRouter } from "next/navigation";
 const UpdatePlaylist = () => {
   const params = useParams<{ id: string }>();
   const id = params.id;
-  const t = useTranslations("EditPlaylistPage");
+  const t = useTranslations("pages.EditPlaylistPage");
 
   const router = useRouter();
 

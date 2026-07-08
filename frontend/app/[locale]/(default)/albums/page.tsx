@@ -12,7 +12,7 @@ import { useCallback, useEffect } from "react";
 import { useTranslations } from "next-intl";
 
 const Albums = () => {
-  const t = useTranslations("AlbumsPage");
+  const t = useTranslations("pages.AlbumsPage");
   const router = useRouter();
   const gap = 10; // макс кол-во треков на стр
   const pathname = usePathname();

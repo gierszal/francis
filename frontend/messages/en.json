@@ -1,129 +1,409 @@
 {
-  "HomePage": {
-    "title": "Francis | Web Player",
-    "year": "2026.",
-    "carousel": {
-      "row1": [
-        "Discover",
-        "Dive",
-        "Listen"
-      ],
-      "row2": [
-        "Explore",
-        "Experience",
-        "Immerse"
-      ],
-      "row3": [
-        "Dream",
-        "Fall in",
-        "Wander"
-      ]
+    "Navigation": {
+        "homeLabel": "Home",
+        "homeAria": "To home page",
+        "profileLabel": "Profile",
+        "profileAria": "To profile",
+        "tracksLabel": "Tracks",
+        "tracksAria": "To tracks",
+        "albumsLabel": "Albums",
+        "albumsAria": "To albums",
+        "gamesLabel": "Games",
+        "gamesAria": "To games",
+        "collectionsLabel": "Collections",
+        "collectionsAria": "To collections",
+        "playlistsLabel": "Playlists",
+        "playlistsAria": "To playlists",
+        "contentLabel": "Content",
+        "contentAria": "To content (admin role required)"
     },
-    "themeTitle": "Theme & Purpose",
-    "themeDescription": "This project was initially created as a final task in SP 2026. The theme of the project is a simple music player with any other tools that may make user experience even better."
-  },
-  "TracksPage": {
-    "title": "Tracks",
-    "searchPlaceholder": "Search tracks...",
-    "noTracksFound": "No tracks found!"
-  },
-  "AlbumsPage": {
-    "title": "Albums",
-    "searchPlaceholder": "Search albums...",
-    "noAlbumsFound": "No albums found!"
-  },
-  "GamesPage": {
-    "title": "Games",
-    "searchPlaceholder": "Search games...",
-    "noGamesFound": "No games found!"
-  },
-  "TrackPage": {
-    "listens": "Listens: {count}",
-    "occursIn": "Tracks amount: {count}"
-  },
-  "AlbumPage": {
-    "tracksAmount": "Tracks: {count}",
-    "emptyAlbum": "Album is empty!"
-  },
-  "GamePage": {
-    "lastUpdated": "Last updated: {date}",
-    "albums": "Albums",
-    "albumsAmount": "Albums amount: {count}",
-    "albumsComingSoon": "Albums coming soon!"
-  },
-  "CollectionsPage": {
-    "title": "Collections",
-    "searchPlaceholder": "Search collections...",
-    "noCollectionsFound": "No collections found!"
-  },
-   "PlaylistsPage": {
-    "title": "Playlists",
-    "searchPlaceholder": "Search playlists...",
-    "createFirst": "Create your first playlist!",
-    "create": "Create playlist",
-    "noPlaylistsYet": "No playlists yet!"
-  },
-   "PlaylistPage": {
-    "edit": "Edit playlist",
-    "emptyPlaylist": "Playlist is empty. Add something!",
-    "tracksAmount": "Tracks: {count}"
-  },
-  "CreatePlaylistPage":{
-    "create":"Create playlist"
-  },
-  "EditPlaylistPage":{
-    "back":"Go back",
-    "edit":"Edit playlist"
-  },
-   "ProfilePage": {
-    "activateWarningTitle": "Don't forget to activate your profile!",
-    "activateWarningDescription": "In order to access more features you have to confirm your email address!",
-    "editProfile": "Edit profile",
-    "signOut": "Sign out",
-    "favourites": "Favourites",
-    "history": "History"
-  },
-  "EditProfilePage":{
-    "back":"Go back"
-  },
-  "AboutPage": {
-    "weMake": "We make",
-    "theReal": "the real",
-    "rotating1": [
-      "kings",
-      "peasants",
-      "lords"
-    ],
-    "rotating2": [
-      "admire",
-      "esteem",
-      "revere"
-    ],
-    "rotating3": [
-      "nature spirit",
-      "music",
-      "masterpiece"
-    ],
-    "description": "As you may have seen on the home page, this project was developed as a final task for SP 2026. This web app is primarily designed for listening to music. Any users — whether authorized or not — can visit pages and listen to music from various games. Since this project is in a test phase, there won't be a large number of games or tracks available, but we hope you'll give it a shot and enjoy some real music. Thanks for reading, and have a great time!"
-  },
-   "ContactsPage": {
-    "heading": "Get to Know Our Team",
-    "team": {
-      "tim": {
-        "subtitle": "Student of SP 2026"
-      },
-      "coffee": {
-        "name":"Cup of Cofee",
-        "subtitle": "Main Contributor"
-      }
+    "pages": {
+        "HomePage": {
+            "title": "Francis | Web Player",
+            "year": "2026.",
+            "carousel": {
+                "row1": [
+                    "Discover",
+                    "Dive",
+                    "Listen"
+                ],
+                "row2": [
+                    "Explore",
+                    "Experience",
+                    "Immerse"
+                ],
+                "row3": [
+                    "Dream",
+                    "Fall in",
+                    "Wander"
+                ]
+            },
+            "themeTitle": "Theme & Purpose",
+            "themeDescription": "This project was initially created as a final task in SP 2026. The theme of the project is a simple music player with any other tools that may make user experience even better."
+        },
+        "TracksPage": {
+            "title": "Tracks",
+            "searchPlaceholder": "Search tracks...",
+            "noTracksFound": "No tracks found!"
+        },
+        "AlbumsPage": {
+            "title": "Albums",
+            "searchPlaceholder": "Search albums...",
+            "noAlbumsFound": "No albums found!"
+        },
+        "GamesPage": {
+            "title": "Games",
+            "searchPlaceholder": "Search games...",
+            "noGamesFound": "No games found!"
+        },
+        "TrackPage": {
+            "listens": "Listens: {count}",
+            "occursIn": "Occurs in..."
+        },
+        "AlbumPage": {
+            "tracksAmount": "Tracks: {count}",
+            "emptyAlbum": "Album is empty!"
+        },
+        "GamePage": {
+            "lastUpdated": "Last updated: {date}",
+            "albums": "Albums",
+            "albumsAmount": "Albums amount: {count}",
+            "albumsComingSoon": "Albums coming soon!"
+        },
+        "CollectionsPage": {
+            "title": "Collections",
+            "searchPlaceholder": "Search collections...",
+            "noCollectionsFound": "No collections found!"
+        },
+        "PlaylistsPage": {
+            "title": "Playlists",
+            "searchPlaceholder": "Search playlists...",
+            "createFirst": "Create your first playlist!",
+            "create": "Create playlist",
+            "noPlaylistsYet": "No playlists yet!"
+        },
+        "PlaylistPage": {
+            "edit": "Edit playlist",
+            "emptyPlaylist": "Playlist is empty. Add something!",
+            "tracksAmount": "Tracks: {count}"
+        },
+        "CreatePlaylistPage": {
+            "create": "Create playlist"
+        },
+        "EditPlaylistPage": {
+            "back": "Go back",
+            "edit": "Edit playlist"
+        },
+        "ProfilePage": {
+            "activateWarningTitle": "Don't forget to activate your profile!",
+            "activateWarningDescription": "In order to access more features you have to confirm your email address!",
+            "editProfile": "Edit profile",
+            "signOut": "Sign out",
+            "favourites": "Favourites",
+            "history": "History"
+        },
+        "EditProfilePage": {
+            "back": "Go back"
+        },
+        "AboutPage": {
+            "weMake": "We make",
+            "theReal": "the real",
+            "rotating1": [
+                "kings",
+                "peasants",
+                "lords"
+            ],
+            "rotating2": [
+                "admire",
+                "esteem",
+                "revere"
+            ],
+            "rotating3": [
+                "nature spirit",
+                "music",
+                "masterpiece"
+            ],
+            "description": "As you may have seen on the home page, this project was developed as a final task for SP 2026. This web app is primarily designed for listening to music. Any users — whether authorized or not — can visit pages and listen to music from various games. Since this project is in a test phase, there won't be a large number of games or tracks available, but we hope you'll give it a shot and enjoy some real music. Thanks for reading, and have a great time!"
+        },
+        "ContactsPage": {
+            "heading": "Get to Know Our Team",
+            "team": {
+                "tim": {
+                    "subtitle": "Student of SP 2026"
+                },
+                "coffee": {
+                    "name": "Cup of Cofee",
+                    "subtitle": "Main Contributor"
+                }
+            }
+        },
+        "ContributionPage": {
+            "heading": "Project Contribution",
+            "description": "This platform was created completely for free, and as the final project for our SP course, it's still a work in progress. In short, if you'd like to support us — just listen to our music and tell your friend about us!",
+            "githubButton": "Star Francis on GitHub!"
+        },
+        "ContentPanel": {
+            "greeting": "What brings you today, {name}"
+        },
+        "CreateTrackPage": {
+            "title": "Create Track",
+            "name": "Name",
+            "namePlaceholder": "Enter track name",
+            "artist": "Artist",
+            "artistPlaceholder": "Enter artist name",
+            "audio": "Audio",
+            "album": "Album",
+            "tags": "Tags",
+            "submit": "Create Track"
+        },
+        "UpdateTrackPage": {
+            "title": "Edit Track",
+            "selectTrack": "Select a track",
+            "name": "Name",
+            "namePlaceholder": "Enter track name",
+            "artist": "Artist",
+            "artistPlaceholder": "Enter artist name",
+            "audio": "Audio",
+            "album": "Album",
+            "selectAlbum": "Select an album",
+            "tags": "Tags",
+            "submit": "Edit Track"
+        },
+        "RemoveTrackPage": {
+            "title": "Delete Track",
+            "selectTrack": "Select a track",
+            "submit": "Remove Track"
+        },
+        "CreateGamePage": {
+            "title": "Create Game",
+            "name": "Name",
+            "namePlaceholder": "Enter game name",
+            "picture": "Picture",
+            "submit": "Create Game"
+        },
+        "UpdateGamePage": {
+            "title": "Edit Game",
+            "selectGame": "Select a game",
+            "name": "Name",
+            "namePlaceholder": "Enter game name",
+            "picture": "Picture",
+            "submit": "Edit Game"
+        },
+        "RemoveGamePage": {
+            "title": "Delete Game",
+            "selectGame": "Select a game",
+            "submit": "Delete Game"
+        },
+        "CreateCollectionPage": {
+            "title": "Create Collection",
+            "name": "Name",
+            "namePlaceholder": "Enter collection name",
+            "submit": "Create Collection"
+        },
+        "UpdateCollectionPage": {
+            "title": "Edit Collection",
+            "selectCollection": "Select a collection",
+            "name": "Name",
+            "namePlaceholder": "Enter collection name",
+            "submit": "Edit Collection"
+        },
+        "RemoveCollectionPage": {
+            "title": "Delete Collection",
+            "selectCollection": "Select a collection",
+            "submit": "Delete Collection"
+        },
+        "AddToCollectionPage": {
+            "title": "Add Album to Collection",
+            "selectAlbum": "Select an album",
+            "selectCollection": "Select a collection",
+            "submit": "Add to Collection",
+            "errorTitle": "Error occurred!",
+            "alreadyExists": "This album is already in this collection!"
+        },
+        "CreateAlbumPage": {
+            "title": "Create Album",
+            "name": "Name",
+            "namePlaceholder": "Enter album name",
+            "description": "Description",
+            "descriptionPlaceholder": "Enter album description",
+            "picture": "Picture",
+            "game": "Game",
+            "submit": "Create Album"
+        },
+        "UpdateAlbumPage": {
+            "title": "Edit Album",
+            "selectAlbum": "Select an album",
+            "name": "Name",
+            "namePlaceholder": "Enter album name",
+            "description": "Description",
+            "descriptionPlaceholder": "Enter album description",
+            "picture": "Picture",
+            "game": "Game",
+            "selectGame": "Select a game",
+            "submit": "Edit Album"
+        },
+        "RemoveAlbumPage": {
+            "title": "Delete Album",
+            "selectAlbum": "Select an album",
+            "submit": "Delete Album"
+        },
+        "RemoveFromCollectionPage": {
+            "title": "Remove Album from Collection",
+            "selectAlbum": "Select an album",
+            "selectCollection": "Select a collection",
+            "submit": "Remove from collection",
+            "errorTitle": "Error ocurred!",
+            "errorDescription": "This collection does not contain this album!"
+        }
+    },
+    "components": {
+        "AITooltip": {
+            "errorNoFields": "No fields provided! Write down something to get pricise response!",
+            "errorNoTopic": "No topic provided!",
+            "aiErrorTitle": "Error occured while trying quering AI",
+            "aiErrorSubtitle": "You may try again or close the window",
+            "aiResponseTitle": "AI response:",
+            "btnAccept": "Accept",
+            "btnClose": "Close",
+            "btnRefetch": "Refetch",
+            "statusGenerating": "Generating...",
+            "statusGenerate": "Generate"
+        },
+        "AuthForm": {
+            "welcomeBack": "Welcome back",
+            "createAccount": "Create account",
+            "signInDesc": "Sign in to access more features.",
+            "signUpDesc": "Create an account to unlock full access.",
+            "noAccount": "Don't have an account?",
+            "hasAccount": "Already have an account?",
+            "createOne": "Create one",
+            "signIn": "Sign in"
+        },
+        "SignInForm": {
+            "emailPlaceholder": "Email",
+            "passwordPlaceholder": "Password",
+            "submit": "Sign in"
+        },
+        "SignUpForm": {
+            "firstNamePlaceholder": "First name",
+            "lastNamePlaceholder": "Last name (optional)",
+            "emailPlaceholder": "Email",
+            "passwordPlaceholder": "Password",
+            "confirmPasswordPlaceholder": "Confirm password",
+            "agreeLabel": "I agree to the Terms of Service",
+            "submit": "Create account"
+        },
+        "CreatePlaylistForm": {
+            "nameLabel": "Name",
+            "namePlaceholder": "Enter playlist name",
+            "descriptionLabel": "Description",
+            "descriptionPlaceholder": "Enter playlist description (optional)",
+            "submit": "Create Playlist"
+        },
+        "UpdatePlaylistForm": {
+            "nameLabel": "Name",
+            "namePlaceholder": "Enter playlist name",
+            "descriptionLabel": "Description",
+            "descriptionPlaceholder": "Enter playlist description (optional)",
+            "submit": "Save Playlist"
+        },
+        "RoleGuard": {
+            "loadErrorTitle": "Failed to load data about role!",
+            "loadErrorDescription": "Seems you do not have enough rights to access this route!",
+            "permissionErrorTitle": "Insufficient permissions!",
+            "permissionErrorDescription": "Seems you do not have enough rights to access this route!"
+        },
+        "Footer": {
+            "aboutLabel": "About",
+            "aboutAria": "To about page",
+            "teamLabel": "Our Team",
+            "teamAria": "To our team page",
+            "contributionLabel": "Project Contribution",
+            "contributionAria": "To project contribution page",
+            "englishLabel": "English",
+            "englishAria": "Switch to English",
+            "englishLocale": "en",
+            "russianLabel": "Russian",
+            "russianAria": "Switch to Russian",
+            "russianLocale": "ru",
+            "frenchLabel": "French",
+            "frenchAria": "Switch to French",
+            "frenchLocale": "fr",
+            "feedback": "Feedback?",
+            "questions": "Questions?",
+            "thoughts": "Thoughts?",
+            "contactUs": "Contact us!",
+            "scrollDeveloped": "Developed with love (and lots of coffee)",
+            "scrollContribute": "Contribute us on GitHub!"
+        },
+        "EditProfileForm": {
+            "firstNameLabel": "First name",
+            "firstNamePlaceholder": "Enter your first name",
+            "lastNameLabel": "Last name",
+            "lastNamePlaceholder": "Enter your last name",
+            "emailLabel": "Email",
+            "submit": "Submit"
+        },
+        "Favourites": {
+            "errorOccurred": "Error occurred:",
+            "searchPlaceholder": "Search favourites...",
+            "noTracks": "No favourite tracks yet. Add something!",
+            "noTracksFound": "No favourite tracks found."
+        },
+        "History": {
+            "errorOccurred": "Error occurred:",
+            "searchPlaceholder": "Search History...",
+            "noHistory": "You haven not listened to anything yet!",
+            "noTracksFound": "No tracks in history found."
+        }
+    },
+    "hooks": {
+        "useAlbum": {
+            "createSuccess": "Album was successfully created!",
+            "updateSuccess": "Album was successfully updated!",
+            "updateFallbackError": "Failed to update album",
+            "deleteSuccess": "Album was successfully deleted!",
+            "addCollectionSuccess": "Album was successfully added to collection!",
+            "removeCollectionSuccess": "Album was successfully removed from collection!"
+        },
+        "useAuth": {
+            "signUpSuccess": "Nice to meet you, {name}!",
+            "signInSuccess": "Welcome back, {name}!",
+            "signOutSuccess": "Hope to see you soon!"
+        },
+        "useRequireActivated": {
+            "signInTitle": "Sign in first!",
+            "signInDescription": "Sign in to get more features!",
+            "verifyTitle": "Verify your profile!",
+            "verifyDescription": "Visit Profile page and verify your email address to unlock this feature."
+        },
+        "useCollection": {
+            "createSuccess": "Collection was successfully created!",
+            "updateSuccess": "Collection was successfully updated!",
+            "deleteSuccess": "Collection was successfully deleted!"
+        },
+        "useGame": {
+            "createSuccess": "Game was successfully created!",
+            "updateSuccess": "Game was successfully updated!",
+            "deleteSuccess": "Game was successfully deleted!"
+        },
+        "usePlaylist": {
+            "createSuccess": "Playlist was successfully created!",
+            "updateSuccess": "Playlist was successfully updated!"
+        },
+        "useTrack": {
+            "addPlaylistSuccess": "Track added to playlist!",
+            "removePlaylistSuccess": "Track removed from playlist!",
+            "createSuccess": "Track was successfully created!",
+            "updateSuccess": "Track was successfully updated!",
+            "deleteSuccess": "Track was successfully deleted!",
+            "errorTitle": "Error"
+        },
+        "useUser": {
+            "updateProfileSuccess": "Information about you was successfully updated!",
+            "addFavouritesSuccess": "Track added to favourites!",
+            "removeFavouritesSuccess": "Track removed from favourites!",
+            "errorTitle": "Error"
+        }
     }
-  },
-  "ContributionPage": {
-    "heading": "Project Contribution",
-    "description": "This platform was created completely for free, and as the final project for our SP course, it's still a work in progress. In short, if you'd like to support us — just listen to our music and tell your friend about us!",
-    "githubButton": "Star Francis on GitHub!"
-  },
-  "ContentPanel":{
-    "greeting": "What brings you today, {name}"
-  }
 }
