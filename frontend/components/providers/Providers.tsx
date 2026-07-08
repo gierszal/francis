@@ -3,10 +3,18 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState } from "react";
-import Lenis from "@/components/motion/Lenis";
+import { NextIntlClientProvider } from "next-intl";
 import { PlayerStoreProvider } from "@/providers/StoreProvider";
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({
+  children,
+  locale,
+  messages,
+}: {
+  children: React.ReactNode;
+  locale: string;
+  messages: Record<string, unknown>;
+}) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -19,9 +27,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <PlayerStoreProvider>{children}</PlayerStoreProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <QueryClientProvider client={queryClient}>
+        <PlayerStoreProvider>{children}</PlayerStoreProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </NextIntlClientProvider>
   );
 }

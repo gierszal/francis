@@ -32,11 +32,17 @@ type optionsType = {
   prefix: string;
 };
 import { validatePart } from "@/middlewares/validate.middleware.js";
+import { PlaylistRepository } from "@/repositories/prisma/playlist.repository.js";
 
 const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   const trackRepository = new TrackRepository();
+  const playlistRepository = new PlaylistRepository();
   const fileService = new FileService();
-  const service = new TrackService(trackRepository, fileService);
+  const service = new TrackService(
+    trackRepository,
+    playlistRepository,
+    fileService,
+  );
   const controller = new TrackController(service);
   fastify.get(
     "/",

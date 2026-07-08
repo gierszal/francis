@@ -9,6 +9,7 @@ import { collectionApi } from "@/api/modules/collectionApi";
 import { notification } from "antd";
 import { AxiosError } from "axios";
 import { UpdateCollectionDTO } from "@/types/collection";
+import { getErrorMessage } from "@/utils/errors/getErrorMessage";
 
 export function useGetCollections(params: GetItemsParams = {}) {
   const { count, offset, searchQuery } = params;
@@ -51,8 +52,7 @@ export function useCreateCollection() {
       });
     },
     onError: (err) => {
-      let title = err.message;
-      if (err instanceof AxiosError) title = err?.response?.data.error.message;
+      const title = getErrorMessage(err);
       notification.error({
         title: title,
       });
@@ -82,18 +82,12 @@ export function useUpdateCollection() {
     },
 
     onError: (error: Error | AxiosError) => {
-      let title = "Failed to update collection";
-
-      if (error instanceof AxiosError) {
-        title = error?.response?.data?.error?.message || error.message;
-      } else {
-        title = error.message;
-      }
+      const title = getErrorMessage(error);
 
       notification.error({
         title: title,
       });
-      console.error("Update album error:", error);
+      logger.error("Update album error:", error);
     },
   });
 }
@@ -110,9 +104,7 @@ export function useRemoveCollection() {
       });
     },
     onError: (err) => {
-      let title = err.message;
-      if (err instanceof AxiosError)
-        title = err?.response?.data?.error?.message;
+      const title = getErrorMessage(err);
       notification.error({
         title: title,
       });

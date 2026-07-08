@@ -53,11 +53,10 @@ export class AuthService implements IAuthService {
   async signIn(data: SignInDTO): Promise<AuthResult> {
     const { email, password } = data;
     const user = await this.authRepository.findUserByEmail(email);
-    if (!user)
-      throw new InvalidCredentialsError("User with this email does not exist!");
+    if (!user) throw new InvalidCredentialsError("Unable to sign in!");
 
     const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) throw new InvalidCredentialsError("Passwords do not match!");
+    if (!isValid) throw new InvalidCredentialsError("Unable to sign in!");
 
     const payload = formatUserPayload(user);
     const tokens = this.tokenService.generateTokens(payload);

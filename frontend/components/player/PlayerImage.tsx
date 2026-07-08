@@ -15,8 +15,7 @@ const PlayerImage = memo(({ className, fill = false }: PlayerImageProps) => {
       <Image
         fill={fill}
         className={clsx("w-full h-full object-cover", className)}
-        // src={`/api/${activeTrack?.picture}`}
-        src={"/heros/kcd2-re-optimized2.png"}
+        src={`/api/${activeTrack?.picture}`}
         alt={activeTrack?.name ?? "pic"}
       />
     );
@@ -25,8 +24,7 @@ const PlayerImage = memo(({ className, fill = false }: PlayerImageProps) => {
       width={1920}
       height={1080}
       className={clsx("w-full h-full object-cover", className)}
-      // src={`/api/${activeTrack?.picture}`}
-      src={"/heros/kcd2-re-optimized2.png"}
+      src={`/api/${activeTrack?.picture}`}
       alt={activeTrack?.name ?? "pic"}
     />
   );

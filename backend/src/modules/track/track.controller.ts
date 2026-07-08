@@ -81,11 +81,13 @@ export class TrackController {
     reply: FastifyReply,
   ) => {
     const data = request.params;
+    const user = request.user;
+    if (!user) throw new BadRequestError("User is not defined!");
     if (!data.playlistId || !data.trackId)
       throw new BadRequestError(
         "Either track id or playlist id was not provided!",
       );
-    await this.trackService.removeFromPlaylist(data);
+    await this.trackService.removeFromPlaylist(data, user);
     reply.code(204).send();
   };
 
@@ -94,11 +96,13 @@ export class TrackController {
     reply: FastifyReply,
   ) => {
     const data = request.params;
+    const user = request?.user;
+    if (!user) throw new BadRequestError("User is not defined!");
     if (!data.playlistId || !data.trackId)
       throw new BadRequestError(
         "Either track id or playlist id was not provided!",
       );
-    await this.trackService.addToPlaylist(data);
+    await this.trackService.addToPlaylist(data, user);
     reply.code(204).send();
   };
 }

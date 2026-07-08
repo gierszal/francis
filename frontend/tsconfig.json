@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "app/(admin)/content/games/update", "app/(admin)/content/collections/update", "app/(admin)/content/collections/remove"  ],
+, "app/[locale]/(admin)/content/games/edit", "app/[locale]/(admin)/content/collections/edit", "app/[locale]/(admin)/content/collections/remove"  ],
   "exclude": ["node_modules"]
 }

@@ -1,5 +1,6 @@
 import { userApi } from "@/api/modules/user";
 import { GetItemsParams } from "@/types/api/common";
+import { getErrorMessage } from "@/utils/errors/getErrorMessage";
 import {
   keepPreviousData,
   useMutation,
@@ -73,8 +74,7 @@ export function useUpdateProfile() {
       });
     },
     onError: (err) => {
-      let title = err.message;
-      if (err instanceof AxiosError) title = err?.response?.data.error.message;
+      const title = getErrorMessage(err);
       notification.error({
         title: title,
       });
@@ -95,20 +95,14 @@ export function useAddToFavourites() {
       });
     },
     onError: (error: Error | AxiosError) => {
-      let message = "Failed to add track to favourites";
-
-      if (error instanceof AxiosError) {
-        message = error?.response?.data?.error?.message || error.message;
-      } else {
-        message = error.message;
-      }
+      const message = getErrorMessage(error);
 
       notification.error({
         title: "Error",
         description: message,
       });
 
-      console.error("Add track to favourites error:", error);
+      logger.error("Add track to favourites error:", error);
     },
   });
 }
@@ -125,20 +119,14 @@ export function useRemoveFromFavourites() {
       });
     },
     onError: (error: Error | AxiosError) => {
-      let message = "Failed to remove track from favourites";
-
-      if (error instanceof AxiosError) {
-        message = error?.response?.data?.error?.message || error.message;
-      } else {
-        message = error.message;
-      }
+      const message = getErrorMessage(error);
 
       notification.error({
         title: "Error",
         description: message,
       });
 
-      console.error("Remove from favourites error:", error);
+      logger.error("Remove from favourites error:", error);
     },
   });
 }

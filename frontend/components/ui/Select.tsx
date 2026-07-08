@@ -12,7 +12,7 @@ interface SelectProps {
   disabled?: boolean;
   defaultValue?: string;
   items: any[];
-  value?: unknown;
+  value?: any;
 }
 
 const SelectItems = ({

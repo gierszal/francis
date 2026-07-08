@@ -18,9 +18,8 @@ import {
 } from "@/hooks/modules/user/useUser";
 import { usePlayerStore } from "@/providers/StoreProvider";
 import { useQueryClient } from "@tanstack/react-query";
-import { useGetTracks } from "@/hooks/modules/track/useTrack";
 import { QueueSource } from "@/types/player";
-import { set } from "react-hook-form";
+import { useRequireActivated } from "@/hooks/modules/auth/useRequireActivated";
 
 interface TrackItemProps {
   track: FormattedTrack;
@@ -44,10 +43,11 @@ const TrackItem = memo(
     const setPlay = usePlayerStore((s) => s.setPlay);
     const initAudio = usePlayerStore((s) => s.initAudio);
     const setQueueMeta = usePlayerStore((s) => s.setQueueMeta);
-    const currentTracks = usePlayerStore((s) => s.currentTracks);
     const setQueryClient = usePlayerStore((s) => s.setQueryClient);
 
     const isCurrentTrackActive = activeTrack?.id === track?.id;
+
+    const { requireActivated, isActivated } = useRequireActivated();
 
     const gap = 10;
 
@@ -89,11 +89,11 @@ const TrackItem = memo(
     };
 
     const addToFavourites = () => {
-      add({ trackId: track.id });
+      requireActivated(() => add({ trackId: track.id }));
     };
 
     const removeFromFavourites = () => {
-      remove({ trackId: track.id });
+      requireActivated(() => remove({ trackId: track.id }));
     };
 
     const { mutate: add } = useAddToFavourites();
@@ -111,8 +111,8 @@ const TrackItem = memo(
       >
         <div className="relative flex-shrink-0 cursor-pointer">
           <Image
-            width={56}
-            height={56}
+            width={1920}
+            height={1080}
             className="size-14 rounded-lg object-cover shadow-lg"
             src={`/api/${track?.picture}`}
             alt={track.name}

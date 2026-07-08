@@ -1,6 +1,8 @@
-import { NotFoundError } from "@/errors/ApiError.js";
+import { ForbiddenError, NotFoundError } from "@/errors/ApiError.js";
 import { FileType, type FileService } from "@/services/fileService.js";
+import { ROLES } from "@/types/auth/auth.roles.js";
 import type { queryType } from "@/types/common/query.js";
+import type { IPlaylistRepository } from "@/types/playlist/playlist.interface.js";
 import type {
   ITrackRepository,
   ITrackService,
@@ -13,6 +15,7 @@ import type {
   TracksResponse,
   RemoveTrackFromPlaylistDTO,
 } from "@/types/track/index.js";
+import type { FormattedUserPayload } from "@/types/user/user.model.js";
 import {
   formatDetailedTrack,
   formatTrack,
@@ -22,6 +25,7 @@ import type { MultipartFile } from "@fastify/multipart";
 export class TrackService implements ITrackService {
   constructor(
     private trackRepository: ITrackRepository,
+    private playlistRepository: IPlaylistRepository,
     private fileService: FileService,
   ) {}
 
@@ -96,11 +100,23 @@ export class TrackService implements ITrackService {
     return this.trackRepository.remove(id);
   }
 
-  async addToPlaylist(data: AddToPlaylistDTO): Promise<void> {
+  async addToPlaylist(
+    data: AddToPlaylistDTO,
+    user: FormattedUserPayload,
+  ): Promise<void> {
+    const playlist = await this.playlistRepository.findById(data?.trackId);
+    if (playlist?.authorId !== user.id && user.role !== ROLES.ADMIN.name)
+      throw new ForbiddenError("Access to playlist denied!");
     return this.trackRepository.addToPlaylist(data);
   }
 
-  async removeFromPlaylist(data: RemoveTrackFromPlaylistDTO): Promise<void> {
+  async removeFromPlaylist(
+    data: RemoveTrackFromPlaylistDTO,
+    user: FormattedUserPayload,
+  ): Promise<void> {
+    const playlist = await this.playlistRepository.findById(data?.trackId);
+    if (playlist?.authorId !== user.id && user.role !== ROLES.ADMIN.name)
+      throw new ForbiddenError("Access to playlist denied!");
     return this.trackRepository.removeFromPlaylist(data);
   }
 }

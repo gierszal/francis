@@ -12,6 +12,7 @@ import { notification } from "antd";
 import { AxiosError } from "axios";
 import { userApi } from "@/api/modules/user";
 import { UpdatePlaylistDTO } from "@/types/playlist";
+import { getErrorMessage } from "@/utils/errors/getErrorMessage";
 
 export function useGetPlaylists(params: GetItemsParams = {}) {
   const { count, offset, searchQuery } = params;
@@ -54,8 +55,7 @@ export function useCreatePlaylist() {
       });
     },
     onError: (err) => {
-      let title = err.message;
-      if (err instanceof AxiosError) title = err?.response?.data.error.message;
+      const title = getErrorMessage(err);
       notification.error({
         title: title,
       });
@@ -85,18 +85,12 @@ export function useUpdatePlaylist() {
     },
 
     onError: (error: Error | AxiosError) => {
-      let title = "Failed to update playlist";
-
-      if (error instanceof AxiosError) {
-        title = error?.response?.data?.error?.message || error.message;
-      } else {
-        title = error.message;
-      }
+      const title = getErrorMessage(error);
 
       notification.error({
         title: title,
       });
-      console.error("Update playlist error:", error);
+      logger.error("Update playlist error:", error);
     },
   });
 }

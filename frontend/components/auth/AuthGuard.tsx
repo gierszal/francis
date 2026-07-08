@@ -22,7 +22,7 @@ const AuthGuard = ({ children, callbackUrl = "/" }: AuthGuardProps) => {
   useEffect(() => {
     if (isError || (!isLoading && !user))
       router.push(`/auth?callbackUrl=${callbackUrl}`);
-  }, [isError, data, cachedUser]);
+  }, [isError, data, user]);
 
   return (
     <>

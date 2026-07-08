@@ -53,7 +53,7 @@ export function useSignOut() {
     mutationFn: authApi.signOut,
     onSuccess: async () => {
       setAccessToken("");
-      queryClient.removeQueries({ queryKey: ["me"] });
+      queryClient.clear();
       notification.success({
         title: `Hope to see you soon!`,
       });

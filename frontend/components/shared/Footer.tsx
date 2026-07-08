@@ -21,7 +21,6 @@ const additionalPages = [
 const languages = [
   { label: "English", ariaLabel: "Switch to English" },
   { label: "Russian", ariaLabel: "Switch to Russian" },
-  { label: "French", ariaLabel: "Switch to French" },
 ];
 
 const Footer = memo(() => {

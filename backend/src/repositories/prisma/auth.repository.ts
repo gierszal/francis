@@ -81,7 +81,7 @@ export class AuthRepository {
   }
 
   async removeRefreshToken(refreshToken: string): Promise<void> {
-    prisma.token.delete({
+    await prisma.token.delete({
       where: { refreshToken },
       select: {
         refreshToken: true,

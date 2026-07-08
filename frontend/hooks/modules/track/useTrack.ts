@@ -9,6 +9,7 @@ import $api from "@/api";
 import { GetItemsParams } from "@/types/api/common";
 import { notification } from "antd";
 import { AxiosError } from "axios";
+import { getErrorMessage } from "@/utils/errors/getErrorMessage";
 
 export function useGetTracks(params: GetItemsParams = {}) {
   const { count, offset, searchQuery } = params;
@@ -53,20 +54,14 @@ export function useAddTrackToPlaylist() {
       });
     },
     onError: (error: Error | AxiosError) => {
-      let message = "Failed to add track to playlist";
-
-      if (error instanceof AxiosError) {
-        message = error?.response?.data?.error?.message || error.message;
-      } else {
-        message = error.message;
-      }
+      const message = getErrorMessage(error);
 
       notification.error({
         title: "Error",
         description: message,
       });
 
-      console.error("Add track error:", error);
+      logger.error("Add track error:", error);
     },
   });
 }
@@ -88,20 +83,14 @@ export function useRemoveTrackFromPlaylist() {
       });
     },
     onError: (error: Error | AxiosError) => {
-      let message = "Failed to remove track from playlist";
-
-      if (error instanceof AxiosError) {
-        message = error?.response?.data?.error?.message || error.message;
-      } else {
-        message = error.message;
-      }
+      const message = getErrorMessage(error);
 
       notification.error({
         title: "Error",
         description: message,
       });
 
-      console.error("Remove from playlist error:", error);
+      logger.error("Remove from playlist error:", error);
     },
   });
 }
@@ -119,8 +108,7 @@ export function useCreateTrack() {
       });
     },
     onError: (err) => {
-      let title = err.message;
-      if (err instanceof AxiosError) title = err?.response?.data.error.message;
+      const title = getErrorMessage(err);
       notification.error({
         title: title,
       });
@@ -150,18 +138,12 @@ export function useUpdateTrack() {
     },
 
     onError: (error: Error | AxiosError) => {
-      let title = "Failed to update track";
-
-      if (error instanceof AxiosError) {
-        title = error?.response?.data?.error?.message || error.message;
-      } else {
-        title = error.message;
-      }
+      const title = getErrorMessage(error);
 
       notification.error({
         title: title,
       });
-      console.error("Update track error:", error);
+      logger.error("Update track error:", error);
     },
   });
 }
@@ -177,14 +159,12 @@ export function useRemoveTrack() {
         title: "Track was successfully deleted!",
       });
     },
-    onError: (err) => {
-      let title = err.message;
-      if (err instanceof AxiosError)
-        title = err?.response?.data?.error?.message;
+    onError: (error) => {
+      const title = getErrorMessage(error);
       notification.error({
         title: title,
       });
-      logger.error(err);
+      logger.error(error);
     },
   });
 }

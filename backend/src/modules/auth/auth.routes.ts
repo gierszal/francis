@@ -8,7 +8,7 @@ import {
   signUpSchema,
 } from "@/schemas/auth/auth.schema.js";
 import { TokenService } from "@/services/tokenService.js";
-import { MailService } from "@/services/mailService.js";
+import { MailService } from "@/services/mail/mailService.js";
 import {
   refreshResponseSchema,
   signInResponseSchema,

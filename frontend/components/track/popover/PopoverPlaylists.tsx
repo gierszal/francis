@@ -1,5 +1,6 @@
 "use client";
 
+import { useRequireActivated } from "@/hooks/modules/auth/useRequireActivated";
 import {
   useGetPlaylist,
   useGetPlaylists,
@@ -25,6 +26,7 @@ const PopoverPlaylists = memo(({ trackId }: PopoverPlaylistsProps) => {
   const { data } = useGetPlaylists();
   const { data: playlistData } = useGetPlaylist(playlistId, isEnabled);
   const playlists = data?.items?.data;
+  const { requireActivated } = useRequireActivated();
 
   const openNotification = () => {
     const key = `open${Date.now()}`;
@@ -43,7 +45,7 @@ const PopoverPlaylists = memo(({ trackId }: PopoverPlaylistsProps) => {
           type="primary"
           size="small"
           onClick={() => {
-            remove({ trackId, playlistId });
+            requireActivated(() => remove({ trackId, playlistId }));
             notification.destroy(key);
           }}
         >
@@ -73,7 +75,7 @@ const PopoverPlaylists = memo(({ trackId }: PopoverPlaylistsProps) => {
   const addToPlaylist = (playlist: FormattedDetailedPlaylist) => {
     if (isTrackInPlaylist(playlist)) {
       openNotification();
-    } else add({ trackId, playlistId });
+    } else requireActivated(() => add({ trackId, playlistId }));
   };
 
   useEffect(() => {
@@ -94,7 +96,11 @@ const PopoverPlaylists = memo(({ trackId }: PopoverPlaylistsProps) => {
           <BsPlusCircle size={15} />
           <h1
             className="cursor-pointer"
-            onClick={() => router.push("/playlists/create?callbackUrl=/tracks")}
+            onClick={() =>
+              requireActivated(() =>
+                router.push("/playlists/create?callbackUrl=/tracks"),
+              )
+            }
           >
             Create playlist
           </h1>

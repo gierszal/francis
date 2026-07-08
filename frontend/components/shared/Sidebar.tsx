@@ -595,7 +595,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               {items && items.length ? (
                 items.map((it, idx) => {
-                  console.log(isActive(it.link));
                   const hasAccess = it?.requiredRole
                     ? userRole === it.requiredRole
                     : true;

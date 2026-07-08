@@ -12,6 +12,7 @@ import type {
 } from "./index.js";
 import type { FindTracksResult } from "./track.result.js";
 import type { Track } from "@/generated/prisma/client.js";
+import type { FormattedUserPayload } from "../user/user.model.js";
 
 export type ITrackService = {
   getTrack: (id: string) => Promise<FormattedDetailedTrack | null>;
@@ -33,9 +34,15 @@ export type ITrackService = {
 
   deleteTrack: (id: string) => Promise<void>;
 
-  addToPlaylist: (data: AddToPlaylistDTO) => Promise<void>;
+  addToPlaylist: (
+    data: AddToPlaylistDTO,
+    user: FormattedUserPayload,
+  ) => Promise<void>;
 
-  removeFromPlaylist: (data: RemoveTrackFromPlaylistDTO) => Promise<void>;
+  removeFromPlaylist: (
+    data: RemoveTrackFromPlaylistDTO,
+    user: FormattedUserPayload,
+  ) => Promise<void>;
 };
 
 export type ITrackRepository = {
