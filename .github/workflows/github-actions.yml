@@ -28,6 +28,9 @@ jobs:
       - name: Backend - installing modules
         run: npm install
         working-directory: ./backend
+      - name: Backend - generate Prisma Client
+        run: npx prisma generate
+        working-directory: ./backend
       - name: Backend - linting code
         run: npm run lint:check
         working-directory: ./backend
