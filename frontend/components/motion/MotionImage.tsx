@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { memo } from "react";
@@ -33,10 +34,8 @@ const MotionImage = memo(
           width={width ?? 150}
           height={height ?? 150}
           alt={alt ?? "pic"}
-          className={className}
+          className={clsx(className, "w-54 h-54")}
           loading={load}
-
-          // className=""
         />
       </motion.div>
     );

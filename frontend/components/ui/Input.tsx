@@ -12,6 +12,7 @@ interface InputProps {
   onBlur?: any;
   disabled?: boolean;
   defaultValue?: string;
+  dataTestId?: string;
 }
 
 const Input = ({
@@ -28,9 +29,11 @@ const Input = ({
   onBlur,
   disabled,
   defaultValue,
+  dataTestId,
 }: InputProps) => {
   return (
     <input
+      data-testid={dataTestId}
       defaultValue={defaultValue}
       className={className}
       type={type ?? "text"}

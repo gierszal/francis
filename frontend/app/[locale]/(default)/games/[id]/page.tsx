@@ -40,10 +40,11 @@ const GamePage = () => {
         <Image
           src={`/api/${game?.picture}`}
           alt={"pic"}
-          width={1920}
-          height={1080}
+          width={400}
+          height={400}
           className="rounded-2xl w-full max-w-[180px] md:max-w-[250px] aspect-square object-cover"
         />
+
         <div className="w-full flex flex-col gap-3 mt-2 md:mt-10 items-start">
           <div className="relative">
             <GradientText className="text-3xl md:text-5xl">

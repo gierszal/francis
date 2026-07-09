@@ -1,0 +1,63 @@
+name: Francis workflow
+run-name: ${{ github.actor }} is initiated Francis workflow
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+jobs:
+  pipeline:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [ 20.x, 22.x, 24.x ]
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+            node-version: ${{ matrix.node-version }}
+            cache: 'npm'
+      - name: Output node version
+        run: node --version
+      - name: Backend - installing modules
+        run: npm install
+        working-directory: ./backend
+      - name: Backend - linting code
+        run: npm run lint
+        working-directory: ./backend
+      - name: Backend - type checking
+        run: npm run type:check
+        working-directory: ./backend
+      - name: Backend - testing
+        run: npm run test
+        working-directory: ./backend
+      - name: Backend - building
+        run: npm run build
+        working-directory: ./backend
+      - run: echo "Backend was built successfully!"
+
+      - name: Frontend - installing modules
+        run: npm install
+        working-directory: ./frontend
+      - name: Frontend - linting code
+        run: npm run lint
+        working-directory: ./frontend
+      - name: Frontend - type checking
+        run: npm run type:check
+        working-directory: ./frontend
+      - name: Frontend - testing
+        run: npm run test
+        working-directory: ./frontend
+      - name: Frontend - building
+        run: npm run build
+        working-directory: ./frontend
+      - run: echo "Frontend was built successfully!"
+      - run: echo "Project was built successfully!"
+      - run: echo "Current job's status is ${{ job.status }}."
+
+
+
+        

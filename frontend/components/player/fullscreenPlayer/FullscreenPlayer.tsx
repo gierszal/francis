@@ -21,6 +21,7 @@ import PlayerImage from "../PlayerImage";
 import TimelineSlider from "../TimelineSlider";
 import FullscreenPlayerControls from "./FullscreenPlayerControls";
 import { FaChevronDown } from "react-icons/fa";
+import Image from "next/image";
 
 interface FullscreenPlayer {
   onClose: Dispatch<SetStateAction<boolean>>;
@@ -109,7 +110,7 @@ const FullscreenPlayer = ({ onClose }: FullscreenPlayer) => {
             <div className="rounded-lg mb-40">
               <div className="w-84 h-84 relative">
                 <div className="w-full h-full">
-                  <PlayerImage className="rounded-xl w-full h-full object-cover" />
+                  <PlayerImage className="rounded-2xl w-full aspect-square object-cover" />
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <FullscreenPlayerControls

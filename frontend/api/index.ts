@@ -3,7 +3,7 @@ import axios, { InternalAxiosRequestConfig } from "axios";
 
 const $api = axios.create({
   withCredentials: true,
-  baseURL: "http://localhost:5000/api/v1",
+  baseURL: `${process.env.NEXT_PUBLIC_SERVER_API}`,
 });
 
 let accessToken: string | null = null;
@@ -19,7 +19,7 @@ let refreshPromise: Promise<RefreshResponse | null> | null = null;
 async function getTokenPair(): Promise<RefreshResponse | null> {
   try {
     const { data } = await axios.get<RefreshResponse>(
-      "http://localhost:5000/api/v1/auth/refresh",
+      `${process.env.NEXT_PUBLIC_SERVER_API}/auth/refresh`,
       { withCredentials: true },
     );
     setAccessToken(data.data.accessToken);

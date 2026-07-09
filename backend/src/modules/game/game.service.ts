@@ -28,6 +28,7 @@ export class GameService implements IGameService {
     id: string,
   ): Promise<FormattedDetailedGame | null> => {
     const game = await this.gameRepository.findById(id);
+    if (!game) throw new NotFoundError(`Game with id ${id} was not found!`);
     return formatDetailedGame(game);
   };
 
@@ -69,12 +70,13 @@ export class GameService implements IGameService {
     pic?: MultipartFile,
   ): Promise<FormattedGame> => {
     let picPath: string | undefined; // если потребуется откат
+    let oldPicturePath: string | undefined;
     try {
       if (pic) {
         const album = await this.gameRepository.findById(id);
         if (!album)
           throw new NotFoundError(`Game with id ${id} was not found!`);
-        await this.fileService.removeFile(album?.picture);
+        oldPicturePath = album?.picture;
         const picturePath = await this.fileService.createFile(
           FileType.IMAGE,
           pic,
@@ -82,6 +84,7 @@ export class GameService implements IGameService {
         picPath = picturePath;
       }
       const game = await this.gameRepository.update(id, data, picPath);
+      if (pic && oldPicturePath) this.fileService.removeFile(oldPicturePath);
       return formatGame(game);
     } catch (err) {
       if (picPath) await this.fileService.removeFile(picPath);

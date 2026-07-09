@@ -139,12 +139,14 @@ export function SignUpForm() {
 
           {isVisible ? (
             <BsEye
+              data-testid="toggle-password-visibility"
               size={18}
               className="absolute right-5 top-1/2 -translate-y-1/2 text-zinc-500 cursor-pointer active:scale-95"
               onClick={handleVisibility}
             />
           ) : (
             <BsEyeSlash
+              data-testid="toggle-password-visibility"
               size={18}
               className="absolute right-5 top-1/2 -translate-y-1/2 text-zinc-500 cursor-pointer active:scale-95"
               onClick={handleVisibility}
@@ -177,12 +179,14 @@ export function SignUpForm() {
 
           {isVisible ? (
             <BsEye
+              data-testid="toggle-confirmPassword-visibility"
               size={18}
               className="absolute right-5 top-1/2 -translate-y-1/2 text-zinc-500 cursor-pointer active:scale-95"
               onClick={handleVisibility}
             />
           ) : (
             <BsEyeSlash
+              data-testid="toggle-confirmPassword-visibility"
               size={18}
               className="absolute right-5 top-1/2 -translate-y-1/2 text-zinc-500 cursor-pointer active:scale-95"
               onClick={handleVisibility}
@@ -203,6 +207,7 @@ export function SignUpForm() {
       <div className="flex flex-col gap-2">
         <div className="flex flex-row justify-center text-white font-sans gap-2">
           <Input
+            dataTestId="agree-checkbox"
             id="agree"
             type="checkbox"
             ariaInvalid={!!errors.agree}

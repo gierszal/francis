@@ -68,9 +68,10 @@ const Footer = memo(() => {
           <div className="py-5 flex flex-row flex-wrap justify-center items-center gap-6 md:gap-15">
             {languages.map((lang, ind) => (
               <div
+                key={ind}
                 onClick={() => router.replace(path, { locale: lang.locale })}
               >
-                <Header key={ind}>{lang.label}</Header>
+                <Header>{lang.label}</Header>
               </div>
             ))}
           </div>

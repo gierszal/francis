@@ -31,6 +31,7 @@ export class TrackService implements ITrackService {
 
   async getTrack(id: string): Promise<FormattedDetailedTrack | null> {
     const track = await this.trackRepository.findById(id);
+    if (!track) throw new NotFoundError(`Track with id ${id} was not found!`);
     return formatDetailedTrack(track);
   }
 
@@ -72,12 +73,13 @@ export class TrackService implements ITrackService {
     audio?: MultipartFile,
   ): Promise<FormattedTrack> {
     let audPath: string | undefined; // если понадобится откатить файл
+    let oldAudPath: string | undefined;
     try {
       if (audio) {
         const track = await this.trackRepository.findById(id);
         if (!track)
           throw new NotFoundError(`Album with id ${id} was not found!`);
-        await this.fileService.removeFile(track?.audio);
+        oldAudPath = track?.audio;
         const audioPath = await this.fileService.createFile(
           FileType.AUDIO,
           audio,
@@ -85,6 +87,7 @@ export class TrackService implements ITrackService {
         audPath = audioPath;
       }
       const track = await this.trackRepository.update(id, data, audPath);
+      if (audio && oldAudPath) await this.fileService.removeFile(oldAudPath);
       return formatTrack(track);
     } catch (err) {
       if (audPath) await this.fileService.removeFile(audPath);

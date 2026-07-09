@@ -18,6 +18,7 @@ import TimelineSlider from "./TimelineSlider";
 import { BsArrowsAngleExpand } from "react-icons/bs";
 import FullscreenPlayer from "./fullscreenPlayer/FullscreenPlayer";
 import MobilePlayer from "./mobile/MobilePlayer";
+import Image from "next/image";
 
 const MusicWidget = () => {
   const { data: userData } = useGetUser();
@@ -112,7 +113,13 @@ const MusicWidget = () => {
                       <div className="flex flex-row gap-5 items-center ">
                         <div className="w-14 h-14 rounded-xl overflow-hidden shadow-lg -mt-1 relative">
                           <div>
-                            <PlayerImage fill={true} />
+                            <Image
+                              width={200}
+                              height={200}
+                              className="rounded-2xl w-full size-14 aspect-square object-cover"
+                              src={`/api/${activeTrack?.picture}`}
+                              alt={activeTrack?.name}
+                            />
                           </div>
                           <div className="hidden md:flex absolute inset-0 flex items-center justify-center">
                             <BsArrowsAngleExpand

@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://localhost:5000/static/:path*",
+        destination: `${process.env.NEXT_PUBLIC_SERVER_STATIC}/:path*`,
       },
     ];
   },

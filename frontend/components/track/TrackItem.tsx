@@ -111,9 +111,10 @@ const TrackItem = memo(
       >
         <div className="relative flex-shrink-0 cursor-pointer">
           <Image
-            width={1920}
-            height={1080}
-            className="size-14 rounded-lg object-cover shadow-lg"
+            onClick={() => router.push(`/tracks/${track.id}`)}
+            width={200}
+            height={200}
+            className="rounded-2xl w-full size-14 aspect-square object-cover"
             src={`/api/${track?.picture}`}
             alt={track.name}
           />

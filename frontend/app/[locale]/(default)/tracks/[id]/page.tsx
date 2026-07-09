@@ -50,11 +50,10 @@ const TrackPage = () => {
     <AnimatedDiv className="ml-4 mt-6 md:ml-10 md:mt-10 flex flex-col items-start font-sans px-2 md:px-0">
       <div className="flex flex-col md:flex-row gap-5 w-full">
         <Image
-          // src={track.album.picture}
           src={`/api/${track?.album?.picture}`}
-          alt={"pic"}
-          width={1920}
-          height={1080}
+          alt={track?.album?.name ?? "album cover"}
+          width={400}
+          height={400}
           className="rounded-2xl w-full max-w-[180px] md:max-w-[250px] aspect-square object-cover"
         />
         <div className="w-full flex flex-col gap-2 mt-2 md:mt-10 items-start">
