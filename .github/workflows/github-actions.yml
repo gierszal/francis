@@ -68,6 +68,8 @@ jobs:
         working-directory: ./frontend
       - name: Frontend - building
         run: npm run build
+        env:
+          NEXT_PUBLIC_SERVER_STATIC: ${{secrets.NEXT_PUBLIC_SERVER_STATIC}}
         working-directory: ./frontend
       - run: echo "Frontend was built successfully!"
       - run: echo "Project was built successfully!"
