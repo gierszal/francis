@@ -14,13 +14,13 @@ const tokensSchema = z.object({
   refreshToken: z.string(),
 });
 
-export const signUpSchema = z.object({
+export const signUpResultSchema = z.object({
   tokens: tokensSchema,
   user: userSchema,
 });
 
 export const signUpResponseSchema = z.object({
-  data: signUpSchema,
+  data: signUpResultSchema,
 });
 
 export const signInResponseSchema = signUpResponseSchema;

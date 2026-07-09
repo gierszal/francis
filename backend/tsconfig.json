@@ -4,8 +4,8 @@
     // File Layout
     "rootDir": "./src",
     "outDir": "./dist",
-    "paths":{
-      "@/*":["./src/*"],
+    "paths": {
+      "@/*": ["./src/*"]
     },
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
@@ -41,18 +41,13 @@
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true,
+    "skipLibCheck": true
   },
   "watchOptions": {
     "watchFile": "dynamicPriorityPolling"
   },
-  
-   "include": [
-    "src/**/*.ts"
-  ],
 
-  "exclude": [
-    "dist",
-    "node_modules"
-  ]
+  "include": ["src/**/*.ts"],
+
+  "exclude": ["dist", "node_modules"]
 }
