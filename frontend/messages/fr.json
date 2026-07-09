@@ -1,409 +1,385 @@
 {
-    "Navigation": {
-        "homeLabel": "Accueil",
-        "homeAria": "Vers la page d'accueil",
-        "profileLabel": "Profil",
-        "profileAria": "Vers le profil",
-        "tracksLabel": "Pistes",
-        "tracksAria": "Vers les pistes",
-        "albumsLabel": "Albums",
-        "albumsAria": "Vers les albums",
-        "gamesLabel": "Jeux",
-        "gamesAria": "Vers les jeux",
-        "collectionsLabel": "Collections",
-        "collectionsAria": "Vers les collections",
-        "playlistsLabel": "Playlists",
-        "playlistsAria": "Vers les playlists",
-        "contentLabel": "Contenu",
-        "contentAria": "Vers le contenu (rôle d'administrateur requis)"
+  "Navigation": {
+    "homeLabel": "Accueil",
+    "homeAria": "Vers la page d'accueil",
+    "profileLabel": "Profil",
+    "profileAria": "Vers le profil",
+    "tracksLabel": "Pistes",
+    "tracksAria": "Vers les pistes",
+    "albumsLabel": "Albums",
+    "albumsAria": "Vers les albums",
+    "gamesLabel": "Jeux",
+    "gamesAria": "Vers les jeux",
+    "collectionsLabel": "Collections",
+    "collectionsAria": "Vers les collections",
+    "playlistsLabel": "Playlists",
+    "playlistsAria": "Vers les playlists",
+    "contentLabel": "Contenu",
+    "contentAria": "Vers le contenu (rôle d'administrateur requis)"
+  },
+  "pages": {
+    "HomePage": {
+      "title": "Francis | Lecteur Web",
+      "year": "2026.",
+      "carousel": {
+        "row1": ["Découvre", "Plonge", "Écoute"],
+        "row2": ["Explore", "Expérimente", "Immerge-toi"],
+        "row3": ["Rêve", "Tombe amoureux", "Vagabonde"]
+      },
+      "themeTitle": "Thème et objectif",
+      "themeDescription": "Ce projet a été initialement créé comme tâche finale pour SP 2026. Le thème du projet est un lecteur de musique simple avec d'autres outils qui peuvent améliorer l'expérience utilisateur."
     },
-    "pages": {
-        "HomePage": {
-            "title": "Francis | Lecteur Web",
-            "year": "2026.",
-            "carousel": {
-                "row1": [
-                    "Découvre",
-                    "Plonge",
-                    "Écoute"
-                ],
-                "row2": [
-                    "Explore",
-                    "Expérimente",
-                    "Immerge-toi"
-                ],
-                "row3": [
-                    "Rêve",
-                    "Tombe amoureux",
-                    "Vagabonde"
-                ]
-            },
-            "themeTitle": "Thème et objectif",
-            "themeDescription": "Ce projet a été initialement créé comme tâche finale pour SP 2026. Le thème du projet est un lecteur de musique simple avec d'autres outils qui peuvent améliorer l'expérience utilisateur."
-        },
-        "TracksPage": {
-            "title": "Pistes",
-            "searchPlaceholder": "Rechercher des pistes...",
-            "noTracksFound": "Aucune piste trouvée !"
-        },
-        "AlbumsPage": {
-            "title": "Albums",
-            "searchPlaceholder": "Rechercher des albums...",
-            "noAlbumsFound": "Aucun album trouvé !"
-        },
-        "GamesPage": {
-            "title": "Jeux",
-            "searchPlaceholder": "Rechercher des jeux...",
-            "noGamesFound": "Aucun jeu trouvé !"
-        },
-        "TrackPage": {
-            "listens": "Écoutes : {count}",
-            "occursIn": "Apparaît dans..."
-        },
-        "AlbumPage": {
-            "tracksAmount": "Pistes : {count}",
-            "emptyAlbum": "L'album est vide !"
-        },
-        "GamePage": {
-            "lastUpdated": "Dernière mise à jour : {date}",
-            "albums": "Albums",
-            "albumsAmount": "Nombre d'albums : {count}",
-            "albumsComingSoon": "Albums bientôt disponibles !"
-        },
-        "CollectionsPage": {
-            "title": "Collections",
-            "searchPlaceholder": "Rechercher des collections...",
-            "noCollectionsFound": "Aucune collection trouvée !"
-        },
-        "PlaylistsPage": {
-            "title": "Playlists",
-            "searchPlaceholder": "Rechercher des playlists...",
-            "createFirst": "Créez votre première playlist !",
-            "create": "Créer une playlist",
-            "noPlaylistsYet": "Pas encore de playlists !"
-        },
-        "PlaylistPage": {
-            "edit": "Modifier la playlist",
-            "emptyPlaylist": "La playlist est vide. Ajoutez quelque chose !",
-            "tracksAmount": "Pistes : {count}"
-        },
-        "CreatePlaylistPage": {
-            "create": "Créer une playlist"
-        },
-        "EditPlaylistPage": {
-            "back": "Retour",
-            "edit": "Modifier la playlist"
-        },
-        "ProfilePage": {
-            "activateWarningTitle": "N'oubliez pas d'activer votre profil !",
-            "activateWarningDescription": "Pour accéder à plus de fonctionnalités, vous devez confirmer votre adresse e-mail !",
-            "editProfile": "Modifier le profil",
-            "signOut": "Se déconnecter",
-            "favourites": "Favoris",
-            "history": "Historique"
-        },
-        "EditProfilePage": {
-            "back": "Retour"
-        },
-        "AboutPage": {
-            "weMake": "Nous faisons",
-            "theReal": "les vrais",
-            "rotating1": [
-                "rois",
-                "paysans",
-                "seigneurs"
-            ],
-            "rotating2": [
-                "admirent",
-                "estiment",
-                "vénèrent"
-            ],
-            "rotating3": [
-                "l'esprit de la nature",
-                "la musique",
-                "le chef-d'œuvre"
-            ],
-            "description": "Comme vous avez pu le voir sur la page d'accueil, ce projet a été développé comme tâche finale pour SP 2026. Cette application web est principalement conçue pour écouter de la musique. Tous les utilisateurs — qu'ils soient authentifiés ou non — peuvent visiter les pages et écouter de la musique de différents jeux. Comme ce projet est en phase de test, le nombre de jeux et de pistes sera limité, mais nous espérons que vous lui donnerez une chance et que vous apprécierez une vraie musique. Merci d'avoir lu, et passez un bon moment !"
-        },
-        "ContactsPage": {
-            "heading": "Découvrez notre équipe",
-            "team": {
-                "tim": {
-                    "subtitle": "Étudiant de SP 2026"
-                },
-                "coffee": {
-                    "name": "Tasse de café",
-                    "subtitle": "Principal contributeur"
-                }
-            }
-        },
-        "ContributionPage": {
-            "heading": "Contribution au projet",
-            "description": "Cette plateforme a été créée entièrement gratuitement et, en tant que projet final pour notre cours SP, elle est encore en développement. Bref, si vous souhaitez nous soutenir — écoutez simplement notre musique et parlez de nous à vos amis !",
-            "githubButton": "Mettez une étoile à Francis sur GitHub !"
-        },
-        "ContentPanel": {
-            "greeting": "Qu'est-ce qui vous amène aujourd'hui, {name}"
-        },
-        "CreateTrackPage": {
-            "title": "Créer une piste",
-            "name": "Nom",
-            "namePlaceholder": "Entrez le nom de la piste",
-            "artist": "Artiste",
-            "artistPlaceholder": "Entrez le nom de l'artiste",
-            "audio": "Fichier audio",
-            "album": "Album",
-            "tags": "Tags",
-            "submit": "Créer la piste"
-        },
-        "UpdateTrackPage": {
-            "title": "Modifier la piste",
-            "selectTrack": "Sélectionnez une piste",
-            "name": "Nom",
-            "namePlaceholder": "Entrez le nom de la piste",
-            "artist": "Artiste",
-            "artistPlaceholder": "Entrez le nom de l'artiste",
-            "audio": "Fichier audio",
-            "album": "Album",
-            "selectAlbum": "Sélectionnez un album",
-            "tags": "Tags",
-            "submit": "Modifier la piste"
-        },
-        "RemoveTrackPage": {
-            "title": "Supprimer la piste",
-            "selectTrack": "Sélectionnez une piste",
-            "submit": "Supprimer la piste"
-        },
-        "CreateGamePage": {
-            "title": "Créer un jeu",
-            "name": "Nom",
-            "namePlaceholder": "Entrez le nom du jeu",
-            "picture": "Image",
-            "submit": "Créer le jeu"
-        },
-        "UpdateGamePage": {
-            "title": "Modifier le jeu",
-            "selectGame": "Sélectionnez un jeu",
-            "name": "Nom",
-            "namePlaceholder": "Entrez le nom du jeu",
-            "picture": "Image",
-            "submit": "Modifier le jeu"
-        },
-        "RemoveGamePage": {
-            "title": "Supprimer le jeu",
-            "selectGame": "Sélectionnez un jeu",
-            "submit": "Supprimer le jeu"
-        },
-        "CreateCollectionPage": {
-            "title": "Créer une collection",
-            "name": "Nom",
-            "namePlaceholder": "Entrez le nom de la collection",
-            "submit": "Créer la collection"
-        },
-        "UpdateCollectionPage": {
-            "title": "Modifier la collection",
-            "selectCollection": "Sélectionnez une collection",
-            "name": "Nom",
-            "namePlaceholder": "Entrez le nom de la collection",
-            "submit": "Modifier la collection"
-        },
-        "RemoveCollectionPage": {
-            "title": "Supprimer la collection",
-            "selectCollection": "Sélectionnez une collection",
-            "submit": "Supprimer la collection"
-        },
-        "AddToCollectionPage": {
-            "title": "Ajouter un album à la collection",
-            "selectAlbum": "Sélectionnez un album",
-            "selectCollection": "Sélectionnez une collection",
-            "submit": "Ajouter à la collection",
-            "errorTitle": "Une erreur est survenue !",
-            "alreadyExists": "Cet album est déjà dans cette collection !"
-        },
-        "CreateAlbumPage": {
-            "title": "Créer un album",
-            "name": "Nom",
-            "namePlaceholder": "Entrez le nom de l'album",
-            "description": "Description",
-            "descriptionPlaceholder": "Entrez la description de l'album",
-            "picture": "Image",
-            "game": "Jeu",
-            "submit": "Créer l'album"
-        },
-        "UpdateAlbumPage": {
-            "title": "Modifier l'album",
-            "selectAlbum": "Sélectionnez un album",
-            "name": "Nom",
-            "namePlaceholder": "Entrez le nom de l'album",
-            "description": "Description",
-            "descriptionPlaceholder": "Entrez la description de l'album",
-            "picture": "Image",
-            "game": "Jeu",
-            "selectGame": "Sélectionnez un jeu",
-            "submit": "Modifier l'album"
-        },
-        "RemoveAlbumPage": {
-            "title": "Supprimer l'album",
-            "selectAlbum": "Sélectionnez un album",
-            "submit": "Supprimer l'album"
-        },
-        "RemoveFromCollectionPage": {
-            "title": "Retirer l'album de la collection",
-            "selectAlbum": "Sélectionnez un album",
-            "selectCollection": "Sélectionnez une collection",
-            "submit": "Retirer de la collection",
-            "errorTitle": "Une erreur est survenue !",
-            "errorDescription": "Cette collection ne contient pas cet album !"
-        }
+    "TracksPage": {
+      "title": "Pistes",
+      "searchPlaceholder": "Rechercher des pistes...",
+      "noTracksFound": "Aucune piste trouvée !"
     },
-    "components": {
-        "AITooltip": {
-            "errorNoFields": "Aucun champ rempli ! Écrivez quelque chose pour obtenir une réponse précise !",
-            "errorNoTopic": "Aucun sujet fourni !",
-            "aiErrorTitle": "Une erreur est survenue lors de l'interrogation de l'IA",
-            "aiErrorSubtitle": "Vous pouvez réessayer ou fermer la fenêtre",
-            "aiResponseTitle": "Réponse de l'IA :",
-            "btnAccept": "Accepter",
-            "btnClose": "Fermer",
-            "btnRefetch": "Rafraîchir",
-            "statusGenerating": "Génération...",
-            "statusGenerate": "Générer"
-        },
-        "AuthForm": {
-            "welcomeBack": "Bon retour",
-            "createAccount": "Créer un compte",
-            "signInDesc": "Connectez-vous pour accéder à plus de fonctionnalités.",
-            "signUpDesc": "Créez un compte pour débloquer un accès complet.",
-            "noAccount": "Vous n'avez pas de compte ?",
-            "hasAccount": "Vous avez déjà un compte ?",
-            "createOne": "Créez-en un",
-            "signIn": "Se connecter"
-        },
-        "SignInForm": {
-            "emailPlaceholder": "Adresse e-mail",
-            "passwordPlaceholder": "Mot de passe",
-            "submit": "Se connecter"
-        },
-        "SignUpForm": {
-            "firstNamePlaceholder": "Prénom",
-            "lastNamePlaceholder": "Nom de famille (facultatif)",
-            "emailPlaceholder": "Adresse e-mail",
-            "passwordPlaceholder": "Mot de passe",
-            "confirmPasswordPlaceholder": "Confirmer le mot de passe",
-            "agreeLabel": "J'accepte les conditions d'utilisation",
-            "submit": "Créer un compte"
-        },
-        "CreatePlaylistForm": {
-            "nameLabel": "Nom",
-            "namePlaceholder": "Entrez le nom de la playlist",
-            "descriptionLabel": "Description",
-            "descriptionPlaceholder": "Entrez la description de la playlist (facultatif)",
-            "submit": "Créer la playlist"
-        },
-        "UpdatePlaylistForm": {
-            "nameLabel": "Nom",
-            "namePlaceholder": "Entrez le nom de la playlist",
-            "descriptionLabel": "Description",
-            "descriptionPlaceholder": "Entrez la description de la playlist (facultatif)",
-            "submit": "Enregistrer la playlist"
-        },
-        "RoleGuard": {
-            "loadErrorTitle": "Échec du chargement des données sur le rôle !",
-            "loadErrorDescription": "Il semble que vous n'ayez pas les droits suffisants pour accéder à cette route !",
-            "permissionErrorTitle": "Permissions insuffisantes !",
-            "permissionErrorDescription": "Il semble que vous n'ayez pas les droits suffisants pour accéder à cette route !"
-        },
-        "Footer": {
-            "aboutLabel": "À propos",
-            "aboutAria": "Vers la page à propos",
-            "teamLabel": "Notre équipe",
-            "teamAria": "Vers la page de notre équipe",
-            "contributionLabel": "Contribution au projet",
-            "contributionAria": "Vers la page de contribution au projet",
-            "englishLabel": "Anglais",
-            "englishAria": "Passer à l'anglais",
-            "englishLocale": "en",
-            "russianLabel": "Russe",
-            "russianAria": "Passer au russe",
-            "russianLocale": "ru",
-            "frenchLabel": "Français",
-            "frenchAria": "Passer au français",
-            "frenchLocale": "fr",
-            "feedback": "Des retours ?",
-            "questions": "Des questions ?",
-            "thoughts": "Des idées ?",
-            "contactUs": "Contactez-nous !",
-            "scrollDeveloped": "Développé avec amour (et beaucoup de café)",
-            "scrollContribute": "Soutenez-nous sur GitHub !"
-        },
-        "EditProfileForm": {
-            "firstNameLabel": "Prénom",
-            "firstNamePlaceholder": "Entrez votre prénom",
-            "lastNameLabel": "Nom de famille",
-            "lastNamePlaceholder": "Entrez votre nom de famille",
-            "emailLabel": "Adresse e-mail",
-            "submit": "Enregistrer"
-        },
-        "Favourites": {
-            "errorOccurred": "Une erreur est survenue :",
-            "searchPlaceholder": "Rechercher dans les favoris...",
-            "noTracks": "Pas encore de pistes favorites. Ajoutez-en !",
-            "noTracksFound": "Aucune piste favorite trouvée."
-        },
-        "History": {
-            "errorOccurred": "Une erreur est survenue :",
-            "searchPlaceholder": "Rechercher dans l'historique...",
-            "noHistory": "Vous n'avez encore rien écouté !",
-            "noTracksFound": "Aucune piste trouvée dans l'historique."
-        }
+    "AlbumsPage": {
+      "title": "Albums",
+      "searchPlaceholder": "Rechercher des albums...",
+      "noAlbumsFound": "Aucun album trouvé !"
     },
-    "hooks": {
-        "useAlbum": {
-            "createSuccess": "L'album a été créé avec succès !",
-            "updateSuccess": "L'album a été mis à jour avec succès !",
-            "updateFallbackError": "Échec de la mise à jour de l'album",
-            "deleteSuccess": "L'album a été supprimé avec succès !",
-            "addCollectionSuccess": "L'album a été ajouté à la collection avec succès !",
-            "removeCollectionSuccess": "L'album a été retiré de la collection avec succès !"
+    "GamesPage": {
+      "title": "Jeux",
+      "searchPlaceholder": "Rechercher des jeux...",
+      "noGamesFound": "Aucun jeu trouvé !"
+    },
+    "TrackPage": {
+      "listens": "Écoutes : {count}",
+      "occursIn": "Apparaît dans..."
+    },
+    "AlbumPage": {
+      "tracksAmount": "Pistes : {count}",
+      "emptyAlbum": "L'album est vide !"
+    },
+    "GamePage": {
+      "lastUpdated": "Dernière mise à jour : {date}",
+      "albums": "Albums",
+      "albumsAmount": "Nombre d'albums : {count}",
+      "albumsComingSoon": "Albums bientôt disponibles !"
+    },
+    "CollectionsPage": {
+      "title": "Collections",
+      "searchPlaceholder": "Rechercher des collections...",
+      "noCollectionsFound": "Aucune collection trouvée !"
+    },
+    "PlaylistsPage": {
+      "title": "Playlists",
+      "searchPlaceholder": "Rechercher des playlists...",
+      "createFirst": "Créez votre première playlist !",
+      "create": "Créer une playlist",
+      "noPlaylistsYet": "Pas encore de playlists !"
+    },
+    "PlaylistPage": {
+      "edit": "Modifier la playlist",
+      "emptyPlaylist": "La playlist est vide. Ajoutez quelque chose !",
+      "tracksAmount": "Pistes : {count}"
+    },
+    "CreatePlaylistPage": {
+      "create": "Créer une playlist"
+    },
+    "EditPlaylistPage": {
+      "back": "Retour",
+      "edit": "Modifier la playlist"
+    },
+    "ProfilePage": {
+      "activateWarningTitle": "N'oubliez pas d'activer votre profil !",
+      "activateWarningDescription": "Pour accéder à plus de fonctionnalités, vous devez confirmer votre adresse e-mail !",
+      "editProfile": "Modifier le profil",
+      "signOut": "Se déconnecter",
+      "favourites": "Favoris",
+      "history": "Historique"
+    },
+    "EditProfilePage": {
+      "back": "Retour"
+    },
+    "AboutPage": {
+      "weMake": "Nous faisons",
+      "theReal": "les vrais",
+      "rotating1": ["rois", "paysans", "seigneurs"],
+      "rotating2": ["admirent", "estiment", "vénèrent"],
+      "rotating3": ["l'esprit de la nature", "la musique", "le chef-d'œuvre"],
+      "description": "Comme vous avez pu le voir sur la page d'accueil, ce projet a été développé comme tâche finale pour SP 2026. Cette application web est principalement conçue pour écouter de la musique. Tous les utilisateurs — qu'ils soient authentifiés ou non — peuvent visiter les pages et écouter de la musique de différents jeux. Comme ce projet est en phase de test, le nombre de jeux et de pistes sera limité, mais nous espérons que vous lui donnerez une chance et que vous apprécierez une vraie musique. Merci d'avoir lu, et passez un bon moment !"
+    },
+    "ContactsPage": {
+      "heading": "Découvrez notre équipe",
+      "team": {
+        "tim": {
+          "subtitle": "Étudiant de SP 2026"
         },
-        "useAuth": {
-            "signUpSuccess": "Ravi de vous rencontrer, {name} !",
-            "signInSuccess": "Bon retour, {name} !",
-            "signOutSuccess": "Au plaisir de vous revoir bientôt !"
-        },
-        "useRequireActivated": {
-            "signInTitle": "Connectez-vous d'abord !",
-            "signInDescription": "Connectez-vous pour profiter de plus de fonctionnalités !",
-            "verifyTitle": "Vérifiez votre profil !",
-            "verifyDescription": "Rendez-vous sur la page de profil et confirmez votre adresse e-mail pour débloquer cette fonctionnalité."
-        },
-        "useCollection": {
-            "createSuccess": "La collection a été créée avec succès !",
-            "updateSuccess": "La collection a été mise à jour avec succès !",
-            "deleteSuccess": "La collection a été supprimée avec succès !"
-        },
-        "useGame": {
-            "createSuccess": "Le jeu a été créé avec succès !",
-            "updateSuccess": "Le jeu a été mis à jour avec succès !",
-            "deleteSuccess": "Le jeu a été supprimé avec succès !"
-        },
-        "usePlaylist": {
-            "createSuccess": "La playlist a été créée avec succès !",
-            "updateSuccess": "La playlist a été mise à jour avec succès !"
-        },
-        "useTrack": {
-            "addPlaylistSuccess": "Piste ajoutée à la playlist !",
-            "removePlaylistSuccess": "Piste retirée de la playlist !",
-            "createSuccess": "La piste a été créée avec succès !",
-            "updateSuccess": "La piste a été mise à jour avec succès !",
-            "deleteSuccess": "La piste a été supprimée avec succès !",
-            "errorTitle": "Erreur"
-        },
-        "useUser": {
-            "updateProfileSuccess": "Vos informations ont été mises à jour avec succès !",
-            "addFavouritesSuccess": "Piste ajoutée aux favoris !",
-            "removeFavouritesSuccess": "Piste retirée des favoris !",
-            "errorTitle": "Erreur"
+        "coffee": {
+          "name": "Tasse de café",
+          "subtitle": "Principal contributeur"
         }
+      }
+    },
+    "ContributionPage": {
+      "heading": "Contribution au projet",
+      "description": "Cette plateforme a été créée entièrement gratuitement et, en tant que projet final pour notre cours SP, elle est encore en développement. Bref, si vous souhaitez nous soutenir — écoutez simplement notre musique et parlez de nous à vos amis !",
+      "githubButton": "Mettez une étoile à Francis sur GitHub !"
+    },
+    "ContentPanel": {
+      "greeting": "Qu'est-ce qui vous amène aujourd'hui, {name}"
+    },
+    "CreateTrackPage": {
+      "title": "Créer une piste",
+      "name": "Nom",
+      "namePlaceholder": "Entrez le nom de la piste",
+      "artist": "Artiste",
+      "artistPlaceholder": "Entrez le nom de l'artiste",
+      "audio": "Fichier audio",
+      "album": "Album",
+      "tags": "Tags",
+      "submit": "Créer la piste"
+    },
+    "UpdateTrackPage": {
+      "title": "Modifier la piste",
+      "selectTrack": "Sélectionnez une piste",
+      "name": "Nom",
+      "namePlaceholder": "Entrez le nom de la piste",
+      "artist": "Artiste",
+      "artistPlaceholder": "Entrez le nom de l'artiste",
+      "audio": "Fichier audio",
+      "album": "Album",
+      "selectAlbum": "Sélectionnez un album",
+      "tags": "Tags",
+      "submit": "Modifier la piste"
+    },
+    "RemoveTrackPage": {
+      "title": "Supprimer la piste",
+      "selectTrack": "Sélectionnez une piste",
+      "submit": "Supprimer la piste"
+    },
+    "CreateGamePage": {
+      "title": "Créer un jeu",
+      "name": "Nom",
+      "namePlaceholder": "Entrez le nom du jeu",
+      "picture": "Image",
+      "submit": "Créer le jeu"
+    },
+    "UpdateGamePage": {
+      "title": "Modifier le jeu",
+      "selectGame": "Sélectionnez un jeu",
+      "name": "Nom",
+      "namePlaceholder": "Entrez le nom du jeu",
+      "picture": "Image",
+      "submit": "Modifier le jeu"
+    },
+    "RemoveGamePage": {
+      "title": "Supprimer le jeu",
+      "selectGame": "Sélectionnez un jeu",
+      "submit": "Supprimer le jeu"
+    },
+    "CreateCollectionPage": {
+      "title": "Créer une collection",
+      "name": "Nom",
+      "namePlaceholder": "Entrez le nom de la collection",
+      "submit": "Créer la collection"
+    },
+    "UpdateCollectionPage": {
+      "title": "Modifier la collection",
+      "selectCollection": "Sélectionnez une collection",
+      "name": "Nom",
+      "namePlaceholder": "Entrez le nom de la collection",
+      "submit": "Modifier la collection"
+    },
+    "RemoveCollectionPage": {
+      "title": "Supprimer la collection",
+      "selectCollection": "Sélectionnez une collection",
+      "submit": "Supprimer la collection"
+    },
+    "AddToCollectionPage": {
+      "title": "Ajouter un album à la collection",
+      "selectAlbum": "Sélectionnez un album",
+      "selectCollection": "Sélectionnez une collection",
+      "submit": "Ajouter à la collection",
+      "errorTitle": "Une erreur est survenue !",
+      "alreadyExists": "Cet album est déjà dans cette collection !"
+    },
+    "CreateAlbumPage": {
+      "title": "Créer un album",
+      "name": "Nom",
+      "namePlaceholder": "Entrez le nom de l'album",
+      "description": "Description",
+      "descriptionPlaceholder": "Entrez la description de l'album",
+      "picture": "Image",
+      "game": "Jeu",
+      "submit": "Créer l'album"
+    },
+    "UpdateAlbumPage": {
+      "title": "Modifier l'album",
+      "selectAlbum": "Sélectionnez un album",
+      "name": "Nom",
+      "namePlaceholder": "Entrez le nom de l'album",
+      "description": "Description",
+      "descriptionPlaceholder": "Entrez la description de l'album",
+      "picture": "Image",
+      "game": "Jeu",
+      "selectGame": "Sélectionnez un jeu",
+      "submit": "Modifier l'album"
+    },
+    "RemoveAlbumPage": {
+      "title": "Supprimer l'album",
+      "selectAlbum": "Sélectionnez un album",
+      "submit": "Supprimer l'album"
+    },
+    "RemoveFromCollectionPage": {
+      "title": "Retirer l'album de la collection",
+      "selectAlbum": "Sélectionnez un album",
+      "selectCollection": "Sélectionnez une collection",
+      "submit": "Retirer de la collection",
+      "errorTitle": "Une erreur est survenue !",
+      "errorDescription": "Cette collection ne contient pas cet album !"
     }
+  },
+  "components": {
+    "AITooltip": {
+      "errorNoFields": "Aucun champ rempli ! Écrivez quelque chose pour obtenir une réponse précise !",
+      "errorNoTopic": "Aucun sujet fourni !",
+      "aiErrorTitle": "Une erreur est survenue lors de l'interrogation de l'IA",
+      "aiErrorSubtitle": "Vous pouvez réessayer ou fermer la fenêtre",
+      "aiResponseTitle": "Réponse de l'IA :",
+      "btnAccept": "Accepter",
+      "btnClose": "Fermer",
+      "btnRefetch": "Rafraîchir",
+      "statusGenerating": "Génération...",
+      "statusGenerate": "Générer"
+    },
+    "AuthForm": {
+      "welcomeBack": "Bon retour",
+      "createAccount": "Créer un compte",
+      "signInDesc": "Connectez-vous pour accéder à plus de fonctionnalités.",
+      "signUpDesc": "Créez un compte pour débloquer un accès complet.",
+      "noAccount": "Vous n'avez pas de compte ?",
+      "hasAccount": "Vous avez déjà un compte ?",
+      "createOne": "Créez-en un",
+      "signIn": "Se connecter"
+    },
+    "SignInForm": {
+      "emailPlaceholder": "Adresse e-mail",
+      "passwordPlaceholder": "Mot de passe",
+      "submit": "Se connecter"
+    },
+    "SignUpForm": {
+      "firstNamePlaceholder": "Prénom",
+      "lastNamePlaceholder": "Nom de famille (facultatif)",
+      "emailPlaceholder": "Adresse e-mail",
+      "passwordPlaceholder": "Mot de passe",
+      "confirmPasswordPlaceholder": "Confirmer le mot de passe",
+      "agreeLabel": "J'accepte les conditions d'utilisation",
+      "submit": "Créer un compte"
+    },
+    "CreatePlaylistForm": {
+      "nameLabel": "Nom",
+      "namePlaceholder": "Entrez le nom de la playlist",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Entrez la description de la playlist (facultatif)",
+      "submit": "Créer la playlist"
+    },
+    "UpdatePlaylistForm": {
+      "nameLabel": "Nom",
+      "namePlaceholder": "Entrez le nom de la playlist",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Entrez la description de la playlist (facultatif)",
+      "submit": "Enregistrer la playlist"
+    },
+    "RoleGuard": {
+      "loadErrorTitle": "Échec du chargement des données sur le rôle !",
+      "loadErrorDescription": "Il semble que vous n'ayez pas les droits suffisants pour accéder à cette route !",
+      "permissionErrorTitle": "Permissions insuffisantes !",
+      "permissionErrorDescription": "Il semble que vous n'ayez pas les droits suffisants pour accéder à cette route !"
+    },
+    "Footer": {
+      "aboutLabel": "À propos",
+      "aboutAria": "Vers la page à propos",
+      "teamLabel": "Notre équipe",
+      "teamAria": "Vers la page de notre équipe",
+      "contributionLabel": "Contribution au projet",
+      "contributionAria": "Vers la page de contribution au projet",
+      "englishLabel": "Anglais",
+      "englishAria": "Passer à l'anglais",
+      "englishLocale": "en",
+      "russianLabel": "Russe",
+      "russianAria": "Passer au russe",
+      "russianLocale": "ru",
+      "frenchLabel": "Français",
+      "frenchAria": "Passer au français",
+      "frenchLocale": "fr",
+      "feedback": "Des retours ?",
+      "questions": "Des questions ?",
+      "thoughts": "Des idées ?",
+      "contactUs": "Contactez-nous !",
+      "scrollDeveloped": "Développé avec amour (et beaucoup de café)",
+      "scrollContribute": "Soutenez-nous sur GitHub !"
+    },
+    "EditProfileForm": {
+      "firstNameLabel": "Prénom",
+      "firstNamePlaceholder": "Entrez votre prénom",
+      "lastNameLabel": "Nom de famille",
+      "lastNamePlaceholder": "Entrez votre nom de famille",
+      "emailLabel": "Adresse e-mail",
+      "submit": "Enregistrer"
+    },
+    "Favourites": {
+      "errorOccurred": "Une erreur est survenue :",
+      "searchPlaceholder": "Rechercher dans les favoris...",
+      "noTracks": "Pas encore de pistes favorites. Ajoutez-en !",
+      "noTracksFound": "Aucune piste favorite trouvée."
+    },
+    "History": {
+      "errorOccurred": "Une erreur est survenue :",
+      "searchPlaceholder": "Rechercher dans l'historique...",
+      "noHistory": "Vous n'avez encore rien écouté !",
+      "noTracksFound": "Aucune piste trouvée dans l'historique."
+    }
+  },
+  "hooks": {
+    "useAlbum": {
+      "createSuccess": "L'album a été créé avec succès !",
+      "updateSuccess": "L'album a été mis à jour avec succès !",
+      "updateFallbackError": "Échec de la mise à jour de l'album",
+      "deleteSuccess": "L'album a été supprimé avec succès !",
+      "addCollectionSuccess": "L'album a été ajouté à la collection avec succès !",
+      "removeCollectionSuccess": "L'album a été retiré de la collection avec succès !"
+    },
+    "useAuth": {
+      "signUpSuccess": "Ravi de vous rencontrer, {name} !",
+      "signInSuccess": "Bon retour, {name} !",
+      "signOutSuccess": "Au plaisir de vous revoir bientôt !"
+    },
+    "useRequireActivated": {
+      "signInTitle": "Connectez-vous d'abord !",
+      "signInDescription": "Connectez-vous pour profiter de plus de fonctionnalités !",
+      "verifyTitle": "Vérifiez votre profil !",
+      "verifyDescription": "Rendez-vous sur la page de profil et confirmez votre adresse e-mail pour débloquer cette fonctionnalité."
+    },
+    "useCollection": {
+      "createSuccess": "La collection a été créée avec succès !",
+      "updateSuccess": "La collection a été mise à jour avec succès !",
+      "deleteSuccess": "La collection a été supprimée avec succès !"
+    },
+    "useGame": {
+      "createSuccess": "Le jeu a été créé avec succès !",
+      "updateSuccess": "Le jeu a été mis à jour avec succès !",
+      "deleteSuccess": "Le jeu a été supprimé avec succès !"
+    },
+    "usePlaylist": {
+      "createSuccess": "La playlist a été créée avec succès !",
+      "updateSuccess": "La playlist a été mise à jour avec succès !"
+    },
+    "useTrack": {
+      "addPlaylistSuccess": "Piste ajoutée à la playlist !",
+      "removePlaylistSuccess": "Piste retirée de la playlist !",
+      "createSuccess": "La piste a été créée avec succès !",
+      "updateSuccess": "La piste a été mise à jour avec succès !",
+      "deleteSuccess": "La piste a été supprimée avec succès !",
+      "errorTitle": "Erreur"
+    },
+    "useUser": {
+      "updateProfileSuccess": "Vos informations ont été mises à jour avec succès !",
+      "addFavouritesSuccess": "Piste ajoutée aux favoris !",
+      "removeFavouritesSuccess": "Piste retirée des favoris !",
+      "errorTitle": "Erreur"
+    }
+  }
 }

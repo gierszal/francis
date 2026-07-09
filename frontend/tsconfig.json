@@ -29,7 +29,10 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
-, "app/[locale]/(admin)/content/games/edit", "app/[locale]/(admin)/content/collections/edit", "app/[locale]/(admin)/content/collections/remove"  ],
+    "**/*.mts",
+    "app/[locale]/(admin)/content/games/edit",
+    "app/[locale]/(admin)/content/collections/edit",
+    "app/[locale]/(admin)/content/collections/remove"
+  ],
   "exclude": ["node_modules"]
 }
