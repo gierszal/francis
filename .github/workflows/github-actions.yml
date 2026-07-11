@@ -70,6 +70,7 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_SERVER_STATIC: ${{secrets.NEXT_PUBLIC_SERVER_STATIC}}
+          BACKEND_URL: ${{secrets.BACKEND_URL}} # that's stub, because it's only needed for docker, without it server_api=backend_url
         working-directory: ./frontend
       - run: echo "Frontend was built successfully!"
       - run: echo "Project was built successfully!"
