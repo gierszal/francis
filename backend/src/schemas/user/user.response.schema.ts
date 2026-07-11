@@ -1,7 +1,7 @@
 import { ROLES } from "@/types/auth/auth.roles.js";
 import z from "zod";
 
-const userSchema = z.object({
+export const userSchema = z.object({
   id: z.uuid(),
   first_name: z.string(),
   last_name: z.string().nullable(),

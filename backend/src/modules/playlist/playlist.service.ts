@@ -1,4 +1,4 @@
-import { ForbiddenError } from "@/errors/ApiError.js";
+import { ForbiddenError, NotFoundError } from "@/errors/ApiError.js";
 import { ROLES } from "@/types/auth/auth.roles.js";
 import type { queryType } from "@/types/common/query.js";
 import type {
@@ -24,6 +24,8 @@ export class PlaylistService implements IPlaylistService {
     user: FormattedUserPayload,
   ): Promise<FormattedDetailedPlaylist | null> {
     const playlist = await this.playlistRepository.findById(id);
+    if (!playlist)
+      throw new NotFoundError(`Playlist with id ${id} was not found!`);
     if (playlist?.authorId !== user.id && user.role !== ROLES.ADMIN.name)
       throw new ForbiddenError("Access to playlist denied!");
     return formatDetailedPlaylist(playlist);

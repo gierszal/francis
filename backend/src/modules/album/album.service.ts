@@ -9,6 +9,7 @@ import type {
   UpdateAlbumDTO,
   FormattedAlbum,
   FormattedDetailedAlbum,
+  RemoveFromCollectionDTO,
 } from "@/types/album/index.js";
 import type { queryType } from "@/types/common/query.js";
 import {
@@ -25,6 +26,7 @@ export class AlbumService implements IAlbumService {
 
   async getAlbum(id: string): Promise<FormattedDetailedAlbum | null> {
     const album = await this.albumRepository.findById(id);
+    if (!album) throw new NotFoundError(`Album with id ${id} was not found!`);
     return formatDetailedAlbum(album);
   }
 
@@ -66,12 +68,13 @@ export class AlbumService implements IAlbumService {
     pic?: MultipartFile,
   ): Promise<FormattedAlbum> {
     let picPath: string | undefined; // если потребуется откат
+    let oldPicturePath: string | undefined;
     try {
       if (pic) {
         const album = await this.albumRepository.findById(id);
         if (!album)
           throw new NotFoundError(`Album with id ${id} was not found!`);
-        await this.fileService.removeFile(album?.picture);
+        oldPicturePath = album?.picture;
         const picturePath = await this.fileService.createFile(
           FileType.IMAGE,
           pic,
@@ -79,6 +82,8 @@ export class AlbumService implements IAlbumService {
         picPath = picturePath;
       }
       const album = await this.albumRepository.update(id, data, picPath);
+      if (pic && oldPicturePath)
+        await this.fileService.removeFile(oldPicturePath);
       return formatAlbum(album);
     } catch (err) {
       if (picPath) await this.fileService.removeFile(picPath);
@@ -92,5 +97,9 @@ export class AlbumService implements IAlbumService {
 
   async addToCollection(data: AddToCollectionDTO): Promise<void> {
     return this.albumRepository.addToCollection(data);
+  }
+
+  async removeFromCollection(data: RemoveFromCollectionDTO): Promise<void> {
+    return this.albumRepository.removeFromCollection(data);
   }
 }

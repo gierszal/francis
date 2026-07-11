@@ -27,7 +27,9 @@ export class CollectionController {
   ) => {
     const opts = request.query;
     const collections = await this.collectionService.getCollections(opts);
-    reply.send(collections);
+    reply
+      .header("x-total-count", collections.meta.total.toString())
+      .send(collections);
   };
 
   public createCollection = async (

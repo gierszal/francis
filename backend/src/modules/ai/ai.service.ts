@@ -1,5 +1,10 @@
-import type { IAIService, AIGenerateResponse } from "@/types/ai/index.js";
-import type { ITrackRepository } from "@/types/track/index.js";
+import { trackSchema } from "@/schemas/track/track.response.schema.js";
+import type {
+  IAIService,
+  AIGenerateResponse,
+  AIGenerateResult,
+} from "@/types/ai/index.js";
+import type { FormattedTrack, ITrackRepository } from "@/types/track/index.js";
 import type { IUserRepository } from "@/types/user/index.js";
 import { Ollama } from "ollama";
 
@@ -10,7 +15,7 @@ export class AIService implements IAIService {
     private ollama = new Ollama({ host: process.env.OLLAMA_API_URL! }),
   ) {}
 
-  async generate(prompt: string): Promise<AIGenerateResponse> {
+  async generate(prompt: string): Promise<AIGenerateResult> {
     try {
       const response = await this.ollama.chat({
         model: process.env.ollamaModel!,

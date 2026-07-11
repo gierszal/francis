@@ -144,6 +144,7 @@ model AlbumCollection {
   albumId      String     @map("album_id")
   collectionId String     @map("collection_id")
 
+  @@unique([albumId, collectionId])
   @@map("albums_collections")
 }
 
@@ -152,6 +153,7 @@ model Game {
   name      String   @unique @db.VarChar(100)
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  picture   String   @db.VarChar(255)
 
   albums Album[]
 
@@ -166,5 +168,6 @@ model TrackListened {
   user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String @map("user_id")
 
+  @@unique([trackId, userId])
   @@map("tracks_listened")
 }

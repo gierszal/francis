@@ -3,6 +3,8 @@ import type {
   FormattedCollection,
   FormattedDetailedCollection,
 } from "@/types/collection/collection.model.js";
+import type { CollectionWithAlbums } from "@/types/collection/collection.result.js";
+import { formatAlbum } from "./album.formatter.js";
 
 export function formatCollection(collection: Collection): FormattedCollection {
   return {
@@ -20,8 +22,8 @@ export function formatDetailedCollection(
     id: collection.id,
     name: collection.name,
     albums_amount: collection._count.albumCollections,
-    albums: collection.albumCollections.map(
-      (albumArray: any) => albumArray.album,
+    albums: collection.albumCollections.map((albumArray: any) =>
+      formatAlbum(albumArray.album),
     ),
     created_at: collection.createdAt,
     updated_at: collection.updatedAt,

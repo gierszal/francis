@@ -26,15 +26,17 @@ export class GameController {
   ) => {
     const opts = request.query;
     const games = await this.gameService.getGames(opts);
-    reply.send(games);
+    reply.header("x-total-count", games.meta.total.toString()).send(games);
   };
 
   public createGame = async (
     request: FastifyRequest<{ Body: CreateGameDTO }>,
     reply: FastifyReply,
   ) => {
+    const pic = request.body.picture;
     const data = request.body;
-    const game = await this.gameService.createGame(data);
+    if (!pic) throw new BadRequestError("The file is not provided!");
+    const game = await this.gameService.createGame(data, pic);
     reply.code(201).send({ data: game });
   };
 
@@ -44,8 +46,9 @@ export class GameController {
   ) => {
     const data = request.body;
     const { id } = request.params;
+    const pic = request.body.picture;
     if (!id) throw new BadRequestError("Game id was not provided!");
-    const game = await this.gameService.updateGame(id, data);
+    const game = await this.gameService.updateGame(id, data, pic);
     reply.send({ data: game });
   };
 

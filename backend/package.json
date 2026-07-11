@@ -17,6 +17,7 @@
     "nodemailer": "^8.0.11",
     "ollama": "^0.6.3",
     "pg": "^8.21.0",
+    "prisma": "^7.8.0",
     "supertest": "^7.2.2",
     "uuid": "^14.0.0",
     "zod": "^4.4.3"
@@ -24,12 +25,15 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx watch src/index.ts",
-    "start": "tsc -p tsconfig.json && node dist/index.js",
+    "start": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json && node dist/index.js",
     "prisma:generate": "npx prisma generate",
-    "db:seed": "npx prisma db:seed",
-    "db:push": "npx prisma db:push",
+    "db:seed": "npx prisma db seed",
+    "db:push": "npx prisma db push",
     "db:migrate up": "npx prisma migrate reset",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "type:check": "tsc --noEmit",
+    "lint:check": "npx prettier . --check",
+    "lint:write": "npx prettier . --write"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -38,20 +42,19 @@
     "@types/nodemailer": "^8.0.1",
     "@types/swagger-jsdoc": "^6.0.4",
     "dotenv": "^17.4.2",
-    "prisma": "^7.8.0",
     "ts-jest": "^29.4.11",
     "ts-jest-resolver": "^2.0.1",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.9.0",
     "tsconfig-paths": "^4.2.0",
-    "tsx": "^4.22.3",
-    "typescript": "^6.0.3"
+    "tsx": "^4.22.3"
   },
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend for Francis | Web Player",
   "main": "index.js",
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Tim G.",
+  "license": "MIT",
   "type": "module"
 }

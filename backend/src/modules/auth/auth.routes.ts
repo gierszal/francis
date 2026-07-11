@@ -8,7 +8,7 @@ import {
   signUpSchema,
 } from "@/schemas/auth/auth.schema.js";
 import { TokenService } from "@/services/tokenService.js";
-import { MailService } from "@/services/mailService.js";
+import { MailService } from "@/services/mail/mailService.js";
 import {
   refreshResponseSchema,
   signInResponseSchema,
@@ -16,6 +16,7 @@ import {
 } from "@/schemas/auth/index.js";
 import { errorResponseSchema } from "@/schemas/common/error.schema.js";
 import { emptyResponseSchema } from "@/schemas/common/empty.response.schema.js";
+import { userResponseSchema } from "@/schemas/user/user.response.schema.js";
 
 type optionsType = {
   prefix: string;

@@ -50,22 +50,29 @@ export class GameRepository implements IGameRepository {
     return game ?? null;
   }
 
-  async create({ name }: CreateGameDTO): Promise<Game> {
+  async create({ name }: CreateGameDTO, picturePath: string): Promise<Game> {
     return await prisma.game.create({
       data: {
         name,
+        picture: picturePath,
       },
     });
   }
 
-  async update(id: string, data: UpdateGameDTO): Promise<Game> {
-    const updates = Object.fromEntries(
-      Object.entries(data).filter(([, v]) => v !== undefined),
+  async update(
+    id: string,
+    data: UpdateGameDTO,
+    picturePath?: string,
+  ): Promise<Game> {
+    const updates = picturePath ? { ...data, picture: picturePath } : data;
+
+    const cleanUpdates = Object.fromEntries(
+      Object.entries(updates).filter(([, v]) => v !== undefined),
     );
     try {
       return prisma.game.update({
         where: { id },
-        data: updates,
+        data: cleanUpdates,
       });
     } catch (err: any) {
       if (err.code === "P2025")
@@ -76,7 +83,7 @@ export class GameRepository implements IGameRepository {
 
   async remove(id: string): Promise<void> {
     try {
-      prisma.game.delete({
+      await prisma.game.delete({
         where: { id },
       });
     } catch (err: any) {

@@ -3,6 +3,7 @@ import type {
   FormattedDetailedPlaylist,
   FormattedPlaylist,
 } from "@/types/playlist/playlist.model.js";
+import { formatTrack } from "./track.formatter.js";
 
 export function formatPlaylist(playlist: Playlist): FormattedPlaylist {
   return {
@@ -20,7 +21,9 @@ export function formatDetailedPlaylist(
   return {
     id: playlist.id,
     name: playlist.name,
-    tracks: playlist.playlistTracks.map((item: any) => item.track),
+    tracks: playlist.playlistTracks?.map((item: any) =>
+      formatTrack(item?.track),
+    ),
     description: playlist.description,
     author: {
       id: playlist.author.id,

@@ -6,16 +6,21 @@ import type {
   CreateTrackDTO,
   FormattedDetailedTrack,
   FormattedTrack,
+  RemoveTrackFromPlaylistDTO,
   TracksResponse,
   UpdateTrackDTO,
 } from "./index.js";
 import type { FindTracksResult } from "./track.result.js";
 import type { Track } from "@/generated/prisma/client.js";
+import type { FormattedUserPayload } from "../user/user.model.js";
 
 export type ITrackService = {
-  getTrack: (id: string) => Promise<FormattedDetailedTrack | null>;
+  getTrack: (
+    id: string,
+    userId?: string,
+  ) => Promise<FormattedDetailedTrack | null>;
 
-  getTracks: (opts: queryType) => Promise<TracksResponse>;
+  getTracks: (opts: queryType, userId?: string) => Promise<TracksResponse>;
 
   createTrack: (
     data: CreateTrackDTO,
@@ -25,6 +30,7 @@ export type ITrackService = {
   updateTrack: (
     id: string,
     data: UpdateTrackDTO,
+    userId: string,
     audio?: MultipartFile,
   ) => Promise<FormattedTrack | null>;
 
@@ -32,19 +38,28 @@ export type ITrackService = {
 
   deleteTrack: (id: string) => Promise<void>;
 
-  addToPlaylist: (data: AddToPlaylistDTO) => Promise<void>;
+  addToPlaylist: (
+    data: AddToPlaylistDTO,
+    user: FormattedUserPayload,
+  ) => Promise<void>;
+
+  removeFromPlaylist: (
+    data: RemoveTrackFromPlaylistDTO,
+    user: FormattedUserPayload,
+  ) => Promise<void>;
 };
 
 export type ITrackRepository = {
-  findAll: (options?: queryType) => Promise<FindTracksResult>;
+  findAll: (options?: queryType, userId?: string) => Promise<FindTracksResult>;
 
-  findById: (id: string) => Promise<Track | null>;
+  findById: (id: string, userId?: string) => Promise<Track | null>;
 
   create: (data: CreateTrackDTO, audio: string) => Promise<Track>;
 
   update: (
     id: string,
     data: UpdateTrackDTO,
+    userId: string,
     audioPath?: string,
   ) => Promise<Track | null>;
 
@@ -53,4 +68,6 @@ export type ITrackRepository = {
   remove: (id: string) => Promise<void>;
 
   addToPlaylist: (data: AddToPlaylistDTO) => Promise<void>;
+
+  removeFromPlaylist: (data: RemoveTrackFromPlaylistDTO) => Promise<void>;
 };

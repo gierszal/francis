@@ -27,7 +27,10 @@ export class UserController {
     if (!id) throw new BadRequestError("User id was not provided!");
 
     const playlists = await this.userService.getPlaylists(id, query);
-    return reply.send(playlists);
+
+    reply
+      .header("x-total-count", playlists.meta.total.toString())
+      .send(playlists);
   };
 
   getFavourites = async (
@@ -38,7 +41,9 @@ export class UserController {
     const data = request.query;
     if (!id) throw new BadRequestError("User id was not provided!");
     const favourites = await this.userService.getFavourites(id, data);
-    return reply.send(favourites);
+    reply
+      .header("x-total-count", favourites.meta.total.toString())
+      .send(favourites);
   };
 
   addToFavourites = async (
@@ -100,7 +105,7 @@ export class UserController {
     const data = request.query;
     if (!id) throw new BadRequestError("User id was not provided!");
     const history = await this.userService.getHistory(id, data);
-    return reply.send(history);
+    reply.header("x-total-count", history.meta.total.toString()).send(history);
   };
 
   updateUser = async (

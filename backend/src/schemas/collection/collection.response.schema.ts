@@ -27,11 +27,11 @@ export const detailedCollectionResponseSchema = z.object({
   data: detailedCollectionSchema,
 });
 
-export const collectionsResponseSchema = z.object({
-  data: z.array(collectionSchema),
-  meta: metaSchema,
-});
-
 export const collectionResponseSchema = z.object({
   data: collectionSchema,
+});
+
+export const collectionsResponseSchema = z.object({
+  data: z.array(detailedCollectionSchema),
+  meta: metaSchema,
 });

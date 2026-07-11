@@ -70,7 +70,6 @@ export class UserRepository implements IUserRepository {
       }),
       prisma.playlist.count({ where }),
     ]);
-
     return {
       playlists,
       total,
@@ -87,27 +86,41 @@ export class UserRepository implements IUserRepository {
       userId,
       ...(searchQuery && {
         track: {
-          name: {
-            contains: searchQuery,
-            mode: "insensitive",
-          },
-          artist: {
-            contains: searchQuery,
-            mode: "insensitive",
-          },
+          OR: [
+            {
+              name: {
+                contains: searchQuery,
+                mode: "insensitive",
+              },
+            },
+            {
+              artist: {
+                contains: searchQuery,
+                mode: "insensitive",
+              },
+            },
+          ],
         },
       }),
     };
 
     const [tracksData, total] = await Promise.all([
       prisma.favourite.findMany({
-        where: where,
+        where,
         include: {
           track: {
             include: {
               album: {
                 select: {
                   picture: true,
+                },
+              },
+              favourites: {
+                where: {
+                  userId: userId ?? "",
+                },
+                select: {
+                  id: true,
                 },
               },
             },
@@ -130,11 +143,18 @@ export class UserRepository implements IUserRepository {
 
   async addToFavourites(userId: string, trackId: string): Promise<void> {
     try {
-      await prisma.favourite.create({
-        data: {
+      await prisma.favourite.upsert({
+        where: {
+          userId_trackId: {
+            userId,
+            trackId,
+          },
+        },
+        create: {
           userId,
           trackId,
         },
+        update: {},
       });
     } catch (e: any) {
       throw new DatabaseError(e.message);
@@ -197,6 +217,14 @@ export class UserRepository implements IUserRepository {
                     picture: true,
                   },
                 },
+                favourites: {
+                  where: {
+                    userId: userId ?? "",
+                  },
+                  select: {
+                    id: true,
+                  },
+                },
               },
             },
           },
@@ -226,6 +254,13 @@ export class UserRepository implements IUserRepository {
       const user = await prisma.user.update({
         where: { id: userId },
         data: updates,
+        include: {
+          role: {
+            select: {
+              role: true,
+            },
+          },
+        },
       });
       return user;
     } catch (err: any) {

@@ -1,4 +1,5 @@
 import type { Collection } from "@/generated/prisma/client.js";
+import type { FormattedAlbum } from "../album/album.model.js";
 
 export type FormattedCollection = Omit<
   Collection,
@@ -17,7 +18,7 @@ export type FormattedDetailedCollection = Omit<
     id: string;
     name: string;
     picture: string;
-  };
+  }[];
   created_at: Date;
   updated_at: Date;
 };

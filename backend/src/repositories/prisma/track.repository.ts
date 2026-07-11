@@ -7,11 +7,17 @@ import type {
   CreateTrackDTO,
   UpdateTrackDTO,
   ITrackRepository,
+  AddToAlbumDTO,
+  RemoveTrackFromAlbumDTO,
+  RemoveTrackFromPlaylistDTO,
 } from "@/types/track/index.js";
 import type { FindTracksResult } from "@/types/track/track.result.js";
 
 export class TrackRepository implements ITrackRepository {
-  async findAll(options?: queryType): Promise<FindTracksResult> {
+  async findAll(
+    options?: queryType,
+    userId?: string,
+  ): Promise<FindTracksResult> {
     const { count = 10, offset = 0, searchQuery } = options || {};
 
     const where: any = {};
@@ -31,6 +37,14 @@ export class TrackRepository implements ITrackRepository {
               picture: true,
             },
           },
+          favourites: {
+            where: {
+              userId: userId ?? "",
+            },
+            select: {
+              id: true,
+            },
+          },
         },
         orderBy: { createdAt: "desc" },
         skip: offset,
@@ -45,7 +59,7 @@ export class TrackRepository implements ITrackRepository {
     };
   }
 
-  async findById(id: string): Promise<Track | null> {
+  async findById(id: string, userId?: string): Promise<Track | null> {
     const track = await prisma.track.findUnique({
       where: { id },
       include: {
@@ -55,6 +69,14 @@ export class TrackRepository implements ITrackRepository {
             name: true,
             game: true,
             picture: true,
+          },
+        },
+        favourites: {
+          where: {
+            userId: userId ?? "",
+          },
+          select: {
+            id: true,
           },
         },
       },
@@ -77,6 +99,11 @@ export class TrackRepository implements ITrackRepository {
       include: {
         album: {
           select: { picture: true },
+        },
+        favourites: {
+          select: {
+            id: true,
+          },
         },
       },
     });
@@ -103,6 +130,11 @@ export class TrackRepository implements ITrackRepository {
         include: {
           album: {
             select: { picture: true },
+          },
+          favourites: {
+            select: {
+              id: true,
+            },
           },
         },
       });
@@ -135,11 +167,6 @@ export class TrackRepository implements ITrackRepository {
     try {
       await prisma.track.delete({
         where: { id },
-        include: {
-          album: {
-            select: { picture: true },
-          },
-        },
       });
     } catch (err: any) {
       if (err.code === "P2025")
@@ -161,6 +188,26 @@ export class TrackRepository implements ITrackRepository {
     } catch (err: any) {
       if (err.code === "P2025")
         throw new NotFoundError(`Track with id ${trackId} not found`);
+      throw err;
+    }
+  }
+
+  async removeFromPlaylist(data: RemoveTrackFromPlaylistDTO): Promise<void> {
+    const { playlistId, trackId } = data;
+    try {
+      await prisma.playlistTrack.delete({
+        where: {
+          trackId_playlistId: {
+            playlistId,
+            trackId,
+          },
+        },
+      });
+    } catch (err: any) {
+      if (err.code === "P2025")
+        throw new NotFoundError(
+          `Either track or playlist with id provided does not exist!`,
+        );
       throw err;
     }
   }

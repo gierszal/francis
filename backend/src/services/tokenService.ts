@@ -1,7 +1,11 @@
 import { InvalidTokenError } from "@/errors/ApiError.js";
 import type { TokenServiceType } from "@/types/services/tokenService.js";
-import type { FormattedUserPayload } from "@/types/user/user.model.js";
 import jwt, { type JwtPayload } from "jsonwebtoken";
+
+export const validateMode = {
+  strict: "strict",
+  soft: "soft",
+} as const;
 
 export class TokenService implements TokenServiceType {
   generateTokens(payload: JwtPayload) {
@@ -26,11 +30,16 @@ export class TokenService implements TokenServiceType {
     }
   }
 
-  validateAccessToken(token: string): JwtPayload | null {
+  validateAccessToken(
+    token: string,
+    mode: string = validateMode.strict,
+  ): JwtPayload | null {
     try {
       return jwt.verify(token, process.env.JWT_ACCESS_SECRET!) as JwtPayload;
     } catch (e) {
-      throw new InvalidTokenError("Unable to validate access token!");
+      if (mode === validateMode.strict)
+        throw new InvalidTokenError("Unable to validate access token!");
+      return null;
     }
   }
 

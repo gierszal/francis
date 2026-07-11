@@ -70,7 +70,14 @@ server.get("*", function (_req, rep) {
   rep.send({ message: "Not found" });
 });
 
-server.register(cors, { origin: process.env.CORS_ORIGIN || "*" });
+server.register(cors, {
+  origin: process.env.CORS_ORIGIN?.split(",") || ["http://localhost:3000"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  exposedHeaders: ["x-total-count"],
+  credentials: true,
+  optionsSuccessStatus: 204,
+});
 
 const port = Number(process.env.PORT) || 10000;
 

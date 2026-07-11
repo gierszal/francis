@@ -9,7 +9,18 @@ export const normalizeAlbumMultipartBody = async (
     name: body.name?.value,
     description: body.description?.value,
     gameId: body.gameId?.value,
-    picture: body.picture,
+    picture: body?.picture,
+  };
+};
+
+export const normalizeGameMultipartBody = async (
+  request: FastifyRequest,
+  reply: FastifyReply,
+) => {
+  const body = request.body as any;
+  request.body = {
+    name: body?.name?.value,
+    picture: body?.picture,
   };
 };
 

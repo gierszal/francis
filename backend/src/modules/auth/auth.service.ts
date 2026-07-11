@@ -47,22 +47,21 @@ export class AuthService implements IAuthService {
       `${process.env.API_URL}/api/v1/auth/activate/${activationLink}`,
     );
 
-    return { user: payload, tokens };
+    return { user: formatUser(user), tokens };
   }
 
   async signIn(data: SignInDTO): Promise<AuthResult> {
     const { email, password } = data;
     const user = await this.authRepository.findUserByEmail(email);
-    if (!user)
-      throw new InvalidCredentialsError("User with this email does not exist!");
+    if (!user) throw new InvalidCredentialsError("Unable to sign in!");
 
     const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) throw new InvalidCredentialsError("Passwords do not match!");
+    if (!isValid) throw new InvalidCredentialsError("Unable to sign in!");
 
     const payload = formatUserPayload(user);
     const tokens = this.tokenService.generateTokens(payload);
     await this.authRepository.saveRefreshToken(user.id, tokens.refreshToken);
-    return { user: payload, tokens };
+    return { user: formatUser(user), tokens };
   }
 
   async refresh(
@@ -70,7 +69,6 @@ export class AuthService implements IAuthService {
   ): Promise<Pick<AuthResult, "tokens">["tokens"]> {
     if (!refreshToken)
       throw new InvalidTokenError("Refresh token is not valid!");
-    console.log(refreshToken);
     const userData = this.tokenService.validateRefreshToken(refreshToken);
     const dbUserData = await this.authRepository.findRefreshToken(refreshToken);
 
@@ -89,8 +87,7 @@ export class AuthService implements IAuthService {
     await this.authRepository.removeRefreshToken(refreshToken);
   }
 
-  async activate(data: ActivationLinkDTO): Promise<FormattedUser> {
-    const user = await this.authRepository.activateUser(data);
-    return formatUser(user);
+  async activate(data: ActivationLinkDTO): Promise<void> {
+    await this.authRepository.activateUser(data);
   }
 }

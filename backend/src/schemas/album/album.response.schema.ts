@@ -28,13 +28,19 @@ export const albumsReponseSchema = z.object({
 export const detailedAlbumSchema = z.object({
   id: z.uuid(),
   name: z.string(),
-  picture: z.uuid(),
+  picture: z.string(),
   description: z.string(),
   tracks: z.array(
     z.object({
-      id: z.uuid(),
+      id: z.string(),
+
       name: z.string(),
       artist: z.string(),
+
+      tags: z.array(z.string()),
+
+      audio: z.string(),
+      picture: z.string(),
     }),
   ),
   tracks_amount: z.number().int().min(0),

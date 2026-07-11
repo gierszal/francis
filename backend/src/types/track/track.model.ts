@@ -4,6 +4,7 @@ export type FormattedTrack = Omit<
   Track,
   "createdAt" | "updatedAt" | "albumId"
 > & {
+  is_favourite: boolean;
   picture: string;
   created_at: Date;
   updated_at: Date;
@@ -14,6 +15,7 @@ export type FormattedDetailedTrack = Omit<
   Track,
   "createdAt" | "updatedAt" | "albumId"
 > & {
+  is_favourite: boolean;
   created_at: Date;
   updated_at: Date;
   album: {

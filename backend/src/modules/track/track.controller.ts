@@ -4,6 +4,7 @@ import type {
   AddToPlaylistDTO,
   CreateTrackDTO,
   ITrackService,
+  RemoveTrackFromPlaylistDTO,
   UpdateTrackDTO,
 } from "../../types/track/index.js";
 import type { paramsType } from "@/types/common/params.js";
@@ -18,7 +19,8 @@ export class TrackController {
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
-    const track = await this.trackService.getTrack(id);
+    const user = request.user;
+    const track = await this.trackService.getTrack(id, user?.id);
     if (!track) throw new NotFoundError(`Track with id ${id} not found`);
     reply.send({ data: track });
   };
@@ -28,8 +30,9 @@ export class TrackController {
     reply: FastifyReply,
   ) => {
     const opts = request.query;
-    const tracks = await this.trackService.getTracks(opts);
-    reply.send(tracks);
+    const user = request.user;
+    const tracks = await this.trackService.getTracks(opts, user?.id);
+    reply.header("x-total-count", tracks.meta.total.toString()).send(tracks);
   };
 
   public createTrack = async (
@@ -50,8 +53,10 @@ export class TrackController {
     const data = request.body;
     const { id } = request.params;
     const audio = request.body.audio;
+    const userId = request.user?.id;
+    if (!userId) throw new BadRequestError("User id was not provided!");
     if (!id) throw new BadRequestError("Track id was not found!");
-    const track = await this.trackService.updateTrack(id, data, audio);
+    const track = await this.trackService.updateTrack(id, data, userId, audio);
     reply.send({ data: track });
   };
 
@@ -75,12 +80,33 @@ export class TrackController {
     reply.code(204).send();
   };
 
+  public removeFromPlaylist = async (
+    request: FastifyRequest<{ Params: RemoveTrackFromPlaylistDTO }>,
+    reply: FastifyReply,
+  ) => {
+    const data = request.params;
+    const user = request.user;
+    if (!user) throw new BadRequestError("User is not defined!");
+    if (!data.playlistId || !data.trackId)
+      throw new BadRequestError(
+        "Either track id or playlist id was not provided!",
+      );
+    await this.trackService.removeFromPlaylist(data, user);
+    reply.code(204).send();
+  };
+
   public addToPlaylist = async (
     request: FastifyRequest<{ Params: AddToPlaylistDTO }>,
     reply: FastifyReply,
   ) => {
     const data = request.params;
-    await this.trackService.addToPlaylist(data);
+    const user = request?.user;
+    if (!user) throw new BadRequestError("User is not defined!");
+    if (!data.playlistId || !data.trackId)
+      throw new BadRequestError(
+        "Either track id or playlist id was not provided!",
+      );
+    await this.trackService.addToPlaylist(data, user);
     reply.code(204).send();
   };
 }

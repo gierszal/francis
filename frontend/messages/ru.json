@@ -1,0 +1,385 @@
+{
+  "Navigation": {
+    "homeLabel": "Главная",
+    "homeAria": "На главную страницу",
+    "profileLabel": "Профиль",
+    "profileAria": "В профиль",
+    "tracksLabel": "Треки",
+    "tracksAria": "К трекам",
+    "albumsLabel": "Альбомы",
+    "albumsAria": "К альбомам",
+    "gamesLabel": "Игры",
+    "gamesAria": "К играм",
+    "collectionsLabel": "Коллекции",
+    "collectionsAria": "К коллекциям",
+    "playlistsLabel": "Плейлисты",
+    "playlistsAria": "К плейлистам",
+    "contentLabel": "Контент",
+    "contentAria": "К контенту (требуются права администратора)"
+  },
+  "pages": {
+    "HomePage": {
+      "title": "Francis | Веб-плеер",
+      "year": "2026.",
+      "carousel": {
+        "row1": ["Открывай", "Погружайся", "Слушай"],
+        "row2": ["Исследуй", "Прочувствуй", "Окунись"],
+        "row3": ["Мечтай", "Чувствуй", "Странствуй"]
+      },
+      "themeTitle": "Тема и цель",
+      "themeDescription": "Этот проект изначально был создан как итоговое задание в рамках ШП 2026. Тема проекта — простой музыкальный плеер с дополнительными инструментами, которые могут улучшить пользовательский опыт."
+    },
+    "TracksPage": {
+      "title": "Треки",
+      "searchPlaceholder": "Поиск треков...",
+      "noTracksFound": "Треки не найдены!"
+    },
+    "AlbumsPage": {
+      "title": "Альбомы",
+      "searchPlaceholder": "Поиск альбомов...",
+      "noAlbumsFound": "Альбомы не найдены!"
+    },
+    "GamesPage": {
+      "title": "Игры",
+      "searchPlaceholder": "Поиск игр...",
+      "noGamesFound": "Игры не найдены!"
+    },
+    "TrackPage": {
+      "listens": "Прослушиваний: {count}",
+      "occursIn": "Содержится в..."
+    },
+    "AlbumPage": {
+      "tracksAmount": "Треков: {count}",
+      "emptyAlbum": "Альбом пуст!"
+    },
+    "GamePage": {
+      "lastUpdated": "Последнее обновление: {date}",
+      "albums": "Альбомы",
+      "albumsAmount": "Количество альбомов: {count}",
+      "albumsComingSoon": "Альбомы скоро появятся!"
+    },
+    "CollectionsPage": {
+      "title": "Коллекции",
+      "searchPlaceholder": "Поиск коллекций...",
+      "noCollectionsFound": "Коллекции не найдены!"
+    },
+    "PlaylistsPage": {
+      "title": "Плейлисты",
+      "searchPlaceholder": "Поиск плейлистов...",
+      "createFirst": "Создайте свой первый плейлист!",
+      "create": "Создать плейлист",
+      "noPlaylistsYet": "Плейлистов пока нет!"
+    },
+    "PlaylistPage": {
+      "edit": "Редактировать плейлист",
+      "emptyPlaylist": "Плейлист пуст. Добавьте что-нибудь!",
+      "tracksAmount": "Треков: {count}"
+    },
+    "CreatePlaylistPage": {
+      "create": "Создать плейлист"
+    },
+    "EditPlaylistPage": {
+      "back": "Назад",
+      "edit": "Редактировать плейлист"
+    },
+    "ProfilePage": {
+      "activateWarningTitle": "Не забудьте активировать свой профиль!",
+      "activateWarningDescription": "Чтобы получить доступ к дополнительным функциям, подтвердите свой адрес электронной почты!",
+      "editProfile": "Редактировать профиль",
+      "signOut": "Выйти",
+      "favourites": "Избранное",
+      "history": "История"
+    },
+    "EditProfilePage": {
+      "back": "Назад"
+    },
+    "AboutPage": {
+      "weMake": "Мы создаём",
+      "theReal": "настоящих",
+      "rotating1": ["королей", "крестьян", "лордов"],
+      "rotating2": ["восхищаются", "ценят", "почитают"],
+      "rotating3": ["дух природы", "музыку", "шедевр"],
+      "description": "Как вы могли заметить на главной странице, этот проект был разработан как итоговое задание для ШП 2026. Это веб-приложение в первую очередь предназначено для прослушивания музыки. Любые пользователи — авторизованные или нет — могут посещать страницы и слушать музыку из различных игр. Поскольку проект находится на стадии тестирования, количество игр и треков будет ограничено, но мы надеемся, что вы дадите ему шанс и насладитесь настоящей музыкой. Спасибо за внимание и хорошего времяпрепровождения!"
+    },
+    "ContactsPage": {
+      "heading": "Познакомьтесь с нашей командой",
+      "team": {
+        "tim": {
+          "subtitle": "Студент ШП 2026"
+        },
+        "coffee": {
+          "name": "Чашка кофе",
+          "subtitle": "Главный вдохновитель"
+        }
+      }
+    },
+    "ContributionPage": {
+      "heading": "Вклад в проект",
+      "description": "Эта платформа была создана абсолютно бесплатно и, как финальный проект для нашего курса ШП, всё ещё находится в разработке. Если коротко, если вы хотите поддержать нас — просто слушайте нашу музыку и расскажите о нас друзьям!",
+      "githubButton": "Поставьте звезду Francis на GitHub!"
+    },
+    "ContentPanel": {
+      "greeting": "Что привело вас сегодня, {name}"
+    },
+    "CreateTrackPage": {
+      "title": "Создать трек",
+      "name": "Название",
+      "namePlaceholder": "Введите название трека",
+      "artist": "Исполнитель",
+      "artistPlaceholder": "Введите имя исполнителя",
+      "audio": "Аудиофайл",
+      "album": "Альбом",
+      "tags": "Теги",
+      "submit": "Создать трек"
+    },
+    "UpdateTrackPage": {
+      "title": "Редактировать трек",
+      "selectTrack": "Выберите трек",
+      "name": "Название",
+      "namePlaceholder": "Введите название трека",
+      "artist": "Исполнитель",
+      "artistPlaceholder": "Введите имя исполнителя",
+      "audio": "Аудиофайл",
+      "album": "Альбом",
+      "selectAlbum": "Выберите альбом",
+      "tags": "Теги",
+      "submit": "Редактировать трек"
+    },
+    "RemoveTrackPage": {
+      "title": "Удалить трек",
+      "selectTrack": "Выберите трек",
+      "submit": "Удалить трек"
+    },
+    "CreateGamePage": {
+      "title": "Создать игру",
+      "name": "Название",
+      "namePlaceholder": "Введите название игры",
+      "picture": "Изображение",
+      "submit": "Создать игру"
+    },
+    "UpdateGamePage": {
+      "title": "Редактировать игру",
+      "selectGame": "Выберите игру",
+      "name": "Название",
+      "namePlaceholder": "Введите название игры",
+      "picture": "Изображение",
+      "submit": "Редактировать игру"
+    },
+    "RemoveGamePage": {
+      "title": "Удалить игру",
+      "selectGame": "Выберите игру",
+      "submit": "Удалить игру"
+    },
+    "CreateCollectionPage": {
+      "title": "Создать коллекцию",
+      "name": "Название",
+      "namePlaceholder": "Введите название коллекции",
+      "submit": "Создать коллекцию"
+    },
+    "UpdateCollectionPage": {
+      "title": "Редактировать коллекцию",
+      "selectCollection": "Выберите коллекцию",
+      "name": "Название",
+      "namePlaceholder": "Введите название коллекции",
+      "submit": "Редактировать коллекцию"
+    },
+    "RemoveCollectionPage": {
+      "title": "Удалить коллекцию",
+      "selectCollection": "Выберите коллекцию",
+      "submit": "Удалить коллекцию"
+    },
+    "AddToCollectionPage": {
+      "title": "Добавить альбом в коллекцию",
+      "selectAlbum": "Выберите альбом",
+      "selectCollection": "Выберите коллекцию",
+      "submit": "Добавить в коллекцию",
+      "errorTitle": "Произошла ошибка!",
+      "alreadyExists": "Этот альбом уже есть в этой коллекции!"
+    },
+    "CreateAlbumPage": {
+      "title": "Создать альбом",
+      "name": "Название",
+      "namePlaceholder": "Введите название альбома",
+      "description": "Описание",
+      "descriptionPlaceholder": "Введите описание альбома",
+      "picture": "Изображение",
+      "game": "Игра",
+      "submit": "Создать альбом"
+    },
+    "UpdateAlbumPage": {
+      "title": "Редактировать альбом",
+      "selectAlbum": "Выберите альбом",
+      "name": "Название",
+      "namePlaceholder": "Введите название альбома",
+      "description": "Описание",
+      "descriptionPlaceholder": "Введите описание альбома",
+      "picture": "Изображение",
+      "game": "Игра",
+      "selectGame": "Выберите игру",
+      "submit": "Редактировать альбом"
+    },
+    "RemoveAlbumPage": {
+      "title": "Удалить альбом",
+      "selectAlbum": "Выберите альбом",
+      "submit": "Удалить альбом"
+    },
+    "RemoveFromCollectionPage": {
+      "title": "Удалить альбом из коллекции",
+      "selectAlbum": "Выберите альбом",
+      "selectCollection": "Выберите коллекцию",
+      "submit": "Удалить из коллекции",
+      "errorTitle": "Произошла ошибка!",
+      "errorDescription": "Эта коллекция не содержит данный альбом!"
+    }
+  },
+  "components": {
+    "AITooltip": {
+      "errorNoFields": "Поля не заполнены! Напишите что-нибудь, чтобы получить точный ответ!",
+      "errorNoTopic": "Тема не указана!",
+      "aiErrorTitle": "Произошла ошибка при обращении к ИИ",
+      "aiErrorSubtitle": "Вы можете попробовать снова или закрыть окно",
+      "aiResponseTitle": "Ответ ИИ:",
+      "btnAccept": "Принять",
+      "btnClose": "Закрыть",
+      "btnRefetch": "Обновить",
+      "statusGenerating": "Генерация...",
+      "statusGenerate": "Сгенерировать"
+    },
+    "AuthForm": {
+      "welcomeBack": "С возвращением",
+      "createAccount": "Создать аккаунт",
+      "signInDesc": "Войдите, чтобы получить доступ к дополнительным функциям.",
+      "signUpDesc": "Создайте аккаунт, чтобы открыть полный доступ.",
+      "noAccount": "Нет аккаунта?",
+      "hasAccount": "Уже есть аккаунт?",
+      "createOne": "Создать",
+      "signIn": "Войти"
+    },
+    "SignInForm": {
+      "emailPlaceholder": "Электронная почта",
+      "passwordPlaceholder": "Пароль",
+      "submit": "Войти"
+    },
+    "SignUpForm": {
+      "firstNamePlaceholder": "Имя",
+      "lastNamePlaceholder": "Фамилия (необязательно)",
+      "emailPlaceholder": "Электронная почта",
+      "passwordPlaceholder": "Пароль",
+      "confirmPasswordPlaceholder": "Подтвердите пароль",
+      "agreeLabel": "Я принимаю Условия использования",
+      "submit": "Создать аккаунт"
+    },
+    "CreatePlaylistForm": {
+      "nameLabel": "Название",
+      "namePlaceholder": "Введите название плейлиста",
+      "descriptionLabel": "Описание",
+      "descriptionPlaceholder": "Введите описание плейлиста (необязательно)",
+      "submit": "Создать плейлист"
+    },
+    "UpdatePlaylistForm": {
+      "nameLabel": "Название",
+      "namePlaceholder": "Введите название плейлиста",
+      "descriptionLabel": "Описание",
+      "descriptionPlaceholder": "Введите описание плейлиста (необязательно)",
+      "submit": "Сохранить плейлист"
+    },
+    "RoleGuard": {
+      "loadErrorTitle": "Не удалось загрузить данные о роли!",
+      "loadErrorDescription": "Похоже, у вас недостаточно прав для доступа к этому маршруту!",
+      "permissionErrorTitle": "Недостаточно прав!",
+      "permissionErrorDescription": "Похоже, у вас недостаточно прав для доступа к этому маршруту!"
+    },
+    "Footer": {
+      "aboutLabel": "О проекте",
+      "aboutAria": "На страницу о проекте",
+      "teamLabel": "Наша команда",
+      "teamAria": "На страницу нашей команды",
+      "contributionLabel": "Вклад в проект",
+      "contributionAria": "На страницу вклада в проект",
+      "englishLabel": "Английский",
+      "englishAria": "Переключить на английский",
+      "englishLocale": "en",
+      "russianLabel": "Русский",
+      "russianAria": "Переключить на русский",
+      "russianLocale": "ru",
+      "frenchLabel": "Французский",
+      "frenchAria": "Переключить на французский",
+      "frenchLocale": "fr",
+      "feedback": "Отзывы?",
+      "questions": "Вопросы?",
+      "thoughts": "Идеи?",
+      "contactUs": "Свяжитесь с нами!",
+      "scrollDeveloped": "Сделано с любовью (и немалым количеством кофе)",
+      "scrollContribute": "Поддержите нас на GitHub!"
+    },
+    "EditProfileForm": {
+      "firstNameLabel": "Имя",
+      "firstNamePlaceholder": "Введите ваше имя",
+      "lastNameLabel": "Фамилия",
+      "lastNamePlaceholder": "Введите вашу фамилию",
+      "emailLabel": "Электронная почта",
+      "submit": "Сохранить"
+    },
+    "Favourites": {
+      "errorOccurred": "Произошла ошибка:",
+      "searchPlaceholder": "Поиск в избранном...",
+      "noTracks": "Избранных треков пока нет. Добавьте что-нибудь!",
+      "noTracksFound": "Избранные треки не найдены."
+    },
+    "History": {
+      "errorOccurred": "Произошла ошибка:",
+      "searchPlaceholder": "Поиск в истории...",
+      "noHistory": "Вы ещё ничего не слушали!",
+      "noTracksFound": "Треков в истории не найдено."
+    }
+  },
+  "hooks": {
+    "useAlbum": {
+      "createSuccess": "Альбом был успешно создан!",
+      "updateSuccess": "Альбом был успешно обновлён!",
+      "updateFallbackError": "Не удалось обновить альбом",
+      "deleteSuccess": "Альбом был успешно удалён!",
+      "addCollectionSuccess": "Альбом был успешно добавлен в коллекцию!",
+      "removeCollectionSuccess": "Альбом был успешно удалён из коллекции!"
+    },
+    "useAuth": {
+      "signUpSuccess": "Приятно познакомиться, {name}!",
+      "signInSuccess": "С возвращением, {name}!",
+      "signOutSuccess": "Будем рады видеть вас снова!"
+    },
+    "useRequireActivated": {
+      "signInTitle": "Сначала войдите!",
+      "signInDescription": "Войдите, чтобы получить больше возможностей!",
+      "verifyTitle": "Подтвердите свой профиль!",
+      "verifyDescription": "Перейдите на страницу профиля и подтвердите свой адрес электронной почты, чтобы разблокировать эту функцию."
+    },
+    "useCollection": {
+      "createSuccess": "Коллекция была успешно создана!",
+      "updateSuccess": "Коллекция была успешно обновлена!",
+      "deleteSuccess": "Коллекция была успешно удалена!"
+    },
+    "useGame": {
+      "createSuccess": "Игра была успешно создана!",
+      "updateSuccess": "Игра была успешно обновлена!",
+      "deleteSuccess": "Игра была успешно удалена!"
+    },
+    "usePlaylist": {
+      "createSuccess": "Плейлист был успешно создан!",
+      "updateSuccess": "Плейлист был успешно обновлён!"
+    },
+    "useTrack": {
+      "addPlaylistSuccess": "Трек добавлен в плейлист!",
+      "removePlaylistSuccess": "Трек удалён из плейлиста!",
+      "createSuccess": "Трек был успешно создан!",
+      "updateSuccess": "Трек был успешно обновлён!",
+      "deleteSuccess": "Трек был успешно удалён!",
+      "errorTitle": "Ошибка"
+    },
+    "useUser": {
+      "updateProfileSuccess": "Информация о вас была успешно обновлена!",
+      "addFavouritesSuccess": "Трек добавлен в избранное!",
+      "removeFavouritesSuccess": "Трек удалён из избранного!",
+      "errorTitle": "Ошибка"
+    }
+  }
+}

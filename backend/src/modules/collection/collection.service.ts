@@ -29,7 +29,9 @@ export class CollectionService implements ICollectionService {
     const { collections, total } =
       await this.collectionRepository.findAll(options);
     return {
-      data: collections.map((collection) => formatCollection(collection)),
+      data: collections.map((collection) =>
+        formatDetailedCollection(collection),
+      ),
       meta: {
         total,
         count,

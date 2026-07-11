@@ -1,0 +1,81 @@
+name: Francis workflow
+run-name: ${{ github.actor }} is initiated Francis workflow
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+jobs:
+  pipeline:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [ 24.18.x, 26.x ]
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+            node-version: ${{ matrix.node-version }}
+            cache: 'npm'
+            cache-dependency-path: |
+              backend/package-lock.json
+              frontend/package-lock.json
+      - name: Output node version
+        run: node --version
+      - name: Backend - installing modules
+        run: npm install
+        working-directory: ./backend
+      - name: Backend - generate Prisma Client
+        run: npx prisma generate
+        working-directory: ./backend
+      - name: Backend - linting code
+        run: npm run lint:check
+        working-directory: ./backend
+      - name: Backend - type checking
+        run: npm run type:check
+        working-directory: ./backend
+      - name: Backend - testing
+        run: npm run test
+        working-directory: ./backend
+      - name: Backend - building
+        run: npm run build
+        working-directory: ./backend
+      - run: echo "Backend was built successfully!"
+
+      - name: Frontend - creating Next.js build cache
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.npm
+            ${{ github.workspace }}/frontend/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('frontend/package-lock.json') }}-${{ hashFiles('frontend/**/*.js', 'frontend/**/*.jsx', 'frontend/**/*.ts', 'frontend/**/*.tsx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('frontend/package-lock.json') }}-
+      - name: Frontend - installing modules
+        run: npm install
+        working-directory: ./frontend
+      - name: Frontend - linting code
+        run: npm run lint:check
+        working-directory: ./frontend
+      - name: Frontend - type checking
+        run: npm run type:check
+        working-directory: ./frontend
+      - name: Frontend - testing
+        run: npm run test
+        working-directory: ./frontend
+      - name: Frontend - building
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SERVER_STATIC: ${{secrets.NEXT_PUBLIC_SERVER_STATIC}}
+          BACKEND_URL: ${{secrets.BACKEND_URL}} # that's stub, because it's only needed for docker, without it server_api=backend_url
+        working-directory: ./frontend
+      - run: echo "Frontend was built successfully!"
+      - run: echo "Project was built successfully!"
+      - run: echo "Current job's status is ${{ job.status }}."
+
+
+
+        
