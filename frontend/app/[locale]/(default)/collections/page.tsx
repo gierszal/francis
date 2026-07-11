@@ -9,11 +9,14 @@ import { Skeleton, Input, Pagination, notification } from "antd";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { constants } from "@/lib/constants";
+import { createQueryString } from "@/lib/queryStringBuilder";
+import ItemsPagination from "@/components/ui/ItemsPagination";
 
 const Collections = () => {
   const t = useTranslations("pages.CollectionsPage");
   const router = useRouter();
-  const gap = 10;
+  const gap = constants.gap;
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
@@ -26,21 +29,6 @@ const Collections = () => {
     offset: (page - 1) * gap,
     searchQuery: searchQuery,
   });
-
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (value === "" || (name === "page" && value === "1")) {
-        params.delete(name);
-      } else {
-        params.set(name, value);
-      }
-
-      return params.toString();
-    },
-    [searchParams],
-  );
 
   const collectionsAmount = data?.total;
 
@@ -73,7 +61,9 @@ const Collections = () => {
           placeholder={t("searchPlaceholder")}
           onSearch={(query) =>
             router.push(
-              pathname + "?" + createQueryString("searchQuery", query),
+              pathname +
+                "?" +
+                createQueryString(searchParams, "searchQuery", query),
             )
           }
           style={{ width: 200 }}
@@ -87,18 +77,7 @@ const Collections = () => {
         </div>
       )}
       <div className="mt-5">
-        <Pagination
-          simple
-          defaultCurrent={collectionsAmount > 0 ? page : 1}
-          total={
-            collectionsAmount > 0 ? Math.ceil(collectionsAmount / gap) * 10 : 1
-          }
-          onChange={(newPage) =>
-            router.push(
-              pathname + "?" + createQueryString("page", newPage.toString()),
-            )
-          }
-        />
+        <ItemsPagination itemsAmount={collectionsAmount} />
       </div>
     </div>
   );

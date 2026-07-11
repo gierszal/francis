@@ -8,9 +8,9 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { notification } from "antd";
-import { getTranslations } from "next-intl/server";
 import { AxiosError } from "axios";
 import { useTranslations } from "next-intl";
+import { logger } from "@/lib/logger";
 
 export function useGetUser() {
   return useQuery({
@@ -92,8 +92,10 @@ export function useAddToFavourites() {
   return useMutation({
     mutationFn: ({ trackId }: { trackId: string }) =>
       userApi.addToFavourites(trackId),
-    onSuccess: async () => {
+    onSuccess: async (_response, variables) => {
+      const { trackId } = variables;
       queryClient.invalidateQueries({ queryKey: ["me/favourites"] });
+      queryClient.invalidateQueries({ queryKey: ["tracks"] });
       notification.success({
         title: t("addFavouritesSuccess"),
       });
@@ -111,6 +113,23 @@ export function useAddToFavourites() {
   });
 }
 
+export function useAddToHistory() {
+  const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useUser");
+  return useMutation({
+    mutationFn: ({ trackId }: { trackId: string }) =>
+      userApi.addToHistory(trackId),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["me/favourites"] });
+    },
+    onError: async (error: Error | AxiosError) => {
+      const message = getErrorMessage(error);
+
+      logger.error("Add track to history error:", error);
+    },
+  });
+}
+
 export function useRemoveFromFavourites() {
   const queryClient = useQueryClient();
   const t = useTranslations("hooks.useUser");
@@ -119,6 +138,7 @@ export function useRemoveFromFavourites() {
       userApi.removeFromFavourites(trackId),
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["me/favourites"] });
+      queryClient.invalidateQueries({ queryKey: ["tracks"] });
       notification.success({
         title: t("removeFavouritesSuccess"),
       });

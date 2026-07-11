@@ -7,11 +7,11 @@ import {
 import { GetItemsParams } from "@/types/api/common";
 import { collectionApi } from "@/api/modules/collectionApi";
 import { notification } from "antd";
-import { getTranslations } from "next-intl/server";
 import { AxiosError } from "axios";
 import { UpdateCollectionDTO } from "@/types/collection";
 import { getErrorMessage } from "@/utils/errors/getErrorMessage";
 import { useTranslations } from "next-intl";
+import { logger } from "@/lib/logger";
 
 export function useGetCollections(params: GetItemsParams = {}) {
   const { count, offset, searchQuery } = params;

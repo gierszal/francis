@@ -11,11 +11,14 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { BsPlusCircle } from "react-icons/bs";
 import { useTranslations } from "next-intl";
+import { constants } from "@/lib/constants";
+import { createQueryString } from "@/lib/queryStringBuilder";
+import ItemsPagination from "@/components/ui/ItemsPagination";
 
 const Playlists = () => {
   const t = useTranslations("pages.PlaylistsPage");
   const router = useRouter();
-  const gap = 10;
+  const gap = constants.gap;
   const pathname = usePathname();
   const { requireActivated } = useRequireActivated();
 
@@ -29,23 +32,6 @@ const Playlists = () => {
     offset: (page - 1) * gap,
     searchQuery: searchQuery,
   });
-
-  const { data: user } = useGetUser();
-
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (value === "" || (name === "page" && value === "1")) {
-        params.delete(name);
-      } else {
-        params.set(name, value);
-      }
-
-      return params.toString();
-    },
-    [searchParams],
-  );
 
   const playlistsAmount = data?.total;
   const { Search } = Input;
@@ -81,7 +67,9 @@ const Playlists = () => {
           // onSearch={onSearch}
           onSearch={(query) =>
             router.push(
-              pathname + "?" + createQueryString("searchQuery", query),
+              pathname +
+                "?" +
+                createQueryString(searchParams, "searchQuery", query),
             )
           }
           style={{ width: 200 }}
@@ -117,18 +105,7 @@ const Playlists = () => {
         )}
       </div>
       <div className="mt-5">
-        <Pagination
-          simple
-          defaultCurrent={1}
-          total={
-            playlistsAmount > 0 ? Math.ceil(playlistsAmount / gap) * 10 : 1
-          }
-          onChange={(newPage) =>
-            router.push(
-              pathname + "?" + createQueryString("page", newPage.toString()),
-            )
-          }
-        />
+        <ItemsPagination itemsAmount={playlistsAmount} />
       </div>
     </AnimatedDiv>
   );

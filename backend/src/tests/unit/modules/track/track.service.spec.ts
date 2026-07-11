@@ -68,6 +68,7 @@ describe("TrackService", () => {
     name: "adsda",
     artist: "assa",
     audio: "audio/5fcb7af9-0b25-4746-978a-91579fad84fe.mp3",
+    is_favourite: false,
     tags: ["Ambient", "Cool"],
     createdAt: new Date("2026-06-24T05:42:21.493Z"),
     updatedAt: new Date("2026-06-24T05:42:21.493Z"),
@@ -93,7 +94,10 @@ describe("TrackService", () => {
 
       const result = await trackService.getTrack(baseTrack.id);
 
-      expect(trackRepository.findById).toHaveBeenCalledWith(baseTrack.id);
+      expect(trackRepository.findById).toHaveBeenCalledWith(
+        baseTrack.id,
+        undefined,
+      );
       expect(result).toEqual(formatDetailedTrack(baseTrack as any));
     });
 
@@ -114,9 +118,9 @@ describe("TrackService", () => {
         tracks: [baseTrack],
       } as any);
 
-      const result = await trackService.getTracks(opts as any);
+      const result = await trackService.getTracks(opts as any, undefined);
 
-      expect(trackRepository.findAll).toHaveBeenCalledWith(opts);
+      expect(trackRepository.findAll).toHaveBeenCalledWith(opts, undefined);
       expect(result).toEqual({
         data: [formatTrack(baseTrack as any)],
         meta: {
@@ -133,10 +137,13 @@ describe("TrackService", () => {
         tracks: [],
       } as any);
 
-      const result = await trackService.getTracks({
-        count: 10,
-        offset: 0,
-      } as any);
+      const result = await trackService.getTracks(
+        {
+          count: 10,
+          offset: 0,
+        } as any,
+        undefined,
+      );
 
       expect(result.data).toEqual([]);
       expect(result.meta.total).toBe(0);
@@ -204,13 +211,18 @@ describe("TrackService", () => {
     it("should update a track without touching audio when no file is provided", async () => {
       trackRepository.update.mockResolvedValue(baseTrack as any);
 
-      const result = await trackService.updateTrack(baseTrack.id, updateDto);
+      const result = await trackService.updateTrack(
+        baseTrack.id,
+        updateDto,
+        regularUser.id,
+      );
 
       expect(fileService.removeFile).not.toHaveBeenCalled();
       expect(fileService.createFile).not.toHaveBeenCalled();
       expect(trackRepository.update).toHaveBeenCalledWith(
         baseTrack.id,
         updateDto,
+        regularUser.id,
         undefined,
       );
       expect(result).toEqual(formatTrack(baseTrack as any));
@@ -224,6 +236,7 @@ describe("TrackService", () => {
       const result = await trackService.updateTrack(
         baseTrack.id,
         updateDto,
+        regularUser.id,
         audioFile,
       );
 
@@ -235,6 +248,7 @@ describe("TrackService", () => {
       expect(trackRepository.update).toHaveBeenCalledWith(
         baseTrack.id,
         updateDto,
+        regularUser.id,
         "audio/new-generated-uuid.mp3",
       );
       expect(result).toEqual(formatTrack(baseTrack as any));
@@ -244,7 +258,12 @@ describe("TrackService", () => {
       trackRepository.findById.mockResolvedValue(null);
 
       await expect(
-        trackService.updateTrack(baseTrack.id, updateDto, audioFile),
+        trackService.updateTrack(
+          baseTrack.id,
+          updateDto,
+          regularUser.id,
+          audioFile,
+        ),
       ).rejects.toThrow(NotFoundError);
 
       expect(fileService.createFile).not.toHaveBeenCalled();
@@ -258,7 +277,12 @@ describe("TrackService", () => {
       trackRepository.update.mockRejectedValue(dbError);
 
       await expect(
-        trackService.updateTrack(baseTrack.id, updateDto, audioFile),
+        trackService.updateTrack(
+          baseTrack.id,
+          updateDto,
+          regularUser.id,
+          audioFile,
+        ),
       ).rejects.toThrow("DB write failed");
 
       expect(fileService.removeFile).toHaveBeenNthCalledWith(

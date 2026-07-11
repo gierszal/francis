@@ -33,6 +33,8 @@ type optionsType = {
 };
 import { validatePart } from "@/middlewares/validate.middleware.js";
 import { PlaylistRepository } from "@/repositories/prisma/playlist.repository.js";
+import { softAuthMiddleware } from "@/middlewares/softAuth.middleware.js";
+import type { queryType } from "@/types/common/query.js";
 
 const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
   const trackRepository = new TrackRepository();
@@ -44,7 +46,7 @@ const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
     fileService,
   );
   const controller = new TrackController(service);
-  fastify.get(
+  fastify.get<{ Querystring: queryType }>(
     "/",
     {
       schema: {
@@ -60,11 +62,12 @@ const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
           default: errorResponseSchema,
         },
       },
+      preHandler: [softAuthMiddleware],
     },
     controller.getTracks,
   );
 
-  fastify.get(
+  fastify.get<{ Params: paramsType }>(
     "/:id",
     {
       schema: {
@@ -80,6 +83,7 @@ const trackRoutes = (fastify: FastifyInstance, _options: optionsType) => {
           default: errorResponseSchema,
         },
       },
+      preHandler: [softAuthMiddleware],
     },
     controller.getTrack,
   );

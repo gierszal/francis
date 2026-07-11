@@ -7,10 +7,14 @@ import { useGetTracks } from "@/hooks/modules/track/useTrack";
 import { usePlayerStore } from "@/providers/StoreProvider";
 import { getErrorMessage } from "@/utils/errors/getErrorMessage";
 import { useQueryClient } from "@tanstack/react-query";
-import { Input, notification, Pagination, Skeleton } from "antd";
+import { Input, Skeleton } from "antd";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { createQueryString } from "@/lib/queryStringBuilder";
+import { constants } from "@/lib/constants";
+import ItemsPagination from "@/components/ui/ItemsPagination";
+import { useGetUser } from "@/hooks/modules/user/useUser";
 
 const Tracks = () => {
   const t = useTranslations("pages.TracksPage");
@@ -18,10 +22,12 @@ const Tracks = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const setQueryClient = usePlayerStore((s) => s.setQueryClient);
-  const gap = 10; // макс кол-во треков на стр
+  const gap = constants.gap;
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
+  const { data: userData } = useGetUser();
+  const user = userData?.data?.data;
 
   const page = parseInt(searchParams.get("page") || "1", 10);
   const searchQuery = searchParams.get("searchQuery") || "";
@@ -39,20 +45,9 @@ const Tracks = () => {
     setQueryClient(queryClient);
   }, [queryClient]);
 
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (value === "" || (name === "page" && value === "1")) {
-        params.delete(name);
-      } else {
-        params.set(name, value);
-      }
-
-      return params.toString();
-    },
-    [searchParams],
-  );
+  useEffect(() => {
+    if (user) queryClient.invalidateQueries({ queryKey: ["tracks"] });
+  }, [user]);
 
   if (isLoading)
     return (
@@ -84,7 +79,9 @@ const Tracks = () => {
             placeholder={t("searchPlaceholder")}
             onSearch={(query) =>
               router.push(
-                pathname + "?" + createQueryString("searchQuery", query),
+                pathname +
+                  "?" +
+                  createQueryString(searchParams, "searchQuery", query),
               )
             }
             style={{ width: 200 }}
@@ -96,16 +93,7 @@ const Tracks = () => {
           <div className={"text-2xl"}>{t("noTracksFound")}</div>
         )}
         <div className="mt-5">
-          <Pagination
-            simple
-            current={tracksAmount > 0 ? page : 1}
-            total={tracksAmount > 0 ? Math.ceil(tracksAmount / gap) * 10 : 1}
-            onChange={(newPage) =>
-              router.push(
-                pathname + "?" + createQueryString("page", newPage.toString()),
-              )
-            }
-          />
+          <ItemsPagination itemsAmount={tracksAmount} />
         </div>
       </AnimatedDiv>
     </>

@@ -5,7 +5,6 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useState,
 } from "react";
 import { usePlayerStore } from "@/providers/StoreProvider";
 import {
@@ -21,7 +20,7 @@ import PlayerImage from "../PlayerImage";
 import TimelineSlider from "../TimelineSlider";
 import FullscreenPlayerControls from "./FullscreenPlayerControls";
 import { FaChevronDown } from "react-icons/fa";
-import Image from "next/image";
+import { useRequireActivated } from "@/hooks/modules/auth/useRequireActivated";
 
 interface FullscreenPlayer {
   onClose: Dispatch<SetStateAction<boolean>>;
@@ -45,6 +44,8 @@ const FullscreenPlayer = ({ onClose }: FullscreenPlayer) => {
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get("page") || "1", 10);
   const searchQuery = searchParams.get("searchQuery") || "";
+  const { requireActivated } = useRequireActivated();
+  const router = useRouter();
 
   const { data } = useGetUserFavourites(
     {
@@ -67,12 +68,12 @@ const FullscreenPlayer = ({ onClose }: FullscreenPlayer) => {
 
   const addToFavourites = useCallback(() => {
     if (!activeTrack) return;
-    add({ trackId: activeTrack.id });
+    requireActivated(() => add({ trackId: activeTrack.id }));
   }, [activeTrack]);
 
   const removeFromFavourites = useCallback(() => {
     if (!activeTrack) return;
-    remove({ trackId: activeTrack.id });
+    requireActivated(() => remove({ trackId: activeTrack.id }));
   }, [activeTrack]);
 
   const handleNextTrack = useCallback(() => {
@@ -127,7 +128,9 @@ const FullscreenPlayer = ({ onClose }: FullscreenPlayer) => {
                 </div>
               </div>
               <div className="mt-5 flex flex-col justify-center items-center gap-2">
-                <Header className="text-2xl">{activeTrack?.name}</Header>
+                <span onClick={() => router.push(`/tracks/${activeTrack?.id}`)}>
+                  <Header className="text-2xl">{activeTrack?.name}</Header>
+                </span>
                 <Header className="text-gray-400">{activeTrack?.artist}</Header>
                 <div className="w-full">
                   <TimelineSlider />

@@ -1,11 +1,16 @@
-FROM node:20-alpine
+FROM node:26-slim
 
 WORKDIR /backend
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
-CMD ["npm", "run", "dev"]
+RUN npx prisma generate
+RUN npm run build
+
+EXPOSE 5000
+
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run start"]

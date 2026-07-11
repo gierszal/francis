@@ -1,18 +1,17 @@
-import { FormattedTrack } from "@/types/track";
 import TrackList from "../track/TrackList";
-import {
-  useGetUserHistory,
-  useGetUserPlaylists,
-} from "@/hooks/modules/user/useUser";
+import { useGetUserHistory } from "@/hooks/modules/user/useUser";
 import { Input, Skeleton } from "antd";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
+import { constants } from "@/lib/constants";
+import ItemsPagination from "../ui/ItemsPagination";
+import { createQueryString } from "@/lib/queryStringBuilder";
 
 const History = () => {
   const router = useRouter();
   const t = useTranslations("components.History");
-  const gap = 10;
+  const gap = constants.gap;
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
@@ -26,25 +25,9 @@ const History = () => {
     searchQuery: searchQuery,
   });
 
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (value === "" || (name === "page" && value === "1")) {
-        params.delete(name);
-      } else {
-        params.set(name, value);
-      }
-
-      return params.toString();
-    },
-    [searchParams],
-  );
-
   const history = data?.items?.data;
-  const historyAmount = data?.total;
 
-  if (isLoading || !historyAmount) {
+  if (isLoading) {
     return <Skeleton />;
   }
 
@@ -66,19 +49,26 @@ const History = () => {
             placeholder={t("searchPlaceholder")}
             onSearch={(query) =>
               router.push(
-                pathname + "?" + createQueryString("searchQuery", query),
+                pathname +
+                  "?" +
+                  createQueryString(searchParams, "searchQuery", query),
               )
             }
             style={{ width: 200 }}
           />
         </div>
 
-        {!history || History.length === 0 ? (
+        {!history || history?.length === 0 ? (
           <div className="text-2xl mt-5 self-center">
             {!searchQuery ? t("noHistory") : t("noTracksFound")}
           </div>
         ) : (
-          <TrackList tracks={history} source={{ type: "me/history" }} />
+          <>
+            <TrackList tracks={history} source={{ type: "me/history" }} />
+            <div className="mt-5 self-start">
+              <ItemsPagination itemsAmount={history?.length} />
+            </div>
+          </>
         )}
       </div>
     );

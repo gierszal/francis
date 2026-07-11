@@ -5,16 +5,18 @@ import AnimatedDiv from "@/components/motion/AnimatedDiv";
 import GradientText from "@/components/motion/GradientText";
 import { useGetAlbums } from "@/hooks/modules/album/useAlbum";
 import { getErrorMessage } from "@/utils/errors/getErrorMessage";
-import { Input, notification, Pagination, Skeleton } from "antd";
+import { Input, Skeleton } from "antd";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { constants } from "@/lib/constants";
+import { createQueryString } from "@/lib/queryStringBuilder";
+import ItemsPagination from "@/components/ui/ItemsPagination";
 
 const Albums = () => {
   const t = useTranslations("pages.AlbumsPage");
   const router = useRouter();
-  const gap = 10; // макс кол-во треков на стр
+  const gap = constants.gap;
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
@@ -27,21 +29,6 @@ const Albums = () => {
     offset: (page - 1) * gap,
     searchQuery: searchQuery,
   });
-
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (value === "" || (name === "page" && value === "1")) {
-        params.delete(name);
-      } else {
-        params.set(name, value);
-      }
-
-      return params.toString();
-    },
-    [searchParams],
-  );
 
   const albumsAmount = data?.total;
 
@@ -74,7 +61,9 @@ const Albums = () => {
           placeholder={t("searchPlaceholder")}
           onSearch={(query) =>
             router.push(
-              pathname + "?" + createQueryString("searchQuery", query),
+              pathname +
+                "?" +
+                createQueryString(searchParams, "searchQuery", query),
             )
           }
           style={{ width: 200 }}
@@ -92,16 +81,7 @@ const Albums = () => {
         <div className="text-xl md:text-2xl">{t("noAlbumsFound")}</div>
       )}
       <div className="mt-5">
-        <Pagination
-          simple
-          defaultCurrent={albumsAmount > 0 ? page : 1}
-          total={albumsAmount ? Math.ceil(albumsAmount / gap) * 10 : 1}
-          onChange={(newPage) =>
-            router.push(
-              pathname + "?" + createQueryString("page", newPage.toString()),
-            )
-          }
-        />
+        <ItemsPagination itemsAmount={albumsAmount} />
       </div>
     </AnimatedDiv>
   );

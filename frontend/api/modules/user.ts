@@ -29,6 +29,9 @@ export const userApi = {
   addToFavourites: async (trackId: string) => {
     return $api.post(`/users/me/favourites/${trackId}`);
   },
+  addToHistory: async (trackId: string) => {
+    return $api.post(`/users/me/history/${trackId}`);
+  },
   removeFromFavourites: async (trackId: string) => {
     return $api.delete(`/users/me/favourites/${trackId}`);
   },

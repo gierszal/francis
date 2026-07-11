@@ -11,6 +11,7 @@ import { albumApi } from "@/api/modules/albumApi";
 import { notification } from "antd";
 import { AxiosError } from "axios";
 import { useTranslations } from "next-intl";
+import { logger } from "@/lib/logger";
 
 export function useGetAlbums(params: GetItemsParams = {}) {
   const { count, offset, searchQuery } = params;

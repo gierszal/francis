@@ -22,6 +22,7 @@ import TimelineSlider from "../TimelineSlider";
 import FullscreenPlayerControls from "../fullscreenPlayer/FullscreenPlayerControls";
 import { FaChevronDown } from "react-icons/fa";
 import MobilePlayerControls from "./MobilePlayerControls";
+import { useRequireActivated } from "@/hooks/modules/auth/useRequireActivated";
 
 interface MobilePlayerProps {
   onClose: Dispatch<SetStateAction<boolean>>;
@@ -45,6 +46,7 @@ const MobilePlayer = ({ onClose }: MobilePlayerProps) => {
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get("page") || "1", 10);
   const searchQuery = searchParams.get("searchQuery") || "";
+  const { requireActivated, isActivated } = useRequireActivated();
 
   const { data } = useGetUserFavourites(
     {
@@ -67,12 +69,12 @@ const MobilePlayer = ({ onClose }: MobilePlayerProps) => {
 
   const addToFavourites = useCallback(() => {
     if (!activeTrack) return;
-    add({ trackId: activeTrack.id });
+    requireActivated(() => add({ trackId: activeTrack.id }));
   }, [activeTrack]);
 
   const removeFromFavourites = useCallback(() => {
     if (!activeTrack) return;
-    remove({ trackId: activeTrack.id });
+    requireActivated(() => remove({ trackId: activeTrack.id }));
   }, [activeTrack]);
 
   const handleNextTrack = useCallback(() => {

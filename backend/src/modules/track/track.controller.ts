@@ -19,7 +19,8 @@ export class TrackController {
     reply: FastifyReply,
   ) => {
     const { id } = request.params;
-    const track = await this.trackService.getTrack(id);
+    const user = request.user;
+    const track = await this.trackService.getTrack(id, user?.id);
     if (!track) throw new NotFoundError(`Track with id ${id} not found`);
     reply.send({ data: track });
   };
@@ -29,7 +30,8 @@ export class TrackController {
     reply: FastifyReply,
   ) => {
     const opts = request.query;
-    const tracks = await this.trackService.getTracks(opts);
+    const user = request.user;
+    const tracks = await this.trackService.getTracks(opts, user?.id);
     reply.header("x-total-count", tracks.meta.total.toString()).send(tracks);
   };
 
@@ -51,8 +53,10 @@ export class TrackController {
     const data = request.body;
     const { id } = request.params;
     const audio = request.body.audio;
+    const userId = request.user?.id;
+    if (!userId) throw new BadRequestError("User id was not provided!");
     if (!id) throw new BadRequestError("Track id was not found!");
-    const track = await this.trackService.updateTrack(id, data, audio);
+    const track = await this.trackService.updateTrack(id, data, userId, audio);
     reply.send({ data: track });
   };
 

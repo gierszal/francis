@@ -3,7 +3,10 @@
 import AnimatedDiv from "@/components/motion/AnimatedDiv";
 import MagicBento from "@/components/motion/Bento";
 import GradientText from "@/components/motion/GradientText";
+import ItemsPagination from "@/components/ui/ItemsPagination";
 import { useGetGames } from "@/hooks/modules/game/useGame";
+import { constants } from "@/lib/constants";
+import { createQueryString } from "@/lib/queryStringBuilder";
 import { getErrorMessage } from "@/utils/errors/getErrorMessage";
 import { Skeleton, Input, Pagination, notification } from "antd";
 import { useTranslations } from "next-intl";
@@ -12,7 +15,7 @@ import { useCallback, useEffect } from "react";
 
 const Games = () => {
   const router = useRouter();
-  const gap = 10;
+  const gap = constants.gap;
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
@@ -27,21 +30,6 @@ const Games = () => {
     offset: (page - 1) * gap,
     searchQuery: searchQuery,
   });
-
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (value === "" || (name === "page" && value === "1")) {
-        params.delete(name);
-      } else {
-        params.set(name, value);
-      }
-
-      return params.toString();
-    },
-    [searchParams],
-  );
 
   const gamesAmount = data?.total;
 
@@ -74,7 +62,9 @@ const Games = () => {
           placeholder={t("searchPlaceholder")}
           onSearch={(query) =>
             router.push(
-              pathname + "?" + createQueryString("searchQuery", query),
+              pathname +
+                "?" +
+                createQueryString(searchParams, "searchQuery", query),
             )
           }
           style={{ width: 200 }}
@@ -101,16 +91,7 @@ const Games = () => {
         <div className="text-xl md:text-2xl">{t("noGamesFound")}</div>
       )}
       <div className="mt-5">
-        <Pagination
-          simple
-          defaultCurrent={gamesAmount > 0 ? page : 1}
-          total={gamesAmount > 0 ? Math.ceil(gamesAmount / gap) * 10 : 1}
-          onChange={(newPage) =>
-            router.push(
-              pathname + "?" + createQueryString("page", newPage.toString()),
-            )
-          }
-        />
+        <ItemsPagination itemsAmount={gamesAmount} />
       </div>
     </AnimatedDiv>
   );

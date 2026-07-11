@@ -1,6 +1,6 @@
 const isDev = process.env.NODE_ENV === "development";
 
-const logger = {
+export const logger = {
   debug: (...args: unknown[]) => {
     if (isDev) console.debug("[DEBUG]", ...args);
   },

@@ -6,11 +6,10 @@ import TrackList from "@/components/track/TrackList";
 import Header from "@/components/ui/Header";
 import { useGetAlbum } from "@/hooks/modules/album/useAlbum";
 import { getErrorMessage } from "@/utils/errors/getErrorMessage";
-import { notification, Skeleton } from "antd";
+import { Skeleton } from "antd";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 const AlbumPage = () => {
   const router = useRouter();

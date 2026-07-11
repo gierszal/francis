@@ -1,10 +1,7 @@
-import { albumApi } from "@/api/modules/albumApi";
-import { playlistApi } from "@/api/modules/playlist";
 import { trackApi } from "@/api/modules/trackApi";
-import { userApi } from "@/api/modules/user";
 import { QueueMeta, QueueSource } from "@/types/player";
 import { FormattedTrack } from "@/types/track";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { createStore } from "zustand/vanilla";
 
 export type PlayerState = {
@@ -14,8 +11,6 @@ export type PlayerState = {
   volume: number;
   isLooped: boolean;
   audio: HTMLAudioElement | null;
-  // isQueueEnded: boolean;
-  // isQueueStartReached: boolean;
   queueMeta: QueueMeta;
   queryClient: QueryClient | null;
   activeTrack: FormattedTrack | null;
@@ -30,8 +25,6 @@ export type PlayerActions = {
   setCurrentTime: (time: number) => void;
   setVolume: (volume: number) => void;
   toggleLoop: () => void;
-  // setIsQueueEnded: (state: boolean) => void;
-  // setIsQueueStartReached: (state: boolean) => void;
   setQueueMeta: (queueMeta: QueueMeta) => void;
   setQueryClient: (queryClient: QueryClient) => void;
   setActiveTrack: (
@@ -72,8 +65,6 @@ export const defaultInitState: PlayerState = {
     },
   },
   queryClient: null,
-  // isQueueEnded: false,
-  // isQueueStartReached: false,
 };
 
 export const createPlayerStore = (
@@ -196,12 +187,6 @@ export const createPlayerStore = (
         set({ isLooped: audio.loop });
       }
     },
-    // setIsQueueEnded: (state) => {
-    //   set({ isQueueEnded: state });
-    // },
-    // setIsQueueStartReached: (state) => {
-    //   set({ isQueueStartReached: state });
-    // },
     setQueueMeta: (meta) => {
       set((state) => ({
         queueMeta: state.queueMeta
@@ -273,22 +258,6 @@ export const createPlayerStore = (
 
       if (currentIndex === currentTracks?.length - 1)
         if (hasMore) {
-          // const newTracksData = await queryClient.fetchQuery({
-          //   queryKey: [
-          //     "tracks",
-          //     {
-          //       offset: offset + (currentTracks?.length ?? 0),
-          //       count,
-          //       searchQuery,
-          //     },
-          //   ],
-          //   queryFn: () =>
-          //     trackApi.get({
-          //       count,
-          //       offset: offset + (currentTracks?.length ?? 0),
-          //       searchQuery,
-          //     }),
-          // });
           const { items: newItems, total } = await fetchNextChunk(
             source,
             offset + (currentTracks?.length ?? 0),
@@ -308,24 +277,8 @@ export const createPlayerStore = (
           loadTrack(updatedTracks[nextIndex]);
           return;
         } else {
-          // const newTracksData = await queryClient.fetchQuery({
-          //   queryKey: [
-          //     "tracks",
-          //     {
-          //       offset: 0,
-          //       count,
-          //       searchQuery,
-          //     },
-          //   ],
-          //   queryFn: () =>
-          //     trackApi.get({
-          //       count,
-          //       offset: 0,
-          //       searchQuery,
-          //     }),
-          // });
           if (source.type !== "default") {
-            const { items: newItems, total } = await fetchNextChunk(
+            const { items: newItems } = await fetchNextChunk(
               source,
               0,
               count,
@@ -339,10 +292,6 @@ export const createPlayerStore = (
               currentTime: 0,
               duration: 0,
               queueMeta: {
-                // total: total,
-                // searchQuery: searchQuery,
-                // count: count,
-                // offset: 0,
                 ...queueMeta,
                 offset: 0,
               },
@@ -356,10 +305,6 @@ export const createPlayerStore = (
               currentTime: 0,
               duration: 0,
               queueMeta: {
-                // total: total,
-                // searchQuery: searchQuery,
-                // count: count,
-                // offset: 0,
                 ...queueMeta,
                 offset: 0,
               },
@@ -407,23 +352,7 @@ export const createPlayerStore = (
 
       if (currentIndex === 0) {
         if (hasMore) {
-          // const newTracksData = await queryClient.fetchQuery({
-          //   queryKey: [
-          //     "tracks",
-          //     {
-          //       offset: offset - count,
-          //       count,
-          //       searchQuery,
-          //     },
-          //   ],
-          //   queryFn: () =>
-          //     trackApi.get({
-          //       count,
-          //       offset: offset - count,
-          //       searchQuery,
-          //     }),
-          // });
-          const { items: newItems, total } = await fetchNextChunk(
+          const { items: newItems } = await fetchNextChunk(
             source,
             offset - count,
             count,

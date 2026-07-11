@@ -7,10 +7,10 @@ import {
 import { GetItemsParams } from "@/types/api/common";
 import { gameApi } from "@/api/modules/gameApi";
 import { notification } from "antd";
-import { getTranslations } from "next-intl/server";
 import { AxiosError } from "axios";
 import { getErrorMessage } from "@/utils/errors/getErrorMessage";
 import { useTranslations } from "next-intl";
+import { logger } from "@/lib/logger";
 
 export function useGetGames(params: GetItemsParams = {}) {
   const { count, offset, searchQuery } = params;

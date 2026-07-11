@@ -1,5 +1,4 @@
 "use client";
-import { FormattedTrack } from "@/types/track";
 import GradientText from "@/components/motion/GradientText";
 import Image from "next/image";
 import formatDetailedTrack from "@/utils/formatters/formatDetailedTrackToFormatted";
@@ -7,10 +6,9 @@ import TrackItem from "@/components/track/TrackItem";
 import AlbumList from "@/components/album/AlbumList";
 import AnimatedDiv from "@/components/motion/AnimatedDiv";
 import { useGetTrack } from "@/hooks/modules/track/useTrack";
-import { notification, Skeleton } from "antd";
+import { Skeleton } from "antd";
 import { useParams } from "next/navigation";
 import { useGetUserFavourites } from "@/hooks/modules/user/useUser";
-import { useEffect, useMemo } from "react";
 import { getErrorMessage } from "@/utils/errors/getErrorMessage";
 import { useTranslations } from "next-intl";
 
@@ -25,10 +23,6 @@ const TrackPage = () => {
   const { data: favouritesData } = useGetUserFavourites();
 
   const favourites = favouritesData?.items?.data;
-
-  const favouriteIds = useMemo(() => {
-    return new Set(favourites?.map((track: FormattedTrack) => track.id) || []);
-  }, [favourites]);
 
   if (isLoading)
     return (
@@ -82,7 +76,6 @@ const TrackPage = () => {
             tracks={[track]}
             source={{ type: "default" }}
             track={formattedTrack}
-            isFavourite={favouriteIds?.has(track?.id)}
             idx={0}
           />
         )}

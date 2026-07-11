@@ -7,6 +7,8 @@ export const trackSchema = z.object({
   name: z.string(),
   artist: z.string(),
 
+  is_favourite: z.boolean(),
+
   tags: z.array(z.string()),
 
   audio: z.string(),
@@ -34,6 +36,7 @@ export const detailedTrackSchema = z.object({
   name: z.string(),
   artist: z.string(),
   audio: z.string(),
+  is_favourite: z.boolean(),
   tags: z.array(z.string()),
 
   created_at: z.coerce.date(),

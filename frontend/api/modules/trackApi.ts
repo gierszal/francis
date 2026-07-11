@@ -12,7 +12,7 @@ export const trackApi = {
     return { items, total };
   },
 
-  getTrack: async (id: string | undefined) => {
+  getTrack: async (id: string) => {
     return await $api.get(`/tracks/${id}`);
   },
 
@@ -24,8 +24,12 @@ export const trackApi = {
     return $api.put(`/tracks/${id}`, data);
   },
 
-  deleteTrack: async (id: string | undefined) => {
+  deleteTrack: async (id: string) => {
     return $api.delete(`/tracks/${id}`);
+  },
+
+  listenIncrement: async (id: string) => {
+    return $api.post(`/tracks/${id}/listens`);
   },
 
   addTrackToPlaylist: async (trackId: string, playlistId: string) => {

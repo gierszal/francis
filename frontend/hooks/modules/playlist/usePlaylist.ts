@@ -9,12 +9,12 @@ import {
 import { GetItemsParams } from "@/types/api/common";
 import { playlistApi } from "@/api/modules/playlist";
 import { notification } from "antd";
-import { getTranslations } from "next-intl/server";
 import { AxiosError } from "axios";
 import { userApi } from "@/api/modules/user";
 import { UpdatePlaylistDTO } from "@/types/playlist";
 import { getErrorMessage } from "@/utils/errors/getErrorMessage";
 import { useTranslations } from "next-intl";
+import { logger } from "@/lib/logger";
 
 export function useGetPlaylists(params: GetItemsParams = {}) {
   const { count, offset, searchQuery } = params;

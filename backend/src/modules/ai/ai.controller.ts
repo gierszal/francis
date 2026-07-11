@@ -1,4 +1,3 @@
-import { BadRequestError } from "@/errors/ApiError.js";
 import type { IAIService, GenerateQueryDTO } from "@/types/ai/index.js";
 import type { FastifyReply, FastifyRequest } from "fastify";
 

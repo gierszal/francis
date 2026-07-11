@@ -5,13 +5,12 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 import { trackApi } from "../../../api/modules/trackApi";
-import $api from "@/api";
 import { GetItemsParams } from "@/types/api/common";
 import { notification } from "antd";
-import { getTranslations } from "next-intl/server";
 import { AxiosError } from "axios";
 import { getErrorMessage } from "@/utils/errors/getErrorMessage";
 import { useTranslations } from "next-intl";
+import { logger } from "@/lib/logger";
 
 export function useGetTracks(params: GetItemsParams = {}) {
   const { count, offset, searchQuery } = params;
@@ -28,7 +27,7 @@ export function useGetTracks(params: GetItemsParams = {}) {
   });
 }
 
-export function useGetTrack(id: string | undefined, enabled: boolean = true) {
+export function useGetTrack(id: string, enabled: boolean = true) {
   return useQuery({
     queryKey: ["tracks", { id }],
     queryFn: () => trackApi.getTrack(id),
@@ -157,8 +156,7 @@ export function useRemoveTrack() {
   const queryClient = useQueryClient();
   const t = useTranslations("hooks.useTrack");
   return useMutation({
-    mutationFn: ({ id }: { id: string | undefined }) =>
-      trackApi.deleteTrack(id),
+    mutationFn: ({ id }: { id: string }) => trackApi.deleteTrack(id),
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["tracks"] });
       notification.success({
@@ -170,6 +168,21 @@ export function useRemoveTrack() {
       notification.error({
         title: title,
       });
+      logger.error(error);
+    },
+  });
+}
+
+export function useListenIncrement() {
+  const queryClient = useQueryClient();
+  const t = useTranslations("hooks.useTrack");
+  return useMutation({
+    mutationFn: ({ id }: { id: string }) => trackApi.listenIncrement(id),
+    onSuccess: async (_response, variables) => {
+      const { id } = variables;
+      queryClient.invalidateQueries({ queryKey: ["tracks", { id }] });
+    },
+    onError: (error) => {
       logger.error(error);
     },
   });

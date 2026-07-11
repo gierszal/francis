@@ -19,6 +19,7 @@ import { BsArrowsAngleExpand } from "react-icons/bs";
 import FullscreenPlayer from "./fullscreenPlayer/FullscreenPlayer";
 import MobilePlayer from "./mobile/MobilePlayer";
 import Image from "next/image";
+import { useRequireActivated } from "@/hooks/modules/auth/useRequireActivated";
 
 const MusicWidget = () => {
   const { data: userData } = useGetUser();
@@ -46,6 +47,7 @@ const MusicWidget = () => {
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get("page") || "1", 10);
   const searchQuery = searchParams.get("searchQuery") || "";
+  const { requireActivated, isActivated } = useRequireActivated();
 
   const { data } = useGetUserFavourites(
     {
@@ -68,12 +70,12 @@ const MusicWidget = () => {
 
   const addToFavourites = useCallback(() => {
     if (!activeTrack) return;
-    add({ trackId: activeTrack.id });
+    requireActivated(() => add({ trackId: activeTrack.id }));
   }, [activeTrack]);
 
   const removeFromFavourites = useCallback(() => {
     if (!activeTrack) return;
-    remove({ trackId: activeTrack.id });
+    requireActivated(() => remove({ trackId: activeTrack.id }));
   }, [activeTrack]);
 
   const handleNextTrack = useCallback(() => {

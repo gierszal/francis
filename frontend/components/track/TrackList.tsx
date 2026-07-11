@@ -29,21 +29,21 @@ const TrackList = memo(({ tracks, source }: TrackListProps) => {
   const page = parseInt(searchParams.get("page") || "1", 10);
   const searchQuery = searchParams.get("searchQuery") || "";
 
-  const { data } = useGetUserFavourites(
-    {
-      count: gap,
-      offset: (page - 1) * gap,
-      searchQuery: searchQuery,
-    },
-    !!user,
-  );
-  const favourites = data?.items?.data;
+  // const { data } = useGetUserFavourites(
+  //   {
+  //     count: gap,
+  //     offset: (page - 1) * gap,
+  //     searchQuery: searchQuery,
+  //   },
+  //   !!user,
+  // );
+  // const favourites = data?.items?.data;
 
   const isUserLoading = isFetching || isPending;
 
-  const favouriteIds = useMemo(() => {
-    return new Set(favourites?.map((track: FormattedTrack) => track.id) || []);
-  }, [favourites]);
+  // const favouriteIds = useMemo(() => {
+  //   return new Set(favourites?.map((track: FormattedTrack) => track.id) || []);
+  // }, [favourites]);
 
   useEffect(() => {
     if (isUserLoading) return;
@@ -71,7 +71,7 @@ const TrackList = memo(({ tracks, source }: TrackListProps) => {
               idx={idx}
               key={idx}
               source={source}
-              isFavourite={favouriteIds?.has(track?.id)}
+              // isFavourite={favouriteIds?.has(track?.id)}
             />
           ))}
       </ul>

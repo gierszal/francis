@@ -10,10 +10,11 @@ import { useRequireActivated } from "@/hooks/modules/auth/useRequireActivated";
 import { useGetUser, useGetUserPlaylists } from "@/hooks/modules/user/useUser";
 import { notification, Skeleton, Tabs, TabsProps } from "antd";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { VscMail } from "react-icons/vsc";
 import { useTranslations } from "next-intl";
+import { createQueryString } from "@/lib/queryStringBuilder";
 
 const Profile = () => {
   const t = useTranslations("pages.ProfilePage");
@@ -21,7 +22,10 @@ const Profile = () => {
   const { data } = useGetUser();
   const notificationShown = useRef<boolean>(false);
   const { requireActivated } = useRequireActivated();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
 
+  const activeTab = searchParams.get("tab") ?? "favourites";
   const user = data?.data?.data ?? data;
 
   const handleSignOut = async () => {
@@ -41,9 +45,17 @@ const Profile = () => {
 
   const { mutate: signOut } = useSignOut();
 
+  const handleChange = (key: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", key);
+    params.delete("page");
+    params.delete("searchQuery");
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   const items: TabsProps["items"] = [
     {
-      key: "1",
+      key: "favourites",
       label: t("favourites"),
       children: (
         <div className="flex justify-center">
@@ -52,7 +64,7 @@ const Profile = () => {
       ),
     },
     {
-      key: "2",
+      key: "history",
       label: t("history"),
       children: (
         <div className="flex justify-center ">
@@ -94,7 +106,12 @@ const Profile = () => {
             </RoundedButton>
           </div>
           <div className="mt-2 w-[98%]">
-            <Tabs defaultActiveKey="1" items={items} centered />
+            <Tabs
+              onChange={handleChange}
+              activeKey={activeTab}
+              items={items}
+              centered
+            />
           </div>
         </div>
       </div>

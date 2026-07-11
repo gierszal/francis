@@ -115,6 +115,14 @@ export class UserRepository implements IUserRepository {
                   picture: true,
                 },
               },
+              favourites: {
+                where: {
+                  userId: userId ?? "",
+                },
+                select: {
+                  id: true,
+                },
+              },
             },
           },
         },
@@ -135,11 +143,18 @@ export class UserRepository implements IUserRepository {
 
   async addToFavourites(userId: string, trackId: string): Promise<void> {
     try {
-      await prisma.favourite.create({
-        data: {
+      await prisma.favourite.upsert({
+        where: {
+          userId_trackId: {
+            userId,
+            trackId,
+          },
+        },
+        create: {
           userId,
           trackId,
         },
+        update: {},
       });
     } catch (e: any) {
       throw new DatabaseError(e.message);
@@ -200,6 +215,14 @@ export class UserRepository implements IUserRepository {
                 album: {
                   select: {
                     picture: true,
+                  },
+                },
+                favourites: {
+                  where: {
+                    userId: userId ?? "",
+                  },
+                  select: {
+                    id: true,
                   },
                 },
               },
