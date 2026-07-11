@@ -23,9 +23,9 @@
     "zod": "^4.4.3"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
     "dev": "tsx watch src/index.ts",
-    "start": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json && node dist/index.js",
+    "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
+    "start": "node dist/index.js",
     "prisma:generate": "npx prisma generate",
     "db:seed": "npx prisma db seed",
     "db:push": "npx prisma db push",
